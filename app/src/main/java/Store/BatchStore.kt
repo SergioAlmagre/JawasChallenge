@@ -1,0 +1,4 @@
+package Store
+
+object BatchStore {
+}
