@@ -1,6 +1,6 @@
 package Store
 
-object AllTypes {
+object Types {
 
     var allTypesList: MutableList<String> = mutableListOf()
 }

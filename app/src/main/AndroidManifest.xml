@@ -23,4 +23,18 @@
         </activity>
     </application>
 
+    <!-- permissions to access the gallery-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- permissions to access the camera-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--    <uses-feature android:name="android.hardware.camera" />-->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>

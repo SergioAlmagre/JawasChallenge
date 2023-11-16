@@ -3,39 +3,12 @@ package Factories
 import Model.Hardware.Batch
 import Model.Hardware.Item
 import Model.Jewels.Jewel
-import com.google.type.DateTime
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import Model.Users.Donor
+import Model.Users.User
 import kotlin.random.Random
-import java.util.Date
 
 object Factory {
 
-    var itemsBrands = mutableListOf(
-        "Intel",
-        "AMD",
-        "NVIDIA",
-        "ASUS",
-        "Corsair",
-        "Seagate",
-        "Western Digital",
-        "Logitech",
-        "Samsung",
-        "Kingston"
-    )
-
-    var itemsModels = mutableListOf(
-        "GeForce RTX 3080",
-        "Samsung 970 EVO",
-        "MacBook Pro",
-        "Sony XDR-F1HD",
-        "Intel Core i9-9900K",
-        "Corsair Vengeance LPX",
-        "Dell Ultrasharp U3415W",
-        "ASUS ROG Strix B450-F",
-        "Logitech Z623",
-        "Epson EcoTank ET-4750"
-    )
 
     var itemTypes = mutableListOf(
         "Tarjeta Gráfica",
@@ -47,10 +20,7 @@ object Factory {
         "Monitor",
         "Placa Base",
         "Altavoces",
-        "Impresora"
-    )
-
-    var components = mutableListOf(
+        "Impresora",
         "CPU",
         "Módulo de Memoria RAM",
         "SSD",
@@ -117,6 +87,7 @@ object Factory {
         "Conectores USB",
         "Botones de Control"
     )
+
 
     var observations = mutableListOf(
         "Excelente estado",
@@ -300,90 +271,164 @@ object Factory {
         -121.8889  // Sacramento, CA
     )
 
+    val emails = mutableListOf(
+        "john.doe@example.com",
+        "alice.smith@example.com",
+        "bob.jones@example.com",
+        "emily.wilson@example.com",
+        "michael.robinson@example.com",
+        "olivia.davis@example.com",
+        "ryan.jackson@example.com",
+        "sophia.harris@example.com",
+        "daniel.miller@example.com",
+        "emma.thomas@example.com",
+        "alexander.white@example.com",
+        "ava.martin@example.com",
+        "christopher.hall@example.com",
+        "mia.brown@example.com",
+        "nathan.anderson@example.com",
+        "olivia.taylor@example.com",
+        "james.johnson@example.com",
+        "samantha.jenkins@example.com",
+        "william.clark@example.com",
+        "ella.roberts@example.com"
+    )
+
+    val addresses = mutableListOf(
+        "123 Main St, Cityville, State, 12345",
+        "456 Elm St, Townsville, State, 54321",
+        "789 Oak Ave, Villagetown, State, 98765",
+        "101 Pine Ln, Hamletville, State, 67890",
+        "202 Maple Dr, Countryside, State, 23456",
+        "303 Birch Rd, Suburbia, State, 34567",
+        "404 Cedar Blvd, Metropolis, State, 87654",
+        "505 Spruce Ct, Riverside, State, 76543",
+        "606 Redwood Pl, Mountainview, State, 43210",
+        "707 Willow Ln, Beachtown, State, 10987",
+        "808 Juniper St, Hilltop, State, 21098",
+        "909 Aspen Ave, Lakeside, State, 87612",
+        "111 Sycamore Dr, Meadowville, State, 54389",
+        "222 Magnolia Rd, Parkside, State, 12398",
+        "333 Cypress Ln, Downtown, State, 76589",
+        "444 Pineapple Blvd, Uptown, State, 23409",
+        "555 Oakwood Ave, Midtown, State, 89012",
+        "666 Maple Rd, Westside, State, 34509",
+        "777 Cherry Pl, Eastend, State, 67801",
+        "888 Walnut Ct, Northville, State, 21098"
+    )
+
+    val phoneNumbers = mutableListOf(
+        "+1 (555) 123-4567",
+        "+1 (555) 234-5678",
+        "+1 (555) 345-6789",
+        "+1 (555) 456-7890",
+        "+1 (555) 567-8901",
+        "+1 (555) 678-9012",
+        "+1 (555) 789-0123",
+        "+1 (555) 890-1234",
+        "+1 (555) 901-2345",
+        "+1 (555) 012-3456",
+        "+1 (555) 123-9876",
+        "+1 (555) 234-8765",
+        "+1 (555) 345-7654",
+        "+1 (555) 456-6543",
+        "+1 (555) 567-5432",
+        "+1 (555) 678-4321",
+        "+1 (555) 789-3210",
+        "+1 (555) 890-2109",
+        "+1 (555) 901-1098",
+        "+1 (555) 210-9876"
+    )
 
 
-    fun createBatch():Batch{
-        var name = donorsNames.random()
+    fun createBatch(donorName:String):Batch{
+        var name = donorName
         var latitud = latitudes.random()
         var longitude = longitudes.random()
-        val creationDate = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
-        val formattedDate = creationDate.format(formatter)
         var picture = picturesName.random()
+        var address = addresses.random()
 
-        var newBatch = Batch(name,latitud,longitude,formattedDate,true,formattedDate,picture,false)
+        var newBatch = Batch(name,latitud,longitude,address,picture)
+
+        for(i in 0..5)
+            newBatch.itemsInside.add(createItem())
 
         return newBatch
     }
 
 
-
-
     fun createItem(): Item {
         var itemType = itemTypes.random()
-        var itemBrand = itemsBrands.random()
-        var itemModel = itemsModels.random()
-        var nComponents = Random.nextInt(1,3)
         var obsevation = observations.random()
         var pictureName = picturesName.random()
 
-        var item:Item = Item(itemType,itemBrand,itemModel,obsevation,pictureName)
+        var item2 = Item()
+        item2.attributes[0].content = itemType
+        item2.attributes[1].content = obsevation
+        item2.attributes[2].content = pictureName
 
-        for(i in 0..nComponents){
-            item.addComponent(components.random())
-        }
-
-        return item
+        return item2
     }
 
-
-    fun fillWarehouses(){
-        addDefaultBrands()
-        addDefaultModels()
-        addDefaultTypes()
-
-        for (i in 0..30){
-            Store.ItemsStore.itemsList.add(createItem())
-        }
-
-        for (i in 0..30){
-            Store.JewelsStore.jewelsList.add(createJewel())
-        }
-    }
 
     fun clearStores(){
-        Store.ItemsStore.itemsList.clear()
-        Store.AllBrands.allBrandsList.clear()
-        Store.AllTypes.allTypesList.clear()
-        Store.AllModels.allModelsList.clear()
-        Store.JewelsStore.jewelsList.clear()
+
     }
 
-
-    fun addDefaultBrands(){
-        Store.AllBrands.allBrandsList = itemsBrands
-    }
-
-    fun addDefaultModels(){
-        Store.AllModels.allModelsList = itemsModels
-    }
 
     fun addDefaultTypes(){
-        Store.AllTypes.allTypesList = itemTypes
+        Store.Types.allTypesList = itemTypes
     }
+
 
     fun createJewel():Jewel{
         var name = jewelsNames.random()
         var instruction = instructions.random()
+        var price = Random.nextDouble(0.5,65.0)
 
-        var newJewel = Jewel(name,instruction)
+        var newJewel = Jewel(name,instruction,price, picturesName.random())
 
         for(i in 1..4){
-            newJewel.components.add(components.random())
+            newJewel.components.add(itemTypes.random())
         }
 
         return newJewel
     }
+
+    fun rolesRandom():String{
+        var roles = mutableListOf("1","2","3")
+        return roles.random()
+    }
+
+    fun createUser(): User {
+        val newUser = User(
+            name = donorsNames.random(),
+            email = emails.random(),
+            address = addresses.random(),
+            phone = phoneNumbers.random(),
+            picture = picturesName.random(),
+            role = rolesRandom()
+        )
+        return newUser
+    }
+
+    fun createDonor(): Donor {
+        val newDonor = Donor(
+            name = donorsNames.random(),
+            email = emails.random(),
+            address = addresses.random(),
+            phone = phoneNumbers.random(),
+            picture = picturesName.random(),
+            role = "0"
+        )
+
+        for (i in 0..5){
+            newDonor.addBatch(createBatch(newDonor.name))
+        }
+        return newDonor
+    }
+
+
 
 
 

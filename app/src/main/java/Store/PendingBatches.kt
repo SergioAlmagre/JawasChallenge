@@ -2,7 +2,7 @@ package Store
 
 import Model.Hardware.Batch
 
-object BatchStore {
+object PendingBatches {
 
     var batchList: MutableList<Batch> = mutableListOf()
 }

@@ -3,13 +3,22 @@ package Model.Jewels
 class Jewel {
 
     var name:String
-    var components: MutableList<String> = mutableListOf()
     var instructions: String?
+    var price: Double?
+    var picture: String? = null
+
+    var components: MutableList<String> = mutableListOf()
 
 
-    constructor(name: String, instruction: String?) {
-        this.name = name
+    constructor(name: String,
+                instruction: String? = null,
+                price: Double?  = null,
+                picture: String?  = null
+    ) {
+        this.name = name.uppercase()
         this.instructions = instruction
+        this.price = price
+        this.picture = picture
     }
 
 
@@ -36,6 +45,8 @@ class Jewel {
 
         cad += "\n" + "Instructions: ${instructions} \n"
         return cad
+
+        cad += "\n" + "Price: ${price} \n"
     }
 
 
