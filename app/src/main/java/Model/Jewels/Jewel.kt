@@ -1,5 +1,7 @@
 package Model.Jewels
 
+import Auxiliaries.ObjectQuantity
+
 class Jewel {
 
     var name:String
@@ -7,7 +9,7 @@ class Jewel {
     var price: Double?
     var picture: String? = null
 
-    var components: MutableList<String> = mutableListOf()
+    var components: MutableList<ObjectQuantity> = mutableListOf()
 
 
     constructor(name: String,
@@ -21,17 +23,23 @@ class Jewel {
         this.picture = picture
     }
 
+    constructor() { //Needed for Firebase
+        this.name = ""
+        this.instructions = ""
+        this.price = 0.0
+        this.picture = ""
+    }
 
     fun addInstructions(instruction: String) {
         instructions = instruction
     }
 
-    fun addComponent(component: String) {
-        components.add(component)
+    fun addObjetcQuantity(objectQuantity: ObjectQuantity) {
+        components.add(objectQuantity)
     }
 
-    fun removeComponent(component: String) {
-        components.remove(component)
+    fun removeObjetcQuantity(objectQuantity: ObjectQuantity) {
+        components.remove(objectQuantity)
     }
 
     override fun toString(): String {

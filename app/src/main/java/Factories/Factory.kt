@@ -1,5 +1,6 @@
 package Factories
 
+import Auxiliaries.ObjectQuantity
 import Model.Hardware.Batch
 import Model.Hardware.Item
 import Model.Jewels.Jewel
@@ -111,6 +112,12 @@ object Factory {
         "Funciona con algunos problemas",
         "Entrega rápida"
     )
+
+    fun randomObjectQuantity(): ObjectQuantity {
+        var objectQuantity = ObjectQuantity(itemTypes.random(), Random.nextInt(1, 3))
+        return objectQuantity
+    }
+
 
     var picturesName = mutableListOf(
         "foto1",
@@ -358,16 +365,18 @@ object Factory {
 
 
     fun createItem(): Item {
+
         var itemType = itemTypes.random()
         var obsevation = observations.random()
         var pictureName = picturesName.random()
 
-        var item2 = Item()
-        item2.attributes[0].content = itemType
-        item2.attributes[1].content = obsevation
-        item2.attributes[2].content = pictureName
+        var item = Item()
+        item.attributes[0].content = itemType
+        item.attributes[1].content = obsevation
+        item.attributes[2].content = pictureName
 
-        return item2
+
+        return item
     }
 
 
@@ -377,7 +386,7 @@ object Factory {
 
 
     fun addDefaultTypes(){
-        Store.Types.allTypesList = itemTypes
+        Store.ItemsTypes.allTypesList = itemTypes
     }
 
 
@@ -388,8 +397,8 @@ object Factory {
 
         var newJewel = Jewel(name,instruction,price, picturesName.random())
 
-        for(i in 1..4){
-            newJewel.components.add(itemTypes.random())
+        for(i in 1..2){
+            newJewel.components.add(randomObjectQuantity())
         }
 
         return newJewel

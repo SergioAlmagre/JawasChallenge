@@ -1,7 +1,9 @@
 package com.example.jawaschallenge
 
+import Connections.FireStore
 import Factories.Factory
 import Model.Hardware.BatchInfo
+import Model.Jewels.Jewel
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,30 +19,52 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
 
+        lifecycleScope.launch {
+            Connections.FireStore.chargeDataBase()
+        }
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
-
-        binding.btnAction.setOnClickListener {
-            binding.textView.text  = Store.PendingBatches.batchList.toString()
-        }
-
-
         binding.btnInsertarUser.setOnClickListener {
-            Connections.FireStore.registerUser(Factory.createUser())
+            Connections.FireStore.addUser(Factory.createUser())
+        }
+
+        binding.btnAddJewelCatalog.setOnClickListener {
+            Connections.FireStore.addJewelToCatalog(Factory.createJewel())
         }
 
 
-        binding.btnInsertarJewel.setOnClickListener {
-            Connections.FireStore.registerJewel(Factory.createJewel())
-        }
-
-        binding.btnInsertarItemInBatch.setOnClickListener {
+        binding.btnShowAllJewels.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     val result = withContext(Dispatchers.Default) {
-                        Connections.FireStore.addItemToBatch("EMILY.WILSON@EXAMPLE.COM", 1, Factory.createItem())
+                        Connections.FireStore.getAllJewels()
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        // Actualizar vistas de la interfaz de usuario aquí
+                        binding.textView.text = Store.JewelsCatalog.jewelsList.toString()
+                        Log.d("Jewels", result.toString())
+
+                    }
+                } catch (e: Exception) {
+                    Log.e("Jewels", "Error: $e")
+                }
+            }
+        }
+
+        binding.btnInsertarItemInBatch.setOnClickListener {//Recuerda que no podrás insertar items a no se que esté recibido en el virgen
+            lifecycleScope.launch {
+                try {
+                    val result = withContext(Dispatchers.Default) {
+                        Connections.FireStore.addItemToBatch(
+                            "DANIEL.MILLER@EXAMPLE.COM",
+                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c",
+                            Factory.createItem()
+                        )
                     }
 
                     withContext(Dispatchers.Main) {
@@ -53,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     Log.e("ItemsInBatch", "Error: $e")
                 }
             }
-
+            Log.d("idItemDepues", Constants.Ids.idItem.toString())
         }
 
         binding.btnAllBatches.setOnClickListener {
@@ -91,17 +115,15 @@ class MainActivity : AppCompatActivity() {
                     Log.e("Count", "Error: $e")
                 }
             }
-
-
         }
 
 
 
-        binding.btnCountItems.setOnClickListener {
+        binding.btnShowItemsInvertory.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     val result = withContext(Dispatchers.Default) {
-                        Connections.FireStore.getCountTypesOfItem()
+                        Connections.FireStore.getItemsInventory()
                     }
 
                     withContext(Dispatchers.Main) {
@@ -117,9 +139,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnInsertDonor.setOnClickListener {
-            Connections.FireStore.registerDonor(Factory.createDonor())
+            Connections.FireStore.addDonor(Factory.createDonor())
         }
-
 
 
         //    ------------------------- DIFFERENT FROM EACH------------------------------- //
@@ -133,7 +154,7 @@ class MainActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = Store.Types.allTypesList.toString()
+                        binding.textView.text = Store.ItemsTypes.allTypesList.toString()
                         Log.d("Count", result.toString())
                     }
                 } catch (e: Exception) {
@@ -146,9 +167,12 @@ class MainActivity : AppCompatActivity() {
         binding.btnInfoBatch.setOnClickListener {
             lifecycleScope.launch {
                 try {
-                    var info:BatchInfo? = null
+                    var info: BatchInfo? = null
                     val result = withContext(Dispatchers.Default) {
-                    info =  Connections.FireStore.getBatchInfoById("EMILY.WILSON@EXAMPLE.COM",1)
+                        info = Connections.FireStore.getBatchInfoById(
+                            "DANIEL.MILLER@EXAMPLE.COM",
+                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
+                        )
                     }
 
                     withContext(Dispatchers.Main) {
@@ -162,20 +186,115 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
+        binding.btnAddType.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    val result = withContext(Dispatchers.Default) {
+                        Connections.FireStore.addNewTypeToFirebase(Factory.itemTypes.random())
+                    }
+                    withContext(Dispatchers.Main) {
+                        // Actualizar vistas de la interfaz de usuario aquí
+                        binding.textView.text = result.toString()
+                        Log.d("Count", result.toString())
+                    }
+                } catch (e: Exception) {
+                }
+            }
+        }
 
 
 //    ------------------------- NUMBER OF COMPONENTS------------------------------- //
-
-
 
 
         binding.btnEndBatch.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     val result = withContext(Dispatchers.Default) {
-                        Connections.FireStore.endBatch("EMILY.WILSON@EXAMPLE.COM", 1)
+                        Connections.FireStore.endBatch(
+                            "DANIEL.MILLER@EXAMPLE.COM",
+                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
+                        )
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        // Actualizar vistas de la interfaz de usuario aquí
+                        binding.textView.text = "Batch ended"
+                        Log.d("Count", result.toString())
+                    }
+                } catch (e: Exception) {
+                    Log.e("Count", "Error: $e")
+                }
+            }
+        }
+
+        binding.btnInsertarBatch.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    val result = withContext(Dispatchers.Default) {
+                        Connections.FireStore.addOrUpdateBatchToDonor(
+                            "DANIEL.MILLER@EXAMPLE.COM",
+                            Factory.createBatch("DANIEL.MILLER@EXAMPLE.COM")
+                        )
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        // Actualizar vistas de la interfaz de usuario aquí
+                        binding.textView.text = result.toString()
+                        Log.d("Count", result.toString())
+                    }
+                } catch (e: Exception) {
+                    Log.e("Count", "Error: $e")
+                }
+            }
+        }
+
+        binding.btnCheckDoJewel.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    var newJewel = FireStore.getJewelByName("GARGANTILLA DE ENGRANAJES")
+                    var isPosible = false
+                    val result = withContext(Dispatchers.Default) {
+                        isPosible = checkIfDoJewelIsPosible(newJewel!!)
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        // Actualizar vistas de la interfaz de usuario aquí
+                        binding.textView.text = isPosible.toString()
+                        Log.d("Count", result.toString())
+                    }
+                } catch (e: Exception) {
+                    Log.e("Count", "Error: $e")
+                }
+            }
+        }
+
+
+        binding.btnDoJewel.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+
+                    val result = withContext(Dispatchers.Default) {
+                        var selectedJewel = FireStore.getJewelByName("GARGANTILLA DE ENGRANAJES")
+                        FireStore.deleteItemsForJewel(selectedJewel!!)
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        // Actualizar vistas de la interfaz de usuario aquí
+                        binding.textView.text = result.toString()
+                        Log.d("Count", result.toString())
+                    }
+                } catch (e: Exception) {
+                    Log.e("Count", "Error: $e")
+                }
+            }
+        }
+
+//    ------------------------- TO CHECK THINGS ------------------------------- //
+        binding.btnAddItemFireSuelto.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    val result = withContext(Dispatchers.Default) {
+                        Connections.FireStore.addItemToFireStore(Factory.createItem())
                     }
 
                     withContext(Dispatchers.Main) {
@@ -192,12 +311,45 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
+        // END OF ONCREATE
     }
-
-
-
-
-
 }
+
+
+
+
+
+suspend fun checkIfDoJewelIsPosible(jewel: Jewel): Boolean {
+    var isPosible = false
+    var actualInvertoryItems = FireStore.getItemsInventory()
+    var quantityOfItems = 0
+
+    for (component in actualInvertoryItems.sumarize) {
+        for (componentJewel in jewel.components) {
+            if (componentJewel.name == component.name) {
+                if (component.quantity >= componentJewel.quantity) {
+                    isPosible = true
+                    quantityOfItems++
+                } else {
+                    isPosible = false
+                    break
+                }
+            }
+        }
+    }
+    if(quantityOfItems != jewel.components.size) isPosible = false
+    return isPosible
+}
+
+fun checkIfNameOfJewelIsUnique(nameJewel: String): Boolean {
+    var isUnique = true
+    for (jewelInCatalog in Store.JewelsCatalog.jewelsList) {
+        if (jewelInCatalog.name == nameJewel) {
+            isUnique = false
+            break
+        }
+    }
+    return isUnique
+}
+
+

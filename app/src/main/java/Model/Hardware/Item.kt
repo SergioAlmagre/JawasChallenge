@@ -1,10 +1,11 @@
 package Model.Hardware
 
 import Auxiliaries.Attribute
+import java.util.UUID
 
 class Item {
 
-    var idItem: Int
+    var idItem: String
     var attributes = mutableListOf<Attribute>()
     init {
         var itemType = Attribute("Type")
@@ -18,13 +19,16 @@ class Item {
 
     constructor(
     ) {
-        this.idItem = Constants.Ids.idItem
-        Constants.Ids.idItem++
+        this.idItem = generateUniqueId()
     }
 
 
     override fun toString(): String {
         return "IdItem=$idItem, attributes=$attributes \n)"
+    }
+
+    private fun generateUniqueId(): String {
+        return UUID.randomUUID().toString()
     }
 
 

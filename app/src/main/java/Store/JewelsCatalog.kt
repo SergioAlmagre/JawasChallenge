@@ -2,7 +2,7 @@ package Store
 
 import Model.Jewels.Jewel
 
-object JewelsStore {
+object JewelsCatalog {
 
     var jewelsList: MutableList<Jewel> = mutableListOf()
 

@@ -4,8 +4,6 @@ import androidx.core.view.KeyEventDispatcher.Component
 
 class Recipe {
 
-
-
     constructor()
 
 

@@ -16,9 +16,9 @@ import kotlinx.coroutines.tasks.await
 object FireStore {
     val db = Firebase.firestore
 
-    //    ------------------------- REGISTERS ------------------------------- //
+    //    ------------------------- ADD ------------------------------- //
 
-    fun registerUser(user: User): Int {
+    fun addUser(user: User): Int {
         var cant = 0
         var us = hashMapOf(
             "name" to user.name,
@@ -37,7 +37,7 @@ object FireStore {
         return cant
     }
 
-    fun registerDonor(donor: Donor): Int {
+    fun addDonor(donor: Donor): Int {
         var cant = 0
         var us = hashMapOf(
             "name" to donor.name,
@@ -57,30 +57,48 @@ object FireStore {
         return cant
     }
 
-    fun registerBatch(batch: Batch): Int {
+    suspend fun addOrUpdateBatchToDonor(email: String, batch: Batch): Int {
         var cant = 0
-        var ba = hashMapOf(
-            "idBatch" to batch.idBatch,
-            "userName" to batch.userName.uppercase(),
-            "latitude" to batch.latitude,
-            "longitude" to batch.longitude,
-            "address" to batch.address,
-            "creationDate" to batch.creationDate,
-            "delivered" to batch.received,
-            "picture" to batch.picture,
-            "isClassifed" to batch.isClassifed,
-            "itemsInside" to batch.itemsInside
-        )
-        //if does exist the document, it will be replaced.
-        db.collection("batches")
-            .document(ba.get("idBatch").toString()) //It will be "document key".
-            .set(ba).addOnSuccessListener {
-                cant = 1
+
+        // Obtener la referencia al documento del donante
+        val donorDocument = db.collection("users").document(email)
+
+        try {
+            // Obtener el documento del donante
+            val donor = donorDocument.get().await().toObject(Donor::class.java)
+
+            // Verificar si el objeto Donor es válido
+            if (donor != null) {
+                // Buscar el índice del lote con el mismo idBatch en la lista de lotes
+                val existingBatchIndex = donor.batches.indexOfFirst { it.idBatch == batch.idBatch }
+
+                if (existingBatchIndex != -1) {
+                    // Si existe, actualizar el lote en la lista
+                    donor.batches[existingBatchIndex] = batch
+                } else {
+                    // Si no existe, agregar el nuevo lote a la lista
+                    donor.batches.add(batch)
+                }
+
+                // Actualizar el documento del donante con la lista de lotes modificada
+                donorDocument.update("batches", donor.batches)
+                    .addOnSuccessListener {
+                        cant = 1
+                        Log.d("addOrUpdateBatchToDonor", "Lote agregado o actualizado con éxito")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("addOrUpdateBatchToDonor", "Error al agregar o actualizar lote: $e")
+                    }
             }
+        } catch (exception: Exception) {
+            Log.e("addOrUpdateBatchToDonor", "Error al obtener datos: $exception")
+        }
+
         return cant
     }
 
-    fun registerJewel(jewel: Jewel): Int {
+
+    fun addJewelToCatalog(jewel: Jewel): Int {
         var cant = 0
         var je = hashMapOf(
             "name" to jewel.name.uppercase(),
@@ -89,7 +107,7 @@ object FireStore {
             "picture" to jewel.picture,
             "components" to jewel.components,
         )
-        db.collection("jewels")
+        db.collection("jewelsCatalog")
             .document(je.get("name").toString())
             .set(je).addOnSuccessListener {
                 cant = 1
@@ -98,12 +116,12 @@ object FireStore {
     }
 
 
-    fun registerNewItem(item: Item):Int{
+    fun addNewItem(item: Item): Int {
         var cant = 0
         var it = hashMapOf(
             "itemId" to item.idItem,
             "attributes" to item.attributes,
-            )
+        )
         db.collection("items")
             .document(it.get("itemId").toString())
             .set(it).addOnSuccessListener {
@@ -112,8 +130,8 @@ object FireStore {
         return cant
     }
 
-    //    ------------------------- ADD ITEM TO BATCH ------------------------------- //
-    suspend fun addItemToBatch(userEmail: String, batchId: Int, item: Item) {
+
+    suspend fun addItemToBatch(userEmail: String, batchId: String, item: Item) {
         // Referencia al documento del cliente
         val clientDocument = db.collection("users").document(userEmail)
 
@@ -147,8 +165,28 @@ object FireStore {
     }
 
 
+    suspend fun addNewTypeToFirebase(typeName: String): Boolean {
+        val typesCollection = db.collection("itemsTypes")
 
-    //    ------------------------- GET DATA ------------------------------- //
+        val newType = hashMapOf(
+            "typeName" to typeName
+        )
+
+        try {
+            typesCollection
+                .document(typeName)
+                .set(newType)
+                .await()
+
+            return true
+        } catch (exception: Exception) {
+            println("Error al añadir nuevo tipo a Firebase: $exception")
+            return false
+        }
+    }
+
+
+    //    ---------------------------- GET --------------------------------- //
     suspend fun getAllPendingBatchesFromUsers() { // THIS QUERY SHOW US ONLY THE BATCHES THAT ARE NOT CLASSIFIED
         // Referencia a la colección de usuarios
         val usersCollection = db.collection("users")
@@ -205,7 +243,8 @@ object FireStore {
             }
 
             // Ordenar los items por el atributo "Type" alfabéticamente
-            val sortedItems = allItems.sortedBy { it.attributes.find { attr -> attr.name == "Type" }?.content }
+            val sortedItems =
+                allItems.sortedBy { it.attributes.find { attr -> attr.name == "Type" }?.content }
 
             // Actualizar la lista en el objeto Store.ItemsStore
             Store.ItemsStore.itemsList = sortedItems.toMutableList()
@@ -216,7 +255,7 @@ object FireStore {
     }
 
 
-    suspend fun getBatchInfoById(userEmail: String, batchId: Int): BatchInfo? {
+    suspend fun getBatchInfoById(userEmail: String, batchId: String): BatchInfo? {
         try {
             // Referencia al documento del usuario
             val userDocument = db.collection("users").document(userEmail)
@@ -248,21 +287,105 @@ object FireStore {
         return null // Retorna null si no se encuentra el lote con el idBatch específico
     }
 
+    suspend fun getAllJewels() {
+        // Referencia a la colección de joyas
+        val jewelsCollection = db.collection("jewelsCatalog")
+
+        // Lista para almacenar todas las joyas
+        val allJewels = mutableListOf<Jewel>()
+
+        try {
+            val querySnapshot = jewelsCollection.get().await()
+
+            for (document in querySnapshot.documents) {
+                // Obtener la joya
+                val jewel = document.toObject(Jewel::class.java)
+
+                // Verificar si el objeto Jewel es válido
+                if (jewel != null) {
+                    allJewels.add(jewel)
+                }
+            }
+
+            // Ordenar las joyas por nombre alfabéticamente
+            val sortedJewels = allJewels.sortedBy { it.name }
+            Log.d("getAllJewels", sortedJewels.toString())
+
+            // Actualizar la lista en el objeto Store.JewelsStore
+            Store.JewelsCatalog.jewelsList = sortedJewels.toMutableList()
+        } catch (exception: Exception) {
+            Log.d("Jewels", "Error al obtener datos: $exception")
+            println("Error al obtener datos: $exception")
+        }
+    }
+
+//    suspend fun getAllDistinctTypes() { // De esta forma recopilaba los tipos desde los items
+//        // Referencia a la colección
+//        val itemsCollection = db.collection("items")
+//
+//        // Conjunto para almacenar los resultados únicos
+//        val typesSet = mutableSetOf<String>()
+//
+//        try {
+//            val querySnapshot = itemsCollection.get().await()
+//
+//            for (document in querySnapshot.documents) {
+//                val attributes = document.get("attributes") as? List<Map<String, Any>>
+//
+//                // Buscar el atributo con nombre "Type"
+//                val typeAttribute = attributes?.find { it["name"] == "Type" }
+//
+//                // Agregar el valor del atributo "Type" al conjunto
+//                val typeValue = typeAttribute?.get("content") as? String
+//                if (typeValue != null) {
+//                    typesSet.add(typeValue)
+//                }
+//            }
+//
+//            // Conservar los tipos antiguos
+//            val oldTypes = Store.ItemsTypes.allTypesList
+//
+//            // Agregar los tipos antiguos al conjunto
+//            typesSet.addAll(oldTypes)
+//
+//            // Actualizar la lista en Store.itemsTypes
+//            Store.ItemsTypes.allTypesList = typesSet.sorted().toMutableList()
+//
+//        } catch (exception: Exception) {
+//            println("Error al obtener datos: $exception")
+//        }
+//    }
 
 
+    suspend fun getAllDistinctTypes() {
+        // Referencia a la colección
+        val typesCollection = db.collection("itemsTypes")
+
+        // Lista para almacenar los resultados
+        val typesList = mutableListOf<String>()
+
+        try {
+            val querySnapshot = typesCollection.get().await()
+
+            for (document in querySnapshot.documents) {
+                val type = document.getString("typeName")
+                type?.let { typesList.add(it) }
+            }
+
+            // Actualizar la lista en Store.itemsTypes
+            Store.ItemsTypes.allTypesList = typesList.sorted().toMutableList()
+        } catch (exception: Exception) {
+            println("Error al obtener datos: $exception")
+        }
+    }
 
 
-
-
-
-    //    ------------------------- COUNT QUANTITIES OF COMPONENTS------------------------------- //
-
-    suspend fun getCountTypesOfItem(): QuantitiesSumarize {
+    suspend fun getItemsInventory(): QuantitiesSumarize {
         // Referencia a la colección
         val itemsCollection = db.collection("items")
 
         // Mapa para almacenar los resultados
-        val countsMap = mutableMapOf<String, Long>()
+        val countsMap = mutableMapOf<String, Int>()
 
         try {
             val querySnapshot = itemsCollection.get().await()
@@ -274,7 +397,8 @@ object FireStore {
                 if (item != null) {
                     for (attribute in item.attributes) {
                         if (attribute.name == "Type" && attribute.content != null) {
-                            countsMap[attribute.content!!] = countsMap.getOrDefault(attribute.content!!, 0) + 1
+                            countsMap[attribute.content!!] =
+                                countsMap.getOrDefault(attribute.content!!, 0) + 1
                         }
                     }
                 }
@@ -297,70 +421,43 @@ object FireStore {
     }
 
 
-
-
-
-//    ------------------------- DIFFERENT TYPES OF ITEMS------------------------------- //
-
-    suspend fun getAllDistinctTypes() {
-        // Referencia a la colección
-        val itemsCollection = db.collection("items")
-
-        // Conjunto para almacenar los resultados únicos
-        val typesSet = mutableSetOf<String>()
-
+    suspend fun getJewelByName(jewelName: String): Jewel? {
         try {
-            val querySnapshot = itemsCollection.get().await()
+            // Referencia a la colección de joyas
+            val jewelsCollection = db.collection("jewelsCatalog")
 
-            for (document in querySnapshot.documents) {
-                val attributes = document.get("attributes") as? List<Map<String, Any>>
+            // Realizar una consulta para obtener la joya por nombre
+            val querySnapshot = jewelsCollection.whereEqualTo("name", jewelName).get().await()
 
-                // Buscar el atributo con nombre "Type"
-                val typeAttribute = attributes?.find { it["name"] == "Type" }
+            // Verificar si se encontró alguna joya
+            if (!querySnapshot.isEmpty) {
+                // Obtener el primer documento (debería ser único por nombre)
+                val jewelDocument = querySnapshot.documents[0]
 
-                // Agregar el valor del atributo "Type" al conjunto
-                val typeValue = typeAttribute?.get("content") as? String
-                if (typeValue != null) {
-                    typesSet.add(typeValue)
-                }
+                // Convertir el documento a un objeto Jewel
+                return jewelDocument.toObject(Jewel::class.java)
+            } else {
+                // No se encontró ninguna joya con el nombre proporcionado
+                Log.d("getJewelByName", "No se encontró ninguna joya con el nombre: $jewelName")
             }
-
-            // Send to Store all different types
-            Store.Types.allTypesList = typesSet.sorted().toMutableList().toMutableList()
         } catch (exception: Exception) {
-            println("Error al obtener datos: $exception")
+            Log.e("getJewelByName", "Error al obtener la joya: $exception")
         }
+
+        // En caso de error o si no se encuentra ninguna joya, devolver null
+        return null
     }
 
 
-
-
-
-    //    ------------------------- UPDATAES ------------------------------- //
-    suspend fun updateDifferentsFromEach(){
-        getAllDistinctTypes()
-    }
-
-
-//    ------------------------- GET SPECIFIC DATA ------------------------------- //
-
-
-
-
-
-
-
-
-
-
-//    ------------------------- OPERATING FUNCTIONS ------------------------------- //
-    suspend fun endBatch(userEmail: String, batchId: Int) {
+    //    ------------------------- OPERATING FUNCTIONS ------------------------------- //
+    suspend fun endBatch(userEmail: String, batchId: String) {
         // Referencia al documento del cliente
         val clientDocument = db.collection("users").document(userEmail)
 
         try {
             // Obtener el cliente
             val client = clientDocument.get().await().toObject(Donor::class.java)
+            Log.d("cliente", client.toString())
 
             // Verificar si el objeto Cliente es válido y si tiene batches
             if (client != null && client.batches.isNotEmpty()) {
@@ -372,7 +469,7 @@ object FireStore {
                         batch.itemsInside.forEach { item ->
                             Store.ItemsStore.itemsList.add(item)
                         }
-                        Log.d( "ItemsStore",Store.ItemsStore.itemsList.toString())
+                        Log.d("ItemsStore", Store.ItemsStore.itemsList.toString())
                         // Update ItemsStore and ItemsCollection in FireStore
                         updateItemsStore()
 
@@ -396,6 +493,38 @@ object FireStore {
         }
     }
 
+
+    //    ------------------------- UPDATES ------------------------------- //
+
+    suspend fun chargeDataBase() {
+        updateItemsStore()
+    }
+
+
+    suspend fun updateLocalTypesFromFirebase(): List<String> {
+        val typesCollection = db.collection("ItemsTypes")
+
+        try {
+            val querySnapshot = typesCollection.get().await()
+
+            val typesList = mutableListOf<String>()
+
+            for (document in querySnapshot.documents) {
+                val type = document.getString("typeName")
+                type?.let { typesList.add(it) }
+            }
+
+            // Actualizar la lista local en Store.itemsTypes
+            Store.ItemsTypes.allTypesList.addAll(typesList)
+
+            return typesList
+        } catch (exception: Exception) {
+            println("Error al obtener tipos desde Firebase: $exception")
+            return emptyList()
+        }
+    }
+
+
     fun updateItemsStore() {
         try {
             val items = Store.ItemsStore.itemsList
@@ -407,6 +536,7 @@ object FireStore {
                 // Crear un mapa con los datos actualizados del ítem
                 val updatedItemData = hashMapOf(
                     "attributes" to item.attributes,
+                    "itemId" to item.idItem,
                     // Agrega otros campos que necesites actualizar
                 )
 
@@ -418,7 +548,10 @@ object FireStore {
                         Log.d("updateItemsStore", "Ítem actualizado con éxito o creado: $itemId")
                     }
                     .addOnFailureListener { e ->
-                        Log.e("updateItemsStore", "Error al actualizar o crear ítem: $itemId, Error: $e")
+                        Log.e(
+                            "updateItemsStore",
+                            "Error al actualizar o crear ítem: $itemId, Error: $e"
+                        )
                     }
             }
         } catch (exception: Exception) {
@@ -427,8 +560,59 @@ object FireStore {
     }
 
 
+    //    ------------------------- UPDATES ------------------------------- //
+
+    suspend fun deleteItemsForJewel(jewel: Jewel) {
+        try {
+            // Referencia a la colección de items
+            val itemsCollection = db.collection("items")
+
+            // Recorrer los componentes de la joya
+            for (component in jewel.components) {
+                val componentName = component.name
+                val componentQuantity = component.quantity
+
+                // Realizar una consulta para obtener los items del tipo de componente
+                val querySnapshot = itemsCollection
+                    .whereArrayContains("attributes", mapOf("name" to "Type", "content" to componentName))
+                    .limit(componentQuantity.toLong())
+                    .get()
+                    .await()
+
+                // Eliminar los items encontrados
+                for (document in querySnapshot.documents) {
+                    val itemId = document.id
+                    itemsCollection.document(itemId).delete().await()
+                    Log.d("deleteItemsForJewel", "Ítem eliminado con éxito: $itemId")
+                }
+
+                Log.d("deleteItemsForJewel", "Componente: $componentName, Cantidad eliminada: ${querySnapshot.size()}")
+            }
+
+        } catch (exception: Exception) {
+            Log.e("deleteItemsForJewel", "Error al eliminar ítems: $exception")
+        }
+    }
 
 
+    //    ------------------------- TO CHECK THINGS ------------------------------- //
+
+
+    suspend fun addItemToFireStore(item: Item){
+        var it = hashMapOf(
+            "itemId" to item.idItem,
+            "attributes" to item.attributes,
+        )
+        db.collection("items")
+            .document(it.get("itemId").toString())
+            .set(it).addOnSuccessListener {
+                Log.d("addItemToFireStore", "Item agregado con éxito")
+            }
+            .addOnFailureListener { e ->
+                Log.e("addItemToFireStore", "Error al agregar item: $e")
+            }
+    }
 
 
 }
+

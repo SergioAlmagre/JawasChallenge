@@ -2,9 +2,10 @@ package Model.Hardware
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 class Batch {
-    val idBatch: Int
+    val idBatch: String
     val userName: String
     var latitude: Double?
     var longitude: Double?
@@ -27,7 +28,7 @@ class Batch {
         address: String? = null,
         picture: String? = null,
     ) {
-        this.idBatch = Constants.Ids.idBatch
+        this.idBatch = generateUniqueId()
         this.userName = userName
         this.latitude = latitude
         this.longitude = longitude
@@ -36,7 +37,6 @@ class Batch {
         this.received = false
         this.picture = picture
         this.isClassifed = false // this option only must be change to true if the batch is classified
-        Constants.Ids.idBatch++
     }
 
     constructor() : this(
@@ -61,6 +61,10 @@ class Batch {
 
     override fun toString(): String {
         return "Batch(idBatch=$idBatch, userName='$userName', latitude=$latitude, longitude=$longitude, creationDate='$date', delivered=$received,  picture=$picture, isClassifed=$isClassifed, itemsInside=$itemsInside\n\n)"
+    }
+
+    private fun generateUniqueId(): String {
+        return UUID.randomUUID().toString()
     }
 
 
