@@ -4,7 +4,6 @@ import Auxiliaries.ObjectQuantity
 import Model.Hardware.Batch
 import Model.Hardware.Item
 import Model.Jewels.Jewel
-import Model.Users.Donor
 import Model.Users.User
 import kotlin.random.Random
 
@@ -90,7 +89,7 @@ object Factory {
     )
 
 
-    var observations = mutableListOf(
+    var descriptions = mutableListOf(
         "Excelente estado",
         "Algunos arañazos leves",
         "Funciona perfectamente",
@@ -367,12 +366,12 @@ object Factory {
     fun createItem(): Item {
 
         var itemType = itemTypes.random()
-        var obsevation = observations.random()
+        var description = descriptions.random()
         var pictureName = picturesName.random()
 
         var item = Item()
         item.attributes[0].content = itemType
-        item.attributes[1].content = obsevation
+        item.attributes[1].content = description
         item.attributes[2].content = pictureName
 
 
@@ -409,32 +408,30 @@ object Factory {
         return roles.random()
     }
 
-    fun createUser(): User {
+    /**
+     * Roles:
+     * 1 - Admin
+     * 2 - Donor
+     * 3 - Designer
+     * 4 - Recycler
+     */
+
+    fun createUser(role: String): User {
         val newUser = User(
             name = donorsNames.random(),
             email = emails.random(),
             address = addresses.random(),
             phone = phoneNumbers.random(),
             picture = picturesName.random(),
-            role = rolesRandom()
-        )
-        return newUser
-    }
-
-    fun createDonor(): Donor {
-        val newDonor = Donor(
-            name = donorsNames.random(),
-            email = emails.random(),
-            address = addresses.random(),
-            phone = phoneNumbers.random(),
-            picture = picturesName.random(),
-            role = "0"
+            role = role
         )
 
-        for (i in 0..5){
-            newDonor.addBatch(createBatch(newDonor.name))
+        if (role == "2"){
+            for (i in 0..3){
+                newUser.addBatch(createBatch(newUser.name))
+            }
         }
-        return newDonor
+        return newUser
     }
 
 

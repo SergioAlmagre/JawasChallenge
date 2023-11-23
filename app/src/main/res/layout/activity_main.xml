@@ -7,16 +7,28 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btnDoJewel"
+        android:id="@+id/btnDeleteItemsTypes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Do Jewel"
+        android:text="Del itemsTypes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.927"
+        app:layout_constraintHorizontal_bias="0.011"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.512" />
+        app:layout_constraintVertical_bias="0.43" />
+
+    <Button
+        android:id="@+id/btnChangeRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Change role"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.584"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.43" />
 
     <Button
         android:id="@+id/btnInfoBatch"
@@ -25,33 +37,45 @@
         android:text="Info batch"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.412"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.995" />
 
     <Button
-        android:id="@+id/btnAddJewelCatalog"
+        android:id="@+id/btnDeleteUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="addJewelCatalog"
+        android:text="Delete user"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintHorizontal_bias="0.399"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.497" />
+        app:layout_constraintVertical_bias="0.92" />
 
     <Button
-        android:id="@+id/btnEndBatch"
+        android:id="@+id/btnDeleteJewel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="EndBatch"
+        android:text="Delete Jewel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.93"
+        app:layout_constraintHorizontal_bias="0.591"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnDeleteItemById"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Del itemById"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.837"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.991" />
+        app:layout_constraintVertical_bias="0.995" />
 
     <Button
         android:id="@+id/btnAddType"
@@ -72,10 +96,81 @@
         android:text="Add Item Fire suelto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.893"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.901" />
+        app:layout_constraintVertical_bias="0.872" />
+
+    <Button
+        android:id="@+id/btnCheckDoJewel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check do Jewel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.984"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.571" />
+
+    <Button
+        android:id="@+id/btnShowItemsInvertory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show items inventory"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.986"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.641" />
+
+    <Button
+        android:id="@+id/btnInsertarBatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="insertarBatchDonor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.995"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.721" />
+
+    <Button
+        android:id="@+id/btnDistinType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distin Type"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.802" />
+
+    <Button
+        android:id="@+id/btnEndBatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EndBatch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.394"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85" />
+
+    <Button
+        android:id="@+id/btnDoJewel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do Jewel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.986"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnAllBatches"
@@ -102,78 +197,6 @@
         app:layout_constraintVertical_bias="0.995" />
 
     <Button
-        android:id="@+id/btnInsertDonor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Insert Donor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.569" />
-
-    <Button
-        android:id="@+id/btnShowAllJewels"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show all jewels"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.71" />
-
-    <Button
-        android:id="@+id/btnCheckDoJewel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check do Jewel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.582" />
-
-    <Button
-        android:id="@+id/btnInsertarBatch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="insertarBatchDonor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.733" />
-
-    <Button
-        android:id="@+id/btnShowItemsInvertory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show items inventory"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.653" />
-
-    <Button
-        android:id="@+id/btnDistinType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Distin Type"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.914"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.815" />
-
-    <Button
         android:id="@+id/btnInsertarItemInBatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -192,21 +215,57 @@
         android:text="insertarUser"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.112"
+        app:layout_constraintHorizontal_bias="0.01"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.639" />
 
-    <ScrollView
-        android:id="@+id/txtScroll"
-        android:layout_width="358dp"
-        android:layout_height="328dp"
+    <Button
+        android:id="@+id/btnAddJewelCatalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="addJewelCatalog"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.011"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.033">
+        app:layout_constraintVertical_bias="0.499" />
+
+    <Button
+        android:id="@+id/btnInsertDonor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert Donor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.569" />
+
+    <Button
+        android:id="@+id/btnShowAllJewels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show all jewels"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.003"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.71" />
+
+    <ScrollView
+        android:id="@+id/txtScroll"
+        android:layout_width="382dp"
+        android:layout_height="283dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.013">
 
         <TextView
             android:id="@+id/textView"
