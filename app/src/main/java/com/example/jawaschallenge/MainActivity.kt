@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btnInsertarUser.setOnClickListener {
-            Connections.FireStore.addUser(Factory.createUser())
+            Connections.FireStore.addUser(Factory.createUser("1"))
         }
 
         binding.btnAddJewelCatalog.setOnClickListener {
@@ -139,8 +139,52 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnInsertDonor.setOnClickListener {
-            Connections.FireStore.addDonor(Factory.createDonor())
+            Connections.FireStore.addUser(Factory.createUser("2"))
         }
+        //    ------------------------- DELETE------------------------------- //
+
+        binding.btnDeleteUser.setOnClickListener {
+            lifecycleScope.launch {
+                val userEmailToDelete = "DANIEL.MILLER@EXAMPLE.COM"
+                FireStore.deleteUserByEmail(userEmailToDelete)
+
+            }
+        }
+
+        binding.btnDeleteJewel.setOnClickListener {
+            lifecycleScope.launch {
+                val jewelName = "ANILLO DE RESISTENCIA"
+                FireStore.deleteJewelByName(jewelName)
+            }
+        }
+
+        binding.btnDeleteItemsTypes.setOnClickListener {
+            lifecycleScope.launch {
+                val typeName = "Altavoces"
+                FireStore.deleteItemsTypeByName(typeName)
+            }
+        }
+
+        binding.btnDeleteItemById.setOnClickListener {
+            lifecycleScope.launch {
+                val itemId = "982271c6-014b-4f39-889e-ef0a17edfe95"
+                FireStore.deleteItemById(itemId)
+            }
+        }
+
+
+        //    ------------------------- UPDATES ------------------------------- //
+
+        binding.btnChangeRole.setOnClickListener {
+            lifecycleScope.launch {
+                val userEmailToUpdate = "AVA.MARTIN@EXAMPLE.COM"
+                val newRole = "2"
+                FireStore.updateUserRoleByEmail(userEmailToUpdate, newRole)
+            }
+        }
+
+
+
 
 
         //    ------------------------- DIFFERENT FROM EACH------------------------------- //

@@ -6,7 +6,6 @@ import Model.Hardware.Batch
 import Model.Hardware.BatchInfo
 import Model.Hardware.Item
 import Model.Jewels.Jewel
-import Model.Users.Donor
 import Model.Users.User
 import android.util.Log
 import com.google.firebase.Firebase
@@ -26,7 +25,8 @@ object FireStore {
             "address" to user.address,
             "phone" to user.phone,
             "picture" to user.picture,
-            "role" to user.role
+            "role" to user.role,
+            "batches" to user.batches
         )
         //if does exist the document, it will be replaced.
         db.collection("users")
@@ -37,25 +37,6 @@ object FireStore {
         return cant
     }
 
-    fun addDonor(donor: Donor): Int {
-        var cant = 0
-        var us = hashMapOf(
-            "name" to donor.name,
-            "email" to donor.email.uppercase(),
-            "address" to donor.address,
-            "phone" to donor.phone,
-            "picture" to donor.picture,
-            "role" to donor.role,
-            "batches" to donor.batches
-        )
-        //if does exist the document, it will be replaced.
-        db.collection("users")
-            .document(us.get("email").toString()) //It will be "document key".
-            .set(us).addOnSuccessListener {
-                cant = 1
-            }
-        return cant
-    }
 
     suspend fun addOrUpdateBatchToDonor(email: String, batch: Batch): Int {
         var cant = 0
@@ -65,7 +46,7 @@ object FireStore {
 
         try {
             // Obtener el documento del donante
-            val donor = donorDocument.get().await().toObject(Donor::class.java)
+            val donor = donorDocument.get().await().toObject(User::class.java)
 
             // Verificar si el objeto Donor es válido
             if (donor != null) {
@@ -137,7 +118,7 @@ object FireStore {
 
         try {
             // Obtener el cliente
-            val client = clientDocument.get().await().toObject(Donor::class.java)
+            val client = clientDocument.get().await().toObject(User::class.java)
 
             // Verificar si el objeto Cliente es válido y si tiene batches
             if (client != null && client.batches.isNotEmpty()) {
@@ -199,7 +180,7 @@ object FireStore {
 
             for (document in querySnapshot.documents) {
                 // Obtener el usuario y su lista de lotes
-                val user = document.toObject(Donor::class.java)
+                val user = document.toObject(User::class.java)
 
                 // Verificar si el objeto User es válido y tiene lotes
                 if (user != null) {
@@ -261,7 +242,7 @@ object FireStore {
             val userDocument = db.collection("users").document(userEmail)
 
             // Obtener el usuario
-            val user = userDocument.get().await().toObject(Donor::class.java)
+            val user = userDocument.get().await().toObject(User::class.java)
 
             // Verificar si el objeto Usuario es válido y si tiene lotes
             if (user != null && user.batches.isNotEmpty()) {
@@ -456,7 +437,7 @@ object FireStore {
 
         try {
             // Obtener el cliente
-            val client = clientDocument.get().await().toObject(Donor::class.java)
+            val client = clientDocument.get().await().toObject(User::class.java)
             Log.d("cliente", client.toString())
 
             // Verificar si el objeto Cliente es válido y si tiene batches
@@ -560,7 +541,25 @@ object FireStore {
     }
 
 
-    //    ------------------------- UPDATES ------------------------------- //
+    suspend fun updateUserRoleByEmail(userEmail: String, newRole: String) {
+        try {
+            // Referencia al documento del usuario en la colección "users"
+            val userDocument = db.collection("users").document(userEmail)
+
+            // Actualizar el rol del usuario en el documento
+            userDocument.update("role", newRole).await()
+
+            Log.d("updateUserRoleByEmail", "Rol del usuario actualizado con éxito: $userEmail")
+        } catch (exception: Exception) {
+            Log.e("updateUserRoleByEmail", "Error al actualizar rol del usuario: $exception")
+        }
+    }
+
+
+
+
+
+    //    ------------------------- DELETE ------------------------------- //
 
     suspend fun deleteItemsForJewel(jewel: Jewel) {
         try {
@@ -593,6 +592,86 @@ object FireStore {
             Log.e("deleteItemsForJewel", "Error al eliminar ítems: $exception")
         }
     }
+
+
+    suspend fun deleteJewelByName(jewelName: String) {
+        try {
+            // Referencia al documento de la joya en el catálogo
+            val jewelDocument = db.collection("jewelsCatalog").document(jewelName)
+
+            // Borrar el documento de la joya
+            jewelDocument.delete().await()
+
+            // También puedes agregar aquí cualquier otra lógica que necesites después de borrar la joya
+            Log.d("deleteJewelByName", "Joya eliminada con éxito: $jewelName")
+        } catch (exception: Exception) {
+            Log.e("deleteJewelByName", "Error al eliminar joya: $exception")
+        }
+    }
+
+
+    suspend fun deleteItemsTypeByName(itemTypeName: String) {
+        try {
+            // Referencia al documento del tipo de ítem en la colección "ItemsTypes"
+            val itemTypeDocument = db.collection("itemsTypes").document(itemTypeName)
+
+            // Borrar el documento del tipo de ítem
+            itemTypeDocument.delete().await()
+
+            // También puedes agregar aquí cualquier otra lógica que necesites después de borrar el tipo de ítem
+            Log.d("deleteItemsTypeByName", "Tipo de ítem eliminado con éxito: $itemTypeName")
+        } catch (exception: Exception) {
+            Log.e("deleteItemsTypeByName", "Error al eliminar tipo de ítem: $exception")
+        }
+    }
+
+
+    suspend fun deleteItemById(itemId: String) {
+        try {
+            // Referencia al documento del ítem en la colección "items"
+            val itemDocument = db.collection("items").document(itemId)
+
+            // Borrar el documento del ítem
+            itemDocument.delete().await()
+
+            // También puedes agregar aquí cualquier otra lógica que necesites después de borrar el ítem
+            Log.d("deleteItemById", "Ítem eliminado con éxito: $itemId")
+        } catch (exception: Exception) {
+            Log.e("deleteItemById", "Error al eliminar ítem: $exception")
+        }
+    }
+
+
+
+
+    suspend fun deleteUserByEmail(email: String) {
+        try {
+            // Referencia al documento del usuario
+            val userDocument = db.collection("users").document(email)
+
+            // Borrar el documento del usuario
+            userDocument.delete().await()
+
+            // También puedes agregar aquí cualquier otra lógica que necesites después de borrar el usuario
+            Log.d("deleteUserByEmail", "Usuario eliminado con éxito: $email")
+        } catch (exception: Exception) {
+            Log.e("deleteUserByEmail", "Error al eliminar usuario: $exception")
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //    ------------------------- TO CHECK THINGS ------------------------------- //

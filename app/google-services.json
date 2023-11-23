@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "173000706716",
+    "project_id": "jawaschallenge",
+    "storage_bucket": "jawaschallenge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173000706716:android:a6a871e6bf7a2cfa4dfb59",
+        "android_client_info": {
+          "package_name": "com.example.jawaschallenge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173000706716-fvam5pnpbdposk9bdc4093aehr3c2usd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jawaschallenge",
+            "certificate_hash": "4055a287d0f5a8ccf569934e94862a27fedfdc16"
+          }
+        },
+        {
+          "client_id": "173000706716-3hdo4moo29d1uvpodddskmvv0k2kqvhn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCskcnta919Zsr_0eNtW2hiZh194vhw0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173000706716-3hdo4moo29d1uvpodddskmvv0k2kqvhn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
