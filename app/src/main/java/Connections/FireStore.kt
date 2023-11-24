@@ -168,6 +168,29 @@ object FireStore {
 
 
     //    ---------------------------- GET --------------------------------- //
+
+
+
+    suspend fun getUserByEmail(email: String): User? {
+
+        try {
+            val documentSnapshot = db.collection("users").document(email).get().await()
+
+            if (documentSnapshot.exists()) {
+                // El documento existe, devuelve el usuario
+                return documentSnapshot.toObject(User::class.java)
+            } else {
+                // El documento no existe
+                return null
+            }
+        } catch (e: Exception) {
+            // Maneja cualquier excepción que pueda ocurrir durante la obtención de datos
+            return null
+        }
+    }
+
+
+
     suspend fun getAllPendingBatchesFromUsers() { // THIS QUERY SHOW US ONLY THE BATCHES THAT ARE NOT CLASSIFIED
         // Referencia a la colección de usuarios
         val usersCollection = db.collection("users")

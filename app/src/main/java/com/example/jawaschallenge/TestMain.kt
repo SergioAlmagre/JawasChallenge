@@ -8,13 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import com.example.jawaschallenge.databinding.ActivityMainBinding
+import com.example.jawaschallenge.databinding.TestMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+class TestMain: AppCompatActivity() {
+    lateinit var binding: TestMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = TestMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
