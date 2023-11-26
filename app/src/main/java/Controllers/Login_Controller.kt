@@ -2,20 +2,17 @@ package Controllers
 
 import Connections.FireStore
 import Model.Users.User
-import Tools.ProviderType
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.example.jawaschallenge.R
 import com.example.jawaschallenge.databinding.ActivityLoginBinding
-import com.example.jawaschallenge.databinding.TestMainBinding
 import com.example.jawaschallenge.TestMain
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -26,14 +23,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.storage
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.File
-import kotlin.random.Random
+import kotlinx.coroutines.withContext
 
 class Login_Controller : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
@@ -55,44 +49,24 @@ class Login_Controller : AppCompatActivity() {
         firebaseauth = FirebaseAuth.getInstance()
 
 
-        //------------------------------ Autenticación con email y password ------------------------------------
-        binding.btnLoginMail.setOnClickListener {
-
-            //------------------ Login Email -------------------
-            if (binding.userMailInput.text!!.isNotEmpty() && binding.passwordInput.text!!.isNotEmpty()) {
-                firebaseauth.signInWithEmailAndPassword(
-                    binding.userMailInput.text.toString(),
-                    binding.passwordInput.text.toString()
-                ).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        var usu: User? = null
-
-                        runBlocking {
-                            val trabajo: Job = launch(context = Dispatchers.Default) {
-                                usu = FireStore.getUserByEmail(binding.userMailInput.text.toString())
-                            }
-                            trabajo.join()   // ESPERAMOS A QUE TERMINE EL TRABAJO ANTES DE SEGUIR
-                        }
-                        Log.d("usuarioLogin", usu.toString())
-                        if (usu != null) {
-                            irHome(
-                                it.result?.user?.email ?: usu!!.email,
-                                usu!!.role!!,
-                                ProviderType.BASIC
-                            )
-                        }
-
-                    } else {
-                        showAlert("Usuario o contraseña incorrectos")
-                    }
-                }
+        //------------------ Sign In Email -------------------
+        // Evento clic para el botón de inicio de sesión
+        binding.btnSingInMail.setOnClickListener {
+            if (binding.userMailInput.text!!.isNotEmpty() && binding.userPasswordInput.text!!.isNotEmpty()) {
+                var email = binding.userMailInput.text.toString().uppercase().trim()
+                var password = binding.userPasswordInput.text.toString()
+                signIn(email,password)
             } else {
                 showAlert("Rellene los campos")
             }
         }
 
+        //------------------ Sign In Google -------------------
+        binding.btnSignInGoogle.setOnClickListener {
+            signInGoogle()
+        }
 
-        //------------------ Login Google -------------------
+
         //------------------------------- -Autenticación Google --------------------------------------------------
         firebaseauth.signOut()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -101,55 +75,69 @@ class Login_Controller : AppCompatActivity() {
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        binding.btnLoginGoogle.setOnClickListener {
-            signInGoogle()
-        }
 
 
-
-        binding.btnCrearCuenta.setOnClickListener {
-
-            // AÑADE EL USUARIO A FIREBASEUTH
-            firebaseauth.createUserWithEmailAndPassword(
-                binding.userMailInput.text.toString(),
-                binding.passwordInput.text.toString()
-            ).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(
-                        this,
-                        "Usuario registrado",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    // AÑADE EL USUARIO A FIRESTONE
-
-                    Connections.FireStore.addUser(Factories.Factory.createUser("1"))
-
-
-                    // IR A SIGUIENTE VENTANA MEDIANTA IRHOME
-                    irHome(
-                        it.result?.user?.email ?: "",
-                        "1",
-                        ProviderType.BASIC
-                    )
-                } else {
-                    showAlert()
+        binding.btnNewAccount.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Registro")
+                .setMessage("¿Cómo desea registrarse?")
+                .setPositiveButton("Correo Electrónico") { _, _ ->
+                    // Acción cuando elige registrarse con correo electrónico
+                    goNewAccountEmail()
                 }
-            }.addOnFailureListener { e ->
-                Toast.makeText(
-                    this, e.message, Toast.LENGTH_SHORT
-                ).show()
-                Log.e(
-                    "FirebaseAuth",
-                    "Error en la autenticación: " + e.message
-                );
-            }
+                .setNegativeButton("Google") { _, _ ->
+                    // Acción cuando elige registrarse con Google
+                    // Implementa aquí la lógica para el registro con Google
+                    // Puedes utilizar Firebase Auth con Google SignIn, por ejemplo
+
+                    signInGoogle()
+
+                }
+                .setNeutralButton("Cancelar") { dialog, _ ->
+                    // Acción cuando elige cancelar
+                    dialog.dismiss()
+                }
+                .show()
         }
+
+        binding.btnInfoApp.setOnClickListener {
+            goWelcome()
+        }
+
+
     }
 
 
+    // Función para iniciar sesión con mail
+    private fun signIn(email: String, password: String) {
+        firebaseauth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { signInTask ->
+                if (signInTask.isSuccessful) {
+                    getUserAndNavigate(email)
+                } else {
+                    showAlert("Usuario o contraseña incorrectos")
+                }
+            }
+    }
 
+    private fun getUserAndNavigate(email: String) {
+        lifecycleScope.launch {
+            try {
+                var us: User? = null
+                val job = withContext(Dispatchers.Default) {
+                    us = FireStore.getUserByEmail(email)
+                }
+                withContext(Dispatchers.Main) {
+                    // Actualizar vistas de la interfaz de usuario aquí
+                        goHome(us!!)
+                        Log.d("signIn", us.toString())
+                    }
 
+            } catch (e: Exception) {
+                showAlert("Error al obtener la información del usuario: ${e.message}")
+            }
+        }
+    }
 
 
     //******************************* Para el login con Google ******************************
@@ -169,21 +157,31 @@ class Login_Controller : AppCompatActivity() {
         if (task.isSuccessful) {
             val account: GoogleSignInAccount? = task.result
             if (account != null) {
-                val mail = account.email
+                val mail = account.email.toString().uppercase().trim()
+                Log.d("mail", mail)
                 // Verifica si el usuario ya existe en la base de datos
-                runBlocking {
-//                    val usuarioExistente = Conexion.obtenerUsuario(account.email!!)
-                    val existingUser = FireStore.getUserByEmail(account.email!!)
-                    if (existingUser != null) {
-                        // El usuario ya existe, va directamente a la página de inicio
-                        irHome(mail ?: "", existingUser.role!!, ProviderType.BASIC)
-                    } else {
-                        updateUI(account)
-                        // El usuario no existe, lo registra en la base de datos
-                        var newUser = User("", mail!!,"","","defaultPictureUser.jpg","2")
-                        FireStore.addUser(newUser )
-//                        Conexion.registrarUsuario(mail ?: "", 0, "usuariodefault.jpg")
-                        irHome(mail ?: "", newUser.role!!, ProviderType.BASIC)
+                lifecycleScope.launch {
+                    try {
+                        var existingUser: User? = null
+                        withContext(Dispatchers.Default) {
+                            existingUser = FireStore.getUserByEmail(mail!!)
+                            Log.d("existingUser", existingUser.toString())
+                        }
+
+                        withContext(Dispatchers.Main) {
+                            // Actualizar vistas de la interfaz de usuario aquí
+                            if (existingUser != null) {
+                                // El usuario ya existe, va directamente a la página de inicio
+                                goHome(existingUser!!)
+                            } else {
+                                updateUI(account)
+                                // El usuario no existe, se redirige a la página de nueva cuenta
+                                Auxiliaries.InterWindows.iwUser = User("", mail!!,"","","defaultPictureUser.jpg","2")
+                                goNewAccountGoogle()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("Count", "Error: $e")
                     }
                 }
             }
@@ -194,11 +192,34 @@ class Login_Controller : AppCompatActivity() {
 
     private fun updateUI(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        firebaseauth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                irHome(it.result?.user?.email ?: "", "2", ProviderType.BASIC)
+
+        firebaseauth.signInWithCredential(credential).addOnCompleteListener { signInTask ->
+            if (signInTask.isSuccessful) {
+                val email = account.email
+                if (email != null) {
+                    GlobalScope.launch(Dispatchers.Main) {
+                        try {
+                            val existingUser = withContext(Dispatchers.IO) {
+                                FireStore.getUserByEmail(email)
+                            }
+
+                            if (existingUser != null) {
+                                goHome(existingUser)
+                            } else {
+                                // El usuario no existe en la base de datos, lo registra
+                                var newUser = User("", email,"","","defaultPictureUser.jpg","2")
+                                FireStore.addUser(newUser)
+                                Auxiliaries.InterWindows.iwUser = newUser
+                            }
+                        } catch (e: Exception) {
+                            Log.e( "Sergio", "Error al obtener el usuario: ${e.message}")
+                        }
+                    }
+                } else {
+                    // El correo electrónico es nulo, manejar este caso según tus necesidades
+                }
             } else {
-                Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                Log.e( "Sergio", signInTask.exception.toString())
             }
         }
     }
@@ -210,8 +231,7 @@ class Login_Controller : AppCompatActivity() {
         //milauncherVentanaGoogle.launch(signInClient)
     }
 
-    //************************************** Funciones auxiliares **************************************
-    //*********************************************************************************
+    //************************************** Auxiliaries Functions **************************************
     private fun showAlert(msg: String = "Se ha producido un error autenticando al usuario") {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
@@ -222,46 +242,47 @@ class Login_Controller : AppCompatActivity() {
     }
 
     //*********************************************************************************
-    private fun irHome(mail: String, rol: String, provider: ProviderType) {
-        Log.e(TAG, "Valores:${mail}, ${provider}, ${rol}")
-        if (rol == "0") {
+    private fun goHome(user: User) {
+        if (user.role == "0") {
             val homeIntent = Intent(this, TestMain::class.java).apply {
-                putExtra("mail", mail)
-                putExtra("rol", rol)
-                putExtra("provider", provider)
+                Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
-        } else if (rol == "1") {
+
+        } else if (user.role == "1") {
             val homeIntent = Intent(this, TestMain::class.java).apply {
-                putExtra("mail", mail)
-                putExtra("rol", rol)
-                putExtra("provider", provider)
+                Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
-        }else if (rol == "2") {
+        }else if (user.role == "2") {
             val homeIntent = Intent(this, TestMain::class.java).apply {
-                putExtra("mail", mail)
-                putExtra("rol", rol)
-                putExtra("provider", provider)
+                Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
-        }else if (rol == "3") {
+        }else if (user.role == "3") {
             val homeIntent = Intent(this, TestMain::class.java).apply {
-                putExtra("mail", mail)
-                putExtra("rol", rol)
-                putExtra("provider", provider)
-            }
-            startActivity(homeIntent)
-        }else if (rol == "4") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
-                putExtra("mail", mail)
-                putExtra("rol", rol)
-                putExtra("provider", provider)
+                Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }
 
     }
+
+    private fun goNewAccountEmail() {
+        val homeIntent =  Intent(this, CreateAccountEmail_Controller::class.java)
+        startActivity(homeIntent)
+    }
+
+    private fun goNewAccountGoogle() {
+        val homeIntent =  Intent(this, CreateAccountGoogle_Controller::class.java)
+        startActivity(homeIntent)
+    }
+
+    private fun goWelcome() {
+        val homeIntent =  Intent(this, Welcome_Controller::class.java)
+        startActivity(homeIntent)
+    }
+
 
 
 }

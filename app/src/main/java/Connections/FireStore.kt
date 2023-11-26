@@ -172,22 +172,21 @@ object FireStore {
 
 
     suspend fun getUserByEmail(email: String): User? {
-
         try {
             val documentSnapshot = db.collection("users").document(email).get().await()
 
             if (documentSnapshot.exists()) {
-                // El documento existe, devuelve el usuario
                 return documentSnapshot.toObject(User::class.java)
             } else {
-                // El documento no existe
                 return null
             }
         } catch (e: Exception) {
-            // Maneja cualquier excepción que pueda ocurrir durante la obtención de datos
+            // Loguea detalles específicos de la excepción para depurar
+            Log.e("getUserByEmail", "Error al obtener usuario por correo electrónico: ${e.message}")
             return null
         }
     }
+
 
 
 
@@ -503,6 +502,28 @@ object FireStore {
     suspend fun chargeDataBase() {
         updateItemsStore()
     }
+
+    suspend fun updateAllDataUser(user: User){
+        var us = hashMapOf(
+            "name" to user.name,
+            "email" to user.email.uppercase(),
+            "address" to user.address,
+            "phone" to user.phone,
+            "picture" to user.picture,
+            "role" to user.role,
+            "batches" to user.batches
+        )
+        db.collection("users")
+            .document(us.get("email").toString()) //It will be "document key".
+            .set(us).addOnSuccessListener {
+                Log.d("updateAllDataUser", "User updated successfully")
+            }
+            .addOnFailureListener { e ->
+                Log.e("updateAllDataUser", "Error updating user: $e")
+            }
+    }
+
+
 
 
     suspend fun updateLocalTypesFromFirebase(): List<String> {
