@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- permissions to access the internet -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- permissions to access the gallery -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- permissions to access the camera -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- <uses-feature android:name="android.hardware.camera" /> -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +24,22 @@
         android:theme="@style/Theme.JawasChallenge"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".UserCrud_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.GuideContact_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Welcome_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.CreateAccountGoogle_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.CreateAccountEmail_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Login_Controller"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,20 +47,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TestMain"
+            android:exported="false" />
     </application>
-
-    <!-- permissions to access the gallery-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- permissions to access the camera-->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!--    <uses-feature android:name="android.hardware.camera" />-->
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
