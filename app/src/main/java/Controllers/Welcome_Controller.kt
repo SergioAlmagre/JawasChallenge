@@ -25,7 +25,6 @@ class Welcome_Controller : AppCompatActivity() {
         }
 
 
-
     }
 
 
