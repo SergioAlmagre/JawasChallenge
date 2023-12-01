@@ -9,7 +9,9 @@ import Model.Jewels.Jewel
 import Model.Users.User
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 object FireStore {
@@ -169,6 +171,23 @@ object FireStore {
 
     //    ---------------------------- GET --------------------------------- //
 
+    suspend fun getAllUsers(): ArrayList<User> {
+
+        try {
+            val querySnapshot = db.collection("users").get().await()
+
+            // Mapea los documentos a objetos User y devuelve la lista
+            return ArrayList(querySnapshot.documents.mapNotNull {
+                it.toObject(User::class.java)
+            })
+        } catch (e: Exception) {
+            // Maneja cualquier excepción que pueda ocurrir durante la obtención de datos
+            return ArrayList()
+        }
+    }
+
+
+
 
 
     suspend fun getUserByEmail(email: String): User? {
@@ -186,7 +205,6 @@ object FireStore {
             return null
         }
     }
-
 
 
 
@@ -451,6 +469,29 @@ object FireStore {
         return null
     }
 
+    suspend fun getAllRoles(): ArrayList<String> {
+        val rolesCollection = db.collection("roles")
+        val rolesList = ArrayList<String>()
+
+        try {
+            val querySnapshot = rolesCollection.get().await()
+
+            for (document in querySnapshot.documents) {
+                val roleName = document.getString("name")
+                roleName?.let {
+                    rolesList.add(it)
+                }
+            }
+        } catch (e: Exception) {
+            // Manejar la excepción según tus necesidades
+            e.printStackTrace()
+        }
+
+        return rolesList
+    }
+
+
+
 
     //    ------------------------- OPERATING FUNCTIONS ------------------------------- //
     suspend fun endBatch(userEmail: String, batchId: String) {
@@ -522,6 +563,23 @@ object FireStore {
                 Log.e("updateAllDataUser", "Error updating user: $e")
             }
     }
+
+    suspend fun updatePhotoByEmail(email: String, newPhotoUrl: String) {
+        val userDocument = db.collection("users").document(email)
+
+        try {
+            userDocument.update("photo", newPhotoUrl)
+                .addOnSuccessListener {
+                    Log.d("UpdatePhoto", "Foto actualizada con éxito")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("UpdatePhoto", "Error al actualizar la foto: $e")
+                }
+        } catch (exception: Exception) {
+            Log.e("UpdatePhoto", "Error al obtener datos: $exception")
+        }
+    }
+
 
 
 
@@ -686,8 +744,6 @@ object FireStore {
     }
 
 
-
-
     suspend fun deleteUserByEmail(email: String) {
         try {
             // Referencia al documento del usuario
@@ -701,6 +757,40 @@ object FireStore {
         } catch (exception: Exception) {
             Log.e("deleteUserByEmail", "Error al eliminar usuario: $exception")
         }
+    }
+
+    fun deleteUserPicture (mail:String){
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val archivoRef = storageRef.child("usersPictures/" + mail)
+        archivoRef.delete()
+            .addOnSuccessListener {
+                // El archivo se ha eliminado con éxito
+            }
+            .addOnFailureListener { exception ->
+                // Ha ocurrido un error al eliminar el archivo
+            }
+    }
+
+    suspend fun deleteUserByEmailAndRefresh(email: String):ArrayList<User> {
+        var updatedUsers = ArrayList<User>()
+        try {
+            // Referencia al documento del usuario
+            val userDocument = db.collection("users").document(email)
+
+            // Borrar el documento del usuario
+            userDocument.delete().await()
+
+            // Obtener la lista actualizada de usuarios después de la eliminación
+            val updatedUsers = getAllUsers()
+
+
+            // También puedes agregar aquí cualquier otra lógica que necesites después de borrar el usuario
+            Log.d("deleteUserByEmail", "Usuario eliminado con éxito: $email")
+        } catch (exception: Exception) {
+            Log.e("deleteUserByEmail", "Error al eliminar usuario: $exception")
+        }
+        return updatedUsers
     }
 
 
