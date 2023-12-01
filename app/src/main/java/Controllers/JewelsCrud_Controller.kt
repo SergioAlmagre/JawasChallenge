@@ -1,9 +1,6 @@
 package Controllers
 
-import Adapters.RecyAdapterAdminUsers
-import Adapters.RecyAdapterJewels
-import Auxiliaries.InterWindows
-import android.content.Intent
+import Adapters.RecyAdapterJeweler
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,7 +37,7 @@ class JewelsCrud_Controller : AppCompatActivity() {
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterJewels(Store.JewelsCatalog.jewelsList, context)
+        var miAdapter = RecyAdapterJeweler(Store.JewelsCatalog.jewelsList, context)
         miRecyclerView.adapter = miAdapter
 
 
@@ -54,7 +51,7 @@ class JewelsCrud_Controller : AppCompatActivity() {
 //            startActivity(inte)
         }
 
-        binding.btnAddUser.setOnClickListener {
+        binding.btnAddObject.setOnClickListener {
 //            var inte: Intent = Intent(this, CreateAccountEmail_Controller::class.java)
 //            startActivity(inte)
         }
@@ -74,7 +71,7 @@ class JewelsCrud_Controller : AppCompatActivity() {
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterJewels(Store.JewelsCatalog.jewelsList, context)
+        var miAdapter = RecyAdapterJeweler(Store.JewelsCatalog.jewelsList, context)
         miRecyclerView.adapter = miAdapter
 
     }

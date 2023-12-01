@@ -5,5 +5,12 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="EstiloBotonCerrarSesion" parent="@style/Widget.Material3.Button.ElevatedButton">
+        <item name="android:background">#F3B3A5</item> <!-- Color de fondo en formato hexadecimal -->
+        <item name="android:textColor">#FFFFFF</item>  <!-- Color del texto en formato hexadecimal -->
+    </style>
+
+
+
     <style name="Theme.JawasChallenge" parent="Base.Theme.JawasChallenge" />
 </resources>

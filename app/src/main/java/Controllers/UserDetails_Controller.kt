@@ -21,7 +21,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.jawaschallenge.R
 import com.example.jawaschallenge.databinding.ActivityUserDetailsAdminBinding
+import com.example.jawaschallenge.databinding.ActivityUserDetailsBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -34,8 +36,8 @@ import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-class UserDetailsAdmin_Controller : AppCompatActivity() {
-    lateinit var binding: ActivityUserDetailsAdminBinding
+class UserDetails_Controller : AppCompatActivity() {
+    lateinit var binding: ActivityUserDetailsBinding
     private lateinit var firebaseauth: FirebaseAuth
     private val cameraRequest = 1888
     private lateinit var bitmap: Bitmap
@@ -48,7 +50,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_user_details_admin)
 
-        binding = ActivityUserDetailsAdminBinding.inflate(layoutInflater)
+        binding = ActivityUserDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         firebaseauth = FirebaseAuth.getInstance()
@@ -70,18 +72,14 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
         }
-        binding.cboRoleUserAdmin.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , roles)
-
         binding.txtNameUserAdmin.setText(InterWindows.iwUser.name)
         binding.txtEmailUserAdmin.setText(InterWindows.iwUser.email)
         binding.txtAddressUserAdmin.setText(InterWindows.iwUser.address)
         binding.txtPhoneUserAdmin.setText(InterWindows.iwUser.phone)
-        binding.cboRoleUserAdmin.setSelection(InterWindows.iwUser.role!!.toInt())
-
 
 
         binding.btnLogOutUserAdmin.setOnClickListener {
-//            logOut()
+           signOutAndRedirectToLogin()
         }
 
         binding.btnHomeAdmin.setOnClickListener {
@@ -89,15 +87,12 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
         }
 
         binding.btnSaveChangesUserAdmin.setOnClickListener {
-            // Obtener el rol seleccionado del Spinner
-            val selectedRole = binding.cboRoleUserAdmin.selectedItemPosition
-
             var name = binding.txtNameUserAdmin.text.toString().uppercase().trim()
             var email = binding.txtEmailUserAdmin.text.toString().uppercase().trim()
             var address = binding.txtAddressUserAdmin.text.toString().uppercase().trim()
             var phone = binding.txtPhoneUserAdmin.text.toString().uppercase().trim()
             var picture = InterWindows.iwUser.picture
-            var role = selectedRole.toString()
+            var role = InterWindows.iwUser.role
 
             var user = User(
                 name,
@@ -105,7 +100,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                 address,
                 phone,
                 picture,
-                role
+                role!!
             )
             uploadPictureOK()
             runBlocking {
@@ -133,19 +128,15 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                 )
                 setNegativeButton("Galería", ({ dialog: DialogInterface, which: Int ->
 
-                    pickMedia.launch(PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
                 }))
                 show()
             }
         }
 
-        binding.btnLogOutUserAdmin.setOnClickListener {
-           signOutAndRedirectToLogin()
-        }
 
     }// End of onCreate
-
 
     fun signOutAndRedirectToLogin() {
         FirebaseAuth.getInstance().signOut()
@@ -153,6 +144,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
 
     //__________________________CAMERA_______________________________
     //Segunda activity para lanzar la cámara.
@@ -166,7 +158,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                     this.bitmap = imageBitmap
                     binding.pictureUserAdmin.setImageBitmap(imageBitmap)
 
-                    Log.d("ComprobacionFuera",InterWindows.iwUser.email)
+                    Log.d("ComprobacionFuera", InterWindows.iwUser.email)
 
                     Glide.with(this)
                         .asBitmap()

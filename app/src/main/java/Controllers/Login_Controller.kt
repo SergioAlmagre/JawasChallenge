@@ -249,12 +249,12 @@ class Login_Controller : AppCompatActivity() {
             startActivity(homeIntent)
 
         } else if (user.role == "1") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, AdministratorElection_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }else if (user.role == "2") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, JewelsCrud_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)

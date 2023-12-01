@@ -23,14 +23,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import java.io.File
 import Model.Users.*
-import Store.ItemsStore
 import android.content.Intent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class RecyAdapterJewels(var jewels : MutableList<Jewel>, var  context: Context) : RecyclerView.Adapter<RecyAdapterJewels.ViewHolder>() {
+class RecyAdapterJeweler(var jewels : MutableList<Jewel>, var  context: Context) : RecyclerView.Adapter<RecyAdapterJeweler.ViewHolder>() {
 
     companion object {
         //Esta variable estática nos será muy útil para saber cual está marcado o no.
@@ -103,7 +102,7 @@ class RecyAdapterJewels(var jewels : MutableList<Jewel>, var  context: Context) 
             context: Context,
 
             pos: Int,
-            miAdaptadorRecycler: RecyAdapterJewels
+            miAdaptadorRecycler: RecyAdapterJeweler
         ) {
             val builder = AlertDialog.Builder(context)
             mailUser.text = jew.name

@@ -1,6 +1,7 @@
 package com.example.jawaschallenge
 
 import Connections.FireStore
+import Controllers.ItemsType_Controller
 import Controllers.JewelsCrud_Controller
 import Controllers.UserCrud_Controller
 import Factories.Factory
@@ -363,6 +364,11 @@ class TestMain: AppCompatActivity() {
 
         binding.btnViewJewelCatalog.setOnClickListener {
             var inte: Intent = Intent(this, JewelsCrud_Controller::class.java)
+            startActivity(inte)
+        }
+
+        binding.btnGestType.setOnClickListener {
+            var inte: Intent = Intent(this, ItemsType_Controller::class.java)
             startActivity(inte)
         }
 

@@ -50,11 +50,11 @@ class UserCrud_Controller : AppCompatActivity() {
 
 
         binding.btnUserAdmin.setOnClickListener {
-//            var inte: Intent = Intent(this, Estadisticas::class.java)
-//            startActivity(inte)
+            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            startActivity(inte)
         }
 
-        binding.btnAddUser.setOnClickListener {
+        binding.btnAddObject.setOnClickListener {
             var inte: Intent = Intent(this, CreateAccountEmail_Controller::class.java)
             startActivity(inte)
         }
