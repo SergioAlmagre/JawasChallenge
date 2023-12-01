@@ -1,9 +1,13 @@
 package com.example.jawaschallenge
 
 import Connections.FireStore
+import Controllers.ItemsType_Controller
+import Controllers.JewelsCrud_Controller
+import Controllers.UserCrud_Controller
 import Factories.Factory
 import Model.Hardware.BatchInfo
 import Model.Jewels.Jewel
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -116,6 +120,7 @@ class TestMain: AppCompatActivity() {
                 }
             }
         }
+
 
 
 
@@ -350,6 +355,21 @@ class TestMain: AppCompatActivity() {
                     Log.e("Count", "Error: $e")
                 }
             }
+        }
+
+        binding.btnAdminUsers.setOnClickListener {
+            var inte: Intent = Intent(this, UserCrud_Controller::class.java)
+            startActivity(inte)
+        }
+
+        binding.btnViewJewelCatalog.setOnClickListener {
+            var inte: Intent = Intent(this, JewelsCrud_Controller::class.java)
+            startActivity(inte)
+        }
+
+        binding.btnGestType.setOnClickListener {
+            var inte: Intent = Intent(this, ItemsType_Controller::class.java)
+            startActivity(inte)
         }
 
 

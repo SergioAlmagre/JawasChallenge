@@ -1,8 +1,9 @@
 package Model.Users
 
 import Model.Hardware.Batch
+import java.io.Serializable
 
-open class User {
+open class User: Serializable {
 
     var batches: MutableList<Batch> = mutableListOf()
     var name: String
@@ -41,10 +42,5 @@ open class User {
     fun addBatch(batch: Batch) {
         batches.add(batch)
     }
-
-
-
-
-
 
 }
