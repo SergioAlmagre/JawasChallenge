@@ -36,7 +36,7 @@ class UserCrud_Controller : AppCompatActivity() {
             trabajo.join()
         }
 
-        miRecyclerView = binding.usersRecycler as RecyclerView
+        miRecyclerView = binding.objetRecycler as RecyclerView
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -70,7 +70,7 @@ class UserCrud_Controller : AppCompatActivity() {
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             trabajo.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
         }
-        miRecyclerView = binding.usersRecycler as RecyclerView
+        miRecyclerView = binding.objetRecycler as RecyclerView
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 

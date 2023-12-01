@@ -1,6 +1,7 @@
 package com.example.jawaschallenge
 
 import Connections.FireStore
+import Controllers.JewelsCrud_Controller
 import Controllers.UserCrud_Controller
 import Factories.Factory
 import Model.Hardware.BatchInfo
@@ -357,6 +358,11 @@ class TestMain: AppCompatActivity() {
 
         binding.btnAdminUsers.setOnClickListener {
             var inte: Intent = Intent(this, UserCrud_Controller::class.java)
+            startActivity(inte)
+        }
+
+        binding.btnViewJewelCatalog.setOnClickListener {
+            var inte: Intent = Intent(this, JewelsCrud_Controller::class.java)
             startActivity(inte)
         }
 

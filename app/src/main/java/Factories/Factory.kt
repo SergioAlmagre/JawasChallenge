@@ -4,7 +4,6 @@ import Auxiliaries.ObjectQuantity
 import Model.Hardware.Batch
 import Model.Hardware.Item
 import Model.Jewels.Jewel
-import Model.Users.User
 import kotlin.random.Random
 
 object Factory {
@@ -416,8 +415,8 @@ object Factory {
      * 4 - Recycler
      */
 
-    fun createUser(role: String): User {
-        val newUser = User(
+    fun createUser(role: String): Model.Users.User {
+        val newUser = Model.Users.User(
             name = donorsNames.random(),
             email = emails.random(),
             address = addresses.random(),

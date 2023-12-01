@@ -45,7 +45,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/usersRecycler"
+        android:id="@+id/objetRecycler"
         android:layout_width="403dp"
         android:layout_height="687dp"
         app:layout_constraintBottom_toBottomOf="parent"

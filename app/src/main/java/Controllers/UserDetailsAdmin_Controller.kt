@@ -3,7 +3,6 @@ package Controllers
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Model.Users.User
-import android.Manifest
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -17,18 +16,13 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.text.set
-import androidx.core.view.get
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.jawaschallenge.R
-import com.example.jawaschallenge.databinding.ActivityCreateAccountEmailBinding
 import com.example.jawaschallenge.databinding.ActivityUserDetailsAdminBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage

@@ -9,7 +9,6 @@ import Model.Jewels.Jewel
 import Model.Users.User
 import android.util.Log
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
@@ -19,7 +18,7 @@ object FireStore {
 
     //    ------------------------- ADD ------------------------------- //
 
-    fun addUser(user: User): Int {
+    fun addUser(user: Model.Users.User): Int {
         var cant = 0
         var us = hashMapOf(
             "name" to user.name,
@@ -171,7 +170,7 @@ object FireStore {
 
     //    ---------------------------- GET --------------------------------- //
 
-    suspend fun getAllUsers(): ArrayList<User> {
+    suspend fun getAllUsers(): ArrayList<Model.Users.User> {
 
         try {
             val querySnapshot = db.collection("users").get().await()
@@ -190,7 +189,7 @@ object FireStore {
 
 
 
-    suspend fun getUserByEmail(email: String): User? {
+    suspend fun getUserByEmail(email: String): Model.Users.User? {
         try {
             val documentSnapshot = db.collection("users").document(email).get().await()
 
@@ -544,7 +543,7 @@ object FireStore {
         updateItemsStore()
     }
 
-    suspend fun updateAllDataUser(user: User){
+    suspend fun updateAllDataUser(user: Model.Users.User){
         var us = hashMapOf(
             "name" to user.name,
             "email" to user.email.uppercase(),
@@ -772,8 +771,8 @@ object FireStore {
             }
     }
 
-    suspend fun deleteUserByEmailAndRefresh(email: String):ArrayList<User> {
-        var updatedUsers = ArrayList<User>()
+    suspend fun deleteUserByEmailAndRefresh(email: String):ArrayList<Model.Users.User> {
+        var updatedUsers = ArrayList<Model.Users.User>()
         try {
             // Referencia al documento del usuario
             val userDocument = db.collection("users").document(email)
@@ -792,11 +791,6 @@ object FireStore {
         }
         return updatedUsers
     }
-
-
-
-
-
 
 
 

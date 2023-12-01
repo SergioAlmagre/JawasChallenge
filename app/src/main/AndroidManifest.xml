@@ -30,6 +30,9 @@
             android:name="Controllers.UserCrud_Controller"
             android:exported="false" />
         <activity
+            android:name="Controllers.JewelsCrud_Controller"
+            android:exported="false" />
+        <activity
             android:name="Controllers.GuideContact_Controller"
             android:exported="false" />
         <activity

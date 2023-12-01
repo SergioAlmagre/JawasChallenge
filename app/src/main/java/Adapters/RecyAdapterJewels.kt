@@ -4,6 +4,7 @@ package Adapters
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Controllers.UserDetailsAdmin_Controller
+import Model.Jewels.Jewel
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -22,13 +23,14 @@ import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import java.io.File
 import Model.Users.*
+import Store.ItemsStore
 import android.content.Intent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) : RecyclerView.Adapter<RecyAdapterAdminUsers.ViewHolder>() {
+class RecyAdapterJewels(var jewels : MutableList<Jewel>, var  context: Context) : RecyclerView.Adapter<RecyAdapterJewels.ViewHolder>() {
 
     companion object {
         //Esta variable estática nos será muy útil para saber cual está marcado o no.
@@ -48,7 +50,7 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
      * ViewHolder(clase interna, ver abajo) para que esta pinte todos los valores y active el evento onClick en cada uno.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = users.get(position)
+        val item = jewels.get(position)
         holder.bind(item, context, position, this)
     }
 
@@ -74,7 +76,7 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
      * getItemCount() nos devuelve el tamaño de la lista, que lo necesita el RecyclerView.
      */
     override fun getItemCount(): Int {
-        return users.size
+        return jewels.size
     }
 
     //--------------------------------- Clase interna ViewHolder -----------------------------------
@@ -89,8 +91,7 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
 
         val storage = Firebase.storage
         val storageRef = storage.reference
-        val filePath = "UsersPictures/"
-        val defaultPicture = "userdefaultpicture.jpg"
+        val filePath = "JewelsPictures/"
 
         /**
          * Éste método se llama desde el método onBindViewHolder de la clase contenedora. Como no vuelve a crear un objeto
@@ -98,14 +99,15 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
          */
         @SuppressLint("ResourceAsColor")
         fun bind(
-            usu: Model.Users.User,
+            jew: Jewel,
             context: Context,
+
             pos: Int,
-            miAdaptadorRecycler: RecyAdapterAdminUsers
+            miAdaptadorRecycler: RecyAdapterJewels
         ) {
             val builder = AlertDialog.Builder(context)
-            mailUser.text = usu.email
-            fileDownload(usu.picture)
+            mailUser.text = jew.name
+            fileDownload(jew.picture)
 
             itemView.setOnLongClickListener() {
 
@@ -117,11 +119,10 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
 
                         runBlocking {
                             val trabajo : Job = launch(context = Dispatchers.Default) {
-                                FireStore.deleteUserByEmail(usu.email) // Borrar usuario
-                                FireStore.deleteUserPicture(usu.email) // Borrar foto de perfil
+//                                FireStore.deleteUserByEmail(jew.email) // Borrar usuario
+//                                FireStore.deleteUserPicture(jew.email) // Borrar foto de perfil
 
-                                 //Actualización de array que muestra la recycler y actualización de la misma
-                                InterWindows.iwUsersAL.remove(usu)
+                                Store.JewelsCatalog.jewelsList.remove(jew)
                             }
                             trabajo.join()
                             miAdaptadorRecycler.notifyDataSetChanged()
