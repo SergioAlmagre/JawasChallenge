@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -65,8 +66,6 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                     Log.d("SergioMail", "Foto: " + InterWindows.iwUser!!.email)
                     fileDownload(InterWindows.iwUser!!.email)
                 }
-
-
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
@@ -77,8 +76,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
         binding.txtEmailUserAdmin.setText(InterWindows.iwUser.email)
         binding.txtAddressUserAdmin.setText(InterWindows.iwUser.address)
         binding.txtPhoneUserAdmin.setText(InterWindows.iwUser.phone)
-        binding.cboRoleUserAdmin.setSelection(roles.indexOf(InterWindows.iwUser.role))
-
+        binding.cboRoleUserAdmin.setSelection(InterWindows.iwUser.role!!.toInt())
 
 
 
@@ -109,6 +107,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                 picture,
                 role
             )
+            uploadPictureOK()
             runBlocking {
                 val job : Job = launch(context = Dispatchers.Default) {
                     FireStore.updateAllDataUser(user)
@@ -263,6 +262,27 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
             binding.pictureUserAdmin.setImageBitmap(bitmap)
         }.addOnFailureListener {
             Toast.makeText(this, "Algo ha fallado en la descarga", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun uploadPictureOK(){
+        binding.pictureUserAdmin.isDrawingCacheEnabled = true
+        binding.pictureUserAdmin.buildDrawingCache()
+        val bitmap = (binding.pictureUserAdmin.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data2 = baos.toByteArray()
+
+        val imagesRef = storageRef.child("UsersPictures/")
+        var pictureName = binding.txtEmailUserAdmin.text.toString().uppercase().trim()
+
+        InterWindows.iwUser.picture = InterWindows.iwUser.email
+
+        val uploadTask = imagesRef.child(pictureName).putBytes(data2)
+        uploadTask.addOnSuccessListener {
+
+        }.addOnFailureListener{
+            //Toast.makeText(this@Registro, "Error en la subida de la imagen", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -123,6 +123,7 @@ class RecyAdapterJewels(var jewels : MutableList<Jewel>, var  context: Context) 
 //                                FireStore.deleteUserPicture(jew.email) // Borrar foto de perfil
 
                                 Store.JewelsCatalog.jewelsList.remove(jew)
+                                FireStore.deleteJewelByName(jew.name)
                             }
                             trabajo.join()
                             miAdaptadorRecycler.notifyDataSetChanged()

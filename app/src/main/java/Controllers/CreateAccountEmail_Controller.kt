@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -70,6 +71,8 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
 
                     createAccount(InterWindows.iwUser, password)
                 }
+
+                uploadPictureOK()
             } else {
                 showAlert("Rellene los campos")
             }
@@ -102,8 +105,6 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
             }else{
                 showAlert("First, you have to enter the email")
             }
-
-
         }
 
 
@@ -233,7 +234,6 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
                                         file_name.downloadUrl.addOnSuccessListener { uri ->
                                             // La imagen se subió correctamente y puedes obtener la URL de descarga
                                             InterWindows.iwUser.picture = InterWindows.iwUser.email
-
                                             Log.d("actualizarDocumentoFotoCamara3", InterWindows.iwUser.toString()
                                             )
                                         }
@@ -244,6 +244,7 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
                 } else {
                     Log.d("Sergio", "No media selected")
                 }
+
             }
         }
 
@@ -253,6 +254,7 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
             if (isGranted) {
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 openCamera.launch(intent)
+
             } else {
                 Log.e("Sergio", "Permiso de cámara no concedido")
             }
@@ -307,6 +309,26 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
         }
     }
 
+    fun uploadPictureOK(){
+        binding.userPicture.isDrawingCacheEnabled = true
+        binding.userPicture.buildDrawingCache()
+        val bitmap = (binding.userPicture.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data2 = baos.toByteArray()
+
+        val imagesRef = storageRef.child("UsersPictures/")
+        var pictureName = binding.userMailInput.text.toString().uppercase().trim()
+
+        InterWindows.iwUser.picture = InterWindows.iwUser.email
+
+        val uploadTask = imagesRef.child(pictureName).putBytes(data2)
+        uploadTask.addOnSuccessListener {
+
+        }.addOnFailureListener{
+            //Toast.makeText(this@Registro, "Error en la subida de la imagen", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
 } // End of class

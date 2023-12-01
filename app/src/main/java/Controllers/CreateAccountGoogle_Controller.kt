@@ -8,6 +8,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -72,7 +73,9 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
             var newUser = User(name,user.email,address,phone,user.picture,defaultRole)
 
             updateUserDataCreateAccount(newUser)
-            Auxiliaries.InterWindows.iwUser = newUser
+            uploadPictureOK()
+
+            InterWindows.iwUser = newUser
             goHome(Auxiliaries.InterWindows.iwUser)
         }
 
@@ -369,4 +372,27 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
 
     }
 
-}
+    fun uploadPictureOK(){
+        binding.userPicture.isDrawingCacheEnabled = true
+        binding.userPicture.buildDrawingCache()
+        val bitmap = (binding.userPicture.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data2 = baos.toByteArray()
+
+        val imagesRef = storageRef.child("UsersPictures/")
+        var pictureName = InterWindows.iwUser!!.email.uppercase().trim()
+
+        InterWindows.iwUser.picture = InterWindows.iwUser.email
+
+        val uploadTask = imagesRef.child(pictureName).putBytes(data2)
+        uploadTask.addOnSuccessListener {
+
+        }.addOnFailureListener{
+            //Toast.makeText(this@Registro, "Error en la subida de la imagen", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+} // End of class
