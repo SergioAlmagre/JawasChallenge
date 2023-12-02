@@ -1,6 +1,7 @@
 package com.example.jawaschallenge
 
 import Connections.FireStore
+import Controllers.BatchesDonorCrud_Controller
 import Controllers.ItemsType_Controller
 import Controllers.JewelsCrud_Controller
 import Controllers.UserCrud_Controller
@@ -281,8 +282,8 @@ class TestMain: AppCompatActivity() {
                 try {
                     val result = withContext(Dispatchers.Default) {
                         Connections.FireStore.addOrUpdateBatchToDonor(
-                            "DANIEL.MILLER@EXAMPLE.COM",
-                            Factory.createBatch("DANIEL.MILLER@EXAMPLE.COM")
+                            "SERGIOALMAGRE@GMAIL.COM",
+                            Factory.createBatch("SERGIOALMAGRE@GMAIL.COM")
                         )
                     }
 
@@ -372,7 +373,10 @@ class TestMain: AppCompatActivity() {
             startActivity(inte)
         }
 
-
+        binding.btnDonorCrud.setOnClickListener {
+            var inte: Intent = Intent(this, BatchesDonorCrud_Controller::class.java)
+            startActivity(inte)
+        }
 
 
         // END OF ONCREATE

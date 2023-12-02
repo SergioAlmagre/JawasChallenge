@@ -79,11 +79,6 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
         binding.cboRoleUserAdmin.setSelection(InterWindows.iwUser.role!!.toInt())
 
 
-
-        binding.btnLogOutUserAdmin.setOnClickListener {
-//            logOut()
-        }
-
         binding.btnHomeAdmin.setOnClickListener {
             finish()
         }
@@ -140,19 +135,10 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
             }
         }
 
-        binding.btnLogOutUserAdmin.setOnClickListener {
-           signOutAndRedirectToLogin()
-        }
 
     }// End of onCreate
 
 
-    fun signOutAndRedirectToLogin() {
-        FirebaseAuth.getInstance().signOut()
-        val intent = Intent(this, Login_Controller::class.java)
-        startActivity(intent)
-        finish()
-    }
 
     //__________________________CAMERA_______________________________
     //Segunda activity para lanzar la cámara.

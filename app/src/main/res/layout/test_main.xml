@@ -302,15 +302,27 @@
         app:layout_constraintVertical_bias="0.263" />
 
     <Button
+        android:id="@+id/btnDonorCrud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DonorCrud"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.589"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.344" />
+
+    <Button
         android:id="@+id/btnGestType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="All Type items"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.589"
+        app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.349" />
+        app:layout_constraintVertical_bias="0.344" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

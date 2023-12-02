@@ -9,8 +9,10 @@ import Model.Jewels.Jewel
 import Model.Users.User
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 
 object FireStore {
@@ -273,6 +275,62 @@ object FireStore {
             println("Error al obtener datos: $exception")
         }
     }
+
+    suspend fun getBatchesForUser(userId: String): MutableList<Batch> {
+        val batchesList = mutableListOf<Batch>()
+
+        try {
+            // Obtén una referencia a la colección de usuarios
+            val usersCollection = db.collection("users")
+
+            // Realiza una consulta para obtener el documento del usuario
+            val userDocument = usersCollection.document(userId).get().await()
+
+            // Verifica si el documento del usuario existe y contiene la lista de lotes
+            if (userDocument.exists()) {
+                val batchesData = userDocument.get("batches") as? List<Map<String, Any>>
+
+                // Verifica que la lista de lotes no sea nula
+                if (batchesData != null) {
+                    // Itera sobre cada lote y convierte los datos a objetos Batch
+                    for (batchData in batchesData) {
+                        val batch = Batch().apply {
+                            idBatch = batchData["idBatch"] as? String ?: ""
+                            userName = batchData["userName"] as? String ?: ""
+                            latitude = batchData["latitude"] as? Double
+                            longitude = batchData["longitude"] as? Double
+                            address = batchData["address"] as? String
+                            creationDate = batchData["creationDate"] as? String ?: ""
+                            received = batchData["received"] as? Boolean ?: false
+                            picture = batchData["picture"] as? String
+                            isClassifed = batchData["isClassifed"] as? Boolean ?: false
+
+                            // Puedes iterar sobre la lista de items dentro del lote
+                            val itemsData = batchData["itemsInside"] as? List<Map<String, Any>>
+                            itemsInside = itemsData?.map { itemData ->
+                                Item().apply {
+                                    // Configura los atributos del Item según tu estructura
+                                }
+                            }?.toMutableList() ?: mutableListOf()
+                        }
+
+                        batchesList.add(batch)
+                    }
+                }
+            }
+
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("getBatchesForUser", "Error al obtener lotes: $exception")
+        }
+
+        return batchesList
+    }
+
+
+
+
+
 
 
     suspend fun getBatchInfoById(userEmail: String, batchId: String): BatchInfo? {
@@ -792,6 +850,68 @@ object FireStore {
         return updatedUsers
     }
 
+
+    suspend fun deleteBatchByIdIfNotReceived(batchId: String) {
+        try {
+            // Obtén una referencia a la colección de usuarios
+            val usersCollection = db.collection("users")
+
+            // Realiza una consulta para obtener todos los documentos de usuarios
+            val usersDocuments = usersCollection.get().await()
+
+            // Itera sobre los documentos de usuarios
+            for (userDocument in usersDocuments.documents) {
+                // Obtiene la lista de lotes del usuario
+                val batchesList = userDocument["batches"] as? List<Map<String, Any>>
+
+                // Verifica si la lista de lotes no es nula
+                if (batchesList != null) {
+                    // Itera sobre los lotes del usuario
+                    for (batchMap in batchesList) {
+                        // Obtiene el ID del lote actual
+                        val currentBatchId = batchMap["idBatch"] as? String
+
+                        // Verifica si el ID del lote actual coincide con el ID que se desea eliminar
+                        if (currentBatchId == batchId) {
+                            // Obtiene el atributo "received" del lote actual
+                            val received = batchMap["received"] as? Boolean
+
+                            // Verifica si el lote no ha sido recibido
+                            if (received != true) {
+                                // Elimina el lote solo si no ha sido recibido
+                                userDocument.reference.update("batches", FieldValue.arrayRemove(batchMap))
+                                Log.d("deleteBatchByIdIfNotReceived", "Lote eliminado con éxito: $batchId")
+                            } else {
+                                Log.d("deleteBatchByIdIfNotReceived", "No se puede eliminar, el lote ha sido recibido: $batchId")
+                            }
+                            break  // No es necesario seguir buscando en otros lotes
+                        }
+                    }
+                }
+            }
+
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("deleteBatchByIdIfNotReceived", "Error al eliminar lote: $exception")
+        }
+    }
+    
+
+
+    suspend fun deleteImageFromStorage(imageId: String, folderPath: String) {
+        try {
+            val storageRef = Firebase.storage.reference.child("$folderPath/$imageId")
+
+            // Elimina la imagen del almacenamiento
+            storageRef.delete().await()
+
+            Log.d("deleteImageFromStorage", "Imagen eliminada con éxito: $imageId")
+
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("deleteImageFromStorage", "Error al eliminar imagen del almacenamiento: $exception")
+        }
+    }
 
 
 

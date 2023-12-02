@@ -1,6 +1,7 @@
 package Factories
 
 import Auxiliaries.ObjectQuantity
+import Constants.Routes
 import Model.Hardware.Batch
 import Model.Hardware.Item
 import Model.Jewels.Jewel
@@ -350,7 +351,7 @@ object Factory {
         var name = donorName
         var latitud = latitudes.random()
         var longitude = longitudes.random()
-        var picture = picturesName.random()
+        var picture = Routes.defaultBatchPictureName
         var address = addresses.random()
 
         var newBatch = Batch(name,latitud,longitude,address,picture)
