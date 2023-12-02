@@ -24,6 +24,9 @@
         android:theme="@style/Theme.JawasChallenge"
         tools:targetApi="31">
         <activity
+            android:name="Controllers.Donor.AddBatch_Controller"
+            android:exported="false" />
+        <activity
             android:name="Controllers.Donor.BatchDetails_Controller"
             android:exported="false" />
         <activity
