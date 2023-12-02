@@ -4,7 +4,7 @@ package Adapters
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
-import Controllers.UserDetailsAdmin_Controller
+import Controllers.Administrator.UserDetailsAdmin_Controller
 import Model.Jewels.Jewel
 import android.annotation.SuppressLint
 import android.content.Context

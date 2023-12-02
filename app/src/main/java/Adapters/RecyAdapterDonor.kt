@@ -4,7 +4,7 @@ package Adapters
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
-import Controllers.BatchDetails_Controller
+import Controllers.Donor.BatchDetails_Controller
 import Model.Hardware.Batch
 import android.annotation.SuppressLint
 import android.content.Context

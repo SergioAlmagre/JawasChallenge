@@ -1,12 +1,13 @@
-package Controllers
+package Controllers.Administrator
 
+import Controllers.Jeweler.JewelsCrud_Controller
+import Controllers.Accounts.Login_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.jawaschallenge.R
 import com.example.jawaschallenge.databinding.ActivityAdministratorElectionBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 
 class AdministratorElection_Controller : AppCompatActivity() {

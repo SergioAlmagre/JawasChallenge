@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Controllers.GuideContact_Controller">
+    tools:context="Controllers.Welcome.GuideContact_Controller">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,10 +1,8 @@
-package Controllers
+package Controllers.Welcome
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.jawaschallenge.R
-import com.example.jawaschallenge.databinding.ActivityLoginBinding
 import com.example.jawaschallenge.databinding.ActivityWelcomeBinding
 
 class Welcome_Controller : AppCompatActivity() {

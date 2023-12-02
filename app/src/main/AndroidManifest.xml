@@ -24,43 +24,43 @@
         android:theme="@style/Theme.JawasChallenge"
         tools:targetApi="31">
         <activity
-            android:name="Controllers.BatchDetails_Controller"
+            android:name="Controllers.Donor.BatchDetails_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.BatchesDonorCrud_Controller"
+            android:name="Controllers.Donor.BatchesDonorCrud_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.AdministratorElection_Controller"
+            android:name="Controllers.Administrator.AdministratorElection_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.ItemsType_Controller"
+            android:name="Controllers.Administrator.ItemsType_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.UserDetails_Controller"
+            android:name="Controllers.Shared.UserDetails_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.UserDetailsAdmin_Controller"
+            android:name="Controllers.Administrator.UserDetailsAdmin_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.UserCrud_Controller"
+            android:name="Controllers.Administrator.UserCrud_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.JewelsCrud_Controller"
+            android:name="Controllers.Jeweler.JewelsCrud_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.GuideContact_Controller"
+            android:name="Controllers.Welcome.GuideContact_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.Welcome_Controller"
+            android:name="Controllers.Welcome.Welcome_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.CreateAccountGoogle_Controller"
+            android:name="Controllers.Accounts.CreateAccountGoogle_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.CreateAccountEmail_Controller"
+            android:name="Controllers.Accounts.CreateAccountEmail_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.Login_Controller"
+            android:name="Controllers.Accounts.Login_Controller"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

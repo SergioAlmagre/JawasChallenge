@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Controllers.Welcome_Controller">
+    tools:context="Controllers.Welcome.Welcome_Controller">
 
     <Button
         android:id="@+id/btnComeBackLogin"

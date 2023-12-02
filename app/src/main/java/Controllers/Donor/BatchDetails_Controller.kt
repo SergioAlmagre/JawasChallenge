@@ -1,12 +1,12 @@
-package Controllers
+package Controllers.Donor
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.jawaschallenge.R
 
-class GuideContact_Controller : AppCompatActivity() {
+class BatchDetails_Controller : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_guide_contact)
+        setContentView(R.layout.activity_batch_details)
     }
 }

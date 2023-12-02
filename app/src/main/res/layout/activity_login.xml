@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/recursos3"
-    tools:context="Controllers.Login_Controller">
+    tools:context="Controllers.Accounts.Login_Controller">
 
 
     <Button

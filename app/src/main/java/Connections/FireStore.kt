@@ -169,6 +169,22 @@ object FireStore {
         }
     }
 
+    suspend fun addItemToFireStore(item: Item){
+        var it = hashMapOf(
+            "itemId" to item.idItem,
+            "attributes" to item.attributes,
+        )
+        db.collection("items")
+            .document(it.get("itemId").toString())
+            .set(it).addOnSuccessListener {
+                Log.d("addItemToFireStore", "Item agregado con éxito")
+            }
+            .addOnFailureListener { e ->
+                Log.e("addItemToFireStore", "Error al agregar item: $e")
+            }
+    }
+
+
 
     //    ---------------------------- GET --------------------------------- //
 
@@ -188,9 +204,6 @@ object FireStore {
     }
 
 
-
-
-
     suspend fun getUserByEmail(email: String): Model.Users.User? {
         try {
             val documentSnapshot = db.collection("users").document(email).get().await()
@@ -206,8 +219,6 @@ object FireStore {
             return null
         }
     }
-
-
 
     suspend fun getAllPendingBatchesFromUsers() { // THIS QUERY SHOW US ONLY THE BATCHES THAT ARE NOT CLASSIFIED
         // Referencia a la colección de usuarios
@@ -276,6 +287,7 @@ object FireStore {
         }
     }
 
+
     suspend fun getBatchesForUser(userId: String): MutableList<Batch> {
         val batchesList = mutableListOf<Batch>()
 
@@ -328,11 +340,6 @@ object FireStore {
     }
 
 
-
-
-
-
-
     suspend fun getBatchInfoById(userEmail: String, batchId: String): BatchInfo? {
         try {
             // Referencia al documento del usuario
@@ -365,6 +372,7 @@ object FireStore {
         return null // Retorna null si no se encuentra el lote con el idBatch específico
     }
 
+
     suspend fun getAllJewels() {
         // Referencia a la colección de joyas
         val jewelsCollection = db.collection("jewelsCatalog")
@@ -396,43 +404,6 @@ object FireStore {
             println("Error al obtener datos: $exception")
         }
     }
-
-//    suspend fun getAllDistinctTypes() { // De esta forma recopilaba los tipos desde los items
-//        // Referencia a la colección
-//        val itemsCollection = db.collection("items")
-//
-//        // Conjunto para almacenar los resultados únicos
-//        val typesSet = mutableSetOf<String>()
-//
-//        try {
-//            val querySnapshot = itemsCollection.get().await()
-//
-//            for (document in querySnapshot.documents) {
-//                val attributes = document.get("attributes") as? List<Map<String, Any>>
-//
-//                // Buscar el atributo con nombre "Type"
-//                val typeAttribute = attributes?.find { it["name"] == "Type" }
-//
-//                // Agregar el valor del atributo "Type" al conjunto
-//                val typeValue = typeAttribute?.get("content") as? String
-//                if (typeValue != null) {
-//                    typesSet.add(typeValue)
-//                }
-//            }
-//
-//            // Conservar los tipos antiguos
-//            val oldTypes = Store.ItemsTypes.allTypesList
-//
-//            // Agregar los tipos antiguos al conjunto
-//            typesSet.addAll(oldTypes)
-//
-//            // Actualizar la lista en Store.itemsTypes
-//            Store.ItemsTypes.allTypesList = typesSet.sorted().toMutableList()
-//
-//        } catch (exception: Exception) {
-//            println("Error al obtener datos: $exception")
-//        }
-//    }
 
 
     suspend fun getAllDistinctTypes() {
@@ -481,7 +452,6 @@ object FireStore {
                     }
                 }
             }
-
             // Crear una lista de pares (tipo de componente, cantidad)
             val componentCountList = countsMap.entries.map { ObjectQuantity(it.key, it.value) }
 
@@ -526,6 +496,7 @@ object FireStore {
         return null
     }
 
+
     suspend fun getAllRoles(): ArrayList<String> {
         val rolesCollection = db.collection("roles")
         val rolesList = ArrayList<String>()
@@ -546,7 +517,6 @@ object FireStore {
 
         return rolesList
     }
-
 
 
 
@@ -597,10 +567,6 @@ object FireStore {
 
     //    ------------------------- UPDATES ------------------------------- //
 
-    suspend fun chargeDataBase() {
-        updateItemsStore()
-    }
-
     suspend fun updateAllDataUser(user: Model.Users.User){
         var us = hashMapOf(
             "name" to user.name,
@@ -621,6 +587,7 @@ object FireStore {
             }
     }
 
+
     suspend fun updatePhotoByEmail(email: String, newPhotoUrl: String) {
         val userDocument = db.collection("users").document(email)
 
@@ -636,9 +603,6 @@ object FireStore {
             Log.e("UpdatePhoto", "Error al obtener datos: $exception")
         }
     }
-
-
-
 
 
     suspend fun updateLocalTypesFromFirebase(): List<String> {
@@ -816,18 +780,6 @@ object FireStore {
         }
     }
 
-    fun deleteUserPicture (mail:String){
-        val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference
-        val archivoRef = storageRef.child("usersPictures/" + mail)
-        archivoRef.delete()
-            .addOnSuccessListener {
-                // El archivo se ha eliminado con éxito
-            }
-            .addOnFailureListener { exception ->
-                // Ha ocurrido un error al eliminar el archivo
-            }
-    }
 
     suspend fun deleteUserByEmailAndRefresh(email: String):ArrayList<Model.Users.User> {
         var updatedUsers = ArrayList<Model.Users.User>()
@@ -895,7 +847,7 @@ object FireStore {
             Log.e("deleteBatchByIdIfNotReceived", "Error al eliminar lote: $exception")
         }
     }
-    
+
 
 
     suspend fun deleteImageFromStorage(imageId: String, folderPath: String) {
@@ -925,20 +877,7 @@ object FireStore {
     //    ------------------------- TO CHECK THINGS ------------------------------- //
 
 
-    suspend fun addItemToFireStore(item: Item){
-        var it = hashMapOf(
-            "itemId" to item.idItem,
-            "attributes" to item.attributes,
-        )
-        db.collection("items")
-            .document(it.get("itemId").toString())
-            .set(it).addOnSuccessListener {
-                Log.d("addItemToFireStore", "Item agregado con éxito")
-            }
-            .addOnFailureListener { e ->
-                Log.e("addItemToFireStore", "Error al agregar item: $e")
-            }
-    }
+
 
 
 }

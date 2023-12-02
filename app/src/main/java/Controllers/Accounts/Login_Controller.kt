@@ -1,7 +1,10 @@
-package Controllers
+package Controllers.Accounts
 
 import Connections.FireStore
 import Constants.Routes
+import Controllers.Administrator.AdministratorElection_Controller
+import Controllers.Jeweler.JewelsCrud_Controller
+import Controllers.Welcome.Welcome_Controller
 import Model.Users.User
 import android.app.Activity
 import android.content.Intent
