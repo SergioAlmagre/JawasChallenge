@@ -124,7 +124,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 
                                 Log.d("DeleteBatch", "Borrando batch: " + bat.idBatch)
                                 if(bat.picture != Routes.defaultBatchPictureName){
-                                    FireStore.deleteImageFromStorage(bat.picture!!, Routes.jewelsPicturesPath)
+                                    FireStore.deleteImageFromStorage(bat.picture!!, Routes.batchesPicturesPath)
                                 }
 
                             }

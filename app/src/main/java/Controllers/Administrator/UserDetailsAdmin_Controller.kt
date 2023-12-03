@@ -2,6 +2,7 @@ package Controllers.Administrator
 
 import Auxiliaries.InterWindows
 import Connections.FireStore
+import Constants.Routes
 import Model.Users.User
 import android.content.DialogInterface
 import android.content.Intent
@@ -42,7 +43,6 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
 
     val storage = Firebase.storage
     val storageRef = storage.reference
-    val filePath = "UsersPictures/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +102,8 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                 picture,
                 role
             )
+            user.batches = InterWindows.iwUser.batches
+
             uploadPictureOK()
             runBlocking {
                 val job : Job = launch(context = Dispatchers.Default) {
@@ -177,7 +179,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                                 Log.d("ComprobacionDentro", InterWindows.iwUser.toString())
                                 // Sube el ByteArray a Firebase Storage
                                 val Folder: StorageReference =
-                                    FirebaseStorage.getInstance().reference.child("UsersPictures/")
+                                    FirebaseStorage.getInstance().reference.child(Routes.usersPicturesPath)
                                 val file_name: StorageReference = Folder.child(InterWindows.iwUser!!.email)
                                 Log.d("actualizarDocumentoFotoCamara2", InterWindows.iwUser.toString())
                                 file_name.putBytes(byteArray)
@@ -227,7 +229,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                         val byteArray = outputStream.toByteArray()
 
                         // Sube el ByteArray a Firebase Storage
-                        val Folder: StorageReference = FirebaseStorage.getInstance().getReference().child("UsersPictures/")
+                        val Folder: StorageReference = FirebaseStorage.getInstance().getReference().child(Routes.usersPicturesPath)
                         val file_name: StorageReference = Folder.child(InterWindows.iwUser!!.email)
                         file_name.putBytes(byteArray)
                             .addOnSuccessListener { taskSnapshot ->
@@ -248,7 +250,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
 
     fun fileDownload(identificador: String) {
 
-        var spaceRef = storageRef.child(filePath + identificador)
+        var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
         val localfile = File.createTempFile(identificador, "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
@@ -266,7 +268,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data2 = baos.toByteArray()
 
-        val imagesRef = storageRef.child("UsersPictures/")
+        val imagesRef = storageRef.child(Routes.usersPicturesPath)
         var pictureName = binding.txtEmailUserAdmin.text.toString().uppercase().trim()
 
         InterWindows.iwUser.picture = InterWindows.iwUser.email

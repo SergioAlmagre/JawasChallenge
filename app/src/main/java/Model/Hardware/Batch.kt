@@ -13,6 +13,7 @@ class Batch {
 
     private val date = LocalDateTime.now()
     private val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
+    var aditionalInfo: String? = null
     var creationDate: String
 
     var received: Boolean

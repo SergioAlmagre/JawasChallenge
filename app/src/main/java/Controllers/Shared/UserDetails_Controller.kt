@@ -2,6 +2,7 @@ package Controllers.Shared
 
 import Auxiliaries.InterWindows
 import Connections.FireStore
+import Constants.Routes
 import Controllers.Accounts.Login_Controller
 import Model.Users.User
 import android.content.DialogInterface
@@ -42,7 +43,6 @@ class UserDetails_Controller : AppCompatActivity() {
 
     val storage = Firebase.storage
     val storageRef = storage.reference
-    val filePath = "UsersPictures/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,6 +100,7 @@ class UserDetails_Controller : AppCompatActivity() {
                 picture,
                 role!!
             )
+            user.batches = InterWindows.iwUser.batches
             uploadPictureOK()
             runBlocking {
                 val job : Job = launch(context = Dispatchers.Default) {
@@ -252,7 +253,7 @@ class UserDetails_Controller : AppCompatActivity() {
 
     fun fileDownload(identificador: String) {
 
-        var spaceRef = storageRef.child(filePath + identificador)
+        var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
         val localfile = File.createTempFile(identificador, "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)

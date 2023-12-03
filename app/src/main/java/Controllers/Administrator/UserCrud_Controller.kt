@@ -22,7 +22,6 @@ class UserCrud_Controller : AppCompatActivity() {
     var context = this
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_user_crud)
 
         binding = ActivityCrudBinding.inflate(layoutInflater)
         setContentView(binding.root)

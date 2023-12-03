@@ -3,6 +3,9 @@ package Controllers.Donor
 import Adapters.RecyAdapterDonor
 import Adapters.RecyAdapterJeweler
 import Auxiliaries.InterWindows
+import Controllers.Accounts.CreateAccountEmail_Controller
+import Controllers.Shared.UserDetails_Controller
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -54,13 +57,13 @@ class BatchesDonorCrud_Controller : AppCompatActivity() {
 
 
         binding.btnUserAdmin.setOnClickListener {
-//            var inte: Intent = Intent(this, Estadisticas::class.java)
-//            startActivity(inte)
+            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            startActivity(inte)
         }
 
         binding.btnAddObject.setOnClickListener {
-//            var inte: Intent = Intent(this, CreateAccountEmail_Controller::class.java)
-//            startActivity(inte)
+            var inte: Intent = Intent(this, AddBatch_Controller::class.java)
+            startActivity(inte)
         }
     }
 

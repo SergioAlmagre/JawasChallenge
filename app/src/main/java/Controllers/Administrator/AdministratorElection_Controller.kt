@@ -2,6 +2,7 @@ package Controllers.Administrator
 
 import Controllers.Jeweler.JewelsCrud_Controller
 import Controllers.Accounts.Login_Controller
+import Controllers.Donor.BatchesDonorCrud_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,16 +27,17 @@ class AdministratorElection_Controller : AppCompatActivity() {
         }
 
         binding.btnClassifer.setOnClickListener {
+
+        }
+
+        binding.btnDesigner.setOnClickListener {
             var inte: Intent = Intent(this, JewelsCrud_Controller::class.java)
             startActivity(inte)
         }
 
-        binding.btnDesigner.setOnClickListener {
-            // Código para ItemsType_Controller
-        }
-
         binding.btnDonor.setOnClickListener {
-            // Código para CreateAccountEmail_Controller
+            var inte: Intent = Intent(this, BatchesDonorCrud_Controller::class.java)
+            startActivity(inte)
         }
 
         binding.btnLogOut.setOnClickListener {
