@@ -3,7 +3,8 @@ package Adapters
 
 import Auxiliaries.InterWindows
 import Connections.FireStore
-import Controllers.UserDetailsAdmin_Controller
+import Constants.Routes
+import Controllers.Administrator.UserDetailsAdmin_Controller
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -89,8 +90,6 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
 
         val storage = Firebase.storage
         val storageRef = storage.reference
-        val filePath = "UsersPictures/"
-        val defaultPicture = "userdefaultpicture.jpg"
 
         /**
          * Éste método se llama desde el método onBindViewHolder de la clase contenedora. Como no vuelve a crear un objeto
@@ -118,9 +117,10 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
                         runBlocking {
                             val trabajo : Job = launch(context = Dispatchers.Default) {
                                 FireStore.deleteUserByEmail(usu.email) // Borrar usuario
-                                FireStore.deleteUserPicture(usu.email) // Borrar foto de perfil
+                                if (usu.picture != Routes.defaultUserPictureName){
+                                    FireStore.deleteImageFromStorage(usu.picture!!,Routes.usersPicturesPath) // Borrar imagen de usuario (si la tiene
+                                }
 
-                                 //Actualización de array que muestra la recycler y actualización de la misma
                                 InterWindows.iwUsersAL.remove(usu)
                             }
                             trabajo.join()
@@ -156,7 +156,7 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
         }
         fun fileDownload(identificador: String?) {
 
-            var spaceRef = storageRef.child(filePath + identificador)
+            var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
             val localfile = File.createTempFile(identificador!!, "jpeg")
             spaceRef.getFile(localfile).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)

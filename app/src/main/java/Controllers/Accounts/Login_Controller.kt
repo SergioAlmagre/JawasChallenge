@@ -1,6 +1,10 @@
-package Controllers
+package Controllers.Accounts
 
 import Connections.FireStore
+import Constants.Routes
+import Controllers.Administrator.AdministratorElection_Controller
+import Controllers.Jeweler.JewelsCrud_Controller
+import Controllers.Welcome.Welcome_Controller
 import Model.Users.User
 import android.app.Activity
 import android.content.Intent
@@ -175,7 +179,7 @@ class Login_Controller : AppCompatActivity() {
                             } else {
                                 updateUI(account)
                                 // El usuario no existe, se redirige a la página de nueva cuenta
-                                Auxiliaries.InterWindows.iwUser = User("", mail!!,"","","defaultPictureUser.jpg","2")
+                                Auxiliaries.InterWindows.iwUser = User("", mail!!,"","",Routes.defaultUserPictureName,"2")
                                 goNewAccountGoogle()
                             }
                         }
@@ -206,7 +210,7 @@ class Login_Controller : AppCompatActivity() {
                                 goHome(existingUser)
                             } else {
                                 // El usuario no existe en la base de datos, lo registra
-                                var newUser = User("", email,"","","defaultPictureUser.jpg","2")
+                                var newUser = User("", email,"","",Routes.defaultUserPictureName,"2")
                                 FireStore.addUser(newUser)
                                 Auxiliaries.InterWindows.iwUser = newUser
                             }

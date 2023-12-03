@@ -3,8 +3,9 @@ package Adapters
 
 import Auxiliaries.InterWindows
 import Connections.FireStore
-import Controllers.UserDetailsAdmin_Controller
-import Model.Jewels.Jewel
+import Constants.Routes
+import Controllers.Donor.BatchDetails_Controller
+import Model.Hardware.Batch
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -19,18 +20,17 @@ import androidx.recyclerview.widget.RecyclerView
 import android.graphics.BitmapFactory
 import com.example.jawaschallenge.R
 import com.google.firebase.Firebase
-//import com.google.firebase.firestore.auth.User
 import com.google.firebase.storage.storage
 import java.io.File
 import Model.Users.*
-import Store.ItemsStore
 import android.content.Intent
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class RecyAdapterDonor(var jewels : MutableList<Jewel>, var  context: Context) : RecyclerView.Adapter<RecyAdapterDonor.ViewHolder>() {
+class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterDonor.ViewHolder>() {
 
     companion object {
         //Esta variable estática nos será muy útil para saber cual está marcado o no.
@@ -50,7 +50,7 @@ class RecyAdapterDonor(var jewels : MutableList<Jewel>, var  context: Context) :
      * ViewHolder(clase interna, ver abajo) para que esta pinte todos los valores y active el evento onClick en cada uno.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = jewels.get(position)
+        val item = batch.get(position)
         holder.bind(item, context, position, this)
     }
 
@@ -76,7 +76,7 @@ class RecyAdapterDonor(var jewels : MutableList<Jewel>, var  context: Context) :
      * getItemCount() nos devuelve el tamaño de la lista, que lo necesita el RecyclerView.
      */
     override fun getItemCount(): Int {
-        return jewels.size
+        return batch.size
     }
 
     //--------------------------------- Clase interna ViewHolder -----------------------------------
@@ -86,12 +86,11 @@ class RecyAdapterDonor(var jewels : MutableList<Jewel>, var  context: Context) :
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val mailUser = view.findViewById(R.id.txtInfo) as TextView
-        val userPicture = view.findViewById(R.id.ObjetPicture) as ImageView
+        val creationDate = view.findViewById(R.id.txtInfo) as TextView
+        val batchPicture = view.findViewById(R.id.ObjetPicture) as ImageView
 
         val storage = Firebase.storage
         val storageRef = storage.reference
-        val filePath = "JewelsPictures/"
 
         /**
          * Éste método se llama desde el método onBindViewHolder de la clase contenedora. Como no vuelve a crear un objeto
@@ -99,31 +98,35 @@ class RecyAdapterDonor(var jewels : MutableList<Jewel>, var  context: Context) :
          */
         @SuppressLint("ResourceAsColor")
         fun bind(
-            jew: Jewel,
+            bat: Batch,
             context: Context,
 
             pos: Int,
             miAdaptadorRecycler: RecyAdapterDonor
         ) {
             val builder = AlertDialog.Builder(context)
-            mailUser.text = jew.name
-            fileDownload(jew.picture)
+            creationDate.text = bat.creationDate
+            fileDownload(bat.picture)
 
             itemView.setOnLongClickListener() {
 
                 with(builder)
                 {
-                    setTitle("Delete")
-                    setMessage("This will delete the user. Are you sure?")
+                    setTitle("Estas a punto de borrar un batch")
+                    setMessage("¿Seguro que quieres continuar?")
                     setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
 
                         runBlocking {
                             val trabajo : Job = launch(context = Dispatchers.Default) {
-//                                FireStore.deleteUserByEmail(jew.email) // Borrar usuario
-//                                FireStore.deleteUserPicture(jew.email) // Borrar foto de perfil
 
-                                Store.JewelsCatalog.jewelsList.remove(jew)
-                                FireStore.deleteJewelByName(jew.name)
+                                Store.AllBatchesDonor.batchList.remove(bat)
+                                FireStore.deleteBatchByIdIfNotReceived(bat.idBatch)
+
+                                Log.d("DeleteBatch", "Borrando batch: " + bat.idBatch)
+                                if(bat.picture != Routes.defaultBatchPictureName){
+                                    FireStore.deleteImageFromStorage(bat.picture!!, Routes.batchesPicturesPath)
+                                }
+
                             }
                             trabajo.join()
                             miAdaptadorRecycler.notifyDataSetChanged()
@@ -141,15 +144,15 @@ class RecyAdapterDonor(var jewels : MutableList<Jewel>, var  context: Context) :
 
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
-                InterWindows.iwUser = InterWindows.iwUsersAL[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
+                InterWindows.iwBatch = Store.AllBatchesDonor.batchList[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
 
-                if (InterWindows.iwUser != null){
+                if (InterWindows.iwBatch != null){
                     Toast.makeText(
                         context,
-                        "Seleccionado " + InterWindows.iwUser!!.email,
+                        "Seleccionado " + InterWindows.iwBatch!!.creationDate,
                         Toast.LENGTH_SHORT
                     ).show()
-                    var inte: Intent = Intent(context, UserDetailsAdmin_Controller::class.java)
+                    var inte: Intent = Intent(context, BatchDetails_Controller::class.java)
                     context.startActivity(inte)
                 }
             }
@@ -158,11 +161,11 @@ class RecyAdapterDonor(var jewels : MutableList<Jewel>, var  context: Context) :
         }
         fun fileDownload(identificador: String?) {
 
-            var spaceRef = storageRef.child(filePath + identificador)
+            var spaceRef = storageRef.child(Routes.batchesPicturesPath + identificador)
             val localfile = File.createTempFile(identificador!!, "jpeg")
             spaceRef.getFile(localfile).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-                userPicture.setImageBitmap(bitmap)
+                batchPicture.setImageBitmap(bitmap)
             }.addOnFailureListener {
 
             }

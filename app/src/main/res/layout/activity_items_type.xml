@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="Controllers.ItemsType_Controller">
+    tools:context="Controllers.Administrator.ItemsType_Controller">
 
     <Button
         android:id="@+id/btnDeleteType"

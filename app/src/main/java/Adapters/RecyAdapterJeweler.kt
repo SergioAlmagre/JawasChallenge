@@ -3,7 +3,8 @@ package Adapters
 
 import Auxiliaries.InterWindows
 import Connections.FireStore
-import Controllers.UserDetailsAdmin_Controller
+import Constants.Routes
+import Controllers.Administrator.UserDetailsAdmin_Controller
 import Model.Jewels.Jewel
 import android.annotation.SuppressLint
 import android.content.Context
@@ -118,11 +119,11 @@ class RecyAdapterJeweler(var jewels : MutableList<Jewel>, var  context: Context)
 
                         runBlocking {
                             val trabajo : Job = launch(context = Dispatchers.Default) {
-//                                FireStore.deleteUserByEmail(jew.email) // Borrar usuario
-//                                FireStore.deleteUserPicture(jew.email) // Borrar foto de perfil
-
                                 Store.JewelsCatalog.jewelsList.remove(jew)
                                 FireStore.deleteJewelByName(jew.name)
+                                if (jew.picture != Routes.defaultJewelPictureName){
+                                    FireStore.deleteImageFromStorage(jew.picture!!,Routes.jewelsPicturesPath)
+                                }
                             }
                             trabajo.join()
                             miAdaptadorRecycler.notifyDataSetChanged()

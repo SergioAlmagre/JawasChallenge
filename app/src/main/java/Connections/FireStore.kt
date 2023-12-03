@@ -9,8 +9,10 @@ import Model.Jewels.Jewel
 import Model.Users.User
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 
 object FireStore {
@@ -167,6 +169,22 @@ object FireStore {
         }
     }
 
+    suspend fun addItemToFireStore(item: Item){
+        var it = hashMapOf(
+            "itemId" to item.idItem,
+            "attributes" to item.attributes,
+        )
+        db.collection("items")
+            .document(it.get("itemId").toString())
+            .set(it).addOnSuccessListener {
+                Log.d("addItemToFireStore", "Item agregado con éxito")
+            }
+            .addOnFailureListener { e ->
+                Log.e("addItemToFireStore", "Error al agregar item: $e")
+            }
+    }
+
+
 
     //    ---------------------------- GET --------------------------------- //
 
@@ -186,9 +204,6 @@ object FireStore {
     }
 
 
-
-
-
     suspend fun getUserByEmail(email: String): Model.Users.User? {
         try {
             val documentSnapshot = db.collection("users").document(email).get().await()
@@ -204,8 +219,6 @@ object FireStore {
             return null
         }
     }
-
-
 
     suspend fun getAllPendingBatchesFromUsers() { // THIS QUERY SHOW US ONLY THE BATCHES THAT ARE NOT CLASSIFIED
         // Referencia a la colección de usuarios
@@ -275,6 +288,58 @@ object FireStore {
     }
 
 
+    suspend fun getBatchesForUser(userId: String): MutableList<Batch> {
+        val batchesList = mutableListOf<Batch>()
+
+        try {
+            // Obtén una referencia a la colección de usuarios
+            val usersCollection = db.collection("users")
+
+            // Realiza una consulta para obtener el documento del usuario
+            val userDocument = usersCollection.document(userId).get().await()
+
+            // Verifica si el documento del usuario existe y contiene la lista de lotes
+            if (userDocument.exists()) {
+                val batchesData = userDocument.get("batches") as? List<Map<String, Any>>
+
+                // Verifica que la lista de lotes no sea nula
+                if (batchesData != null) {
+                    // Itera sobre cada lote y convierte los datos a objetos Batch
+                    for (batchData in batchesData) {
+                        val batch = Batch().apply {
+                            idBatch = batchData["idBatch"] as? String ?: ""
+                            userName = batchData["userName"] as? String ?: ""
+                            latitude = batchData["latitude"] as? Double
+                            longitude = batchData["longitude"] as? Double
+                            address = batchData["address"] as? String
+                            creationDate = batchData["creationDate"] as? String ?: ""
+                            received = batchData["received"] as? Boolean ?: false
+                            picture = batchData["picture"] as? String
+                            isClassifed = batchData["isClassifed"] as? Boolean ?: false
+
+                            // Puedes iterar sobre la lista de items dentro del lote
+                            val itemsData = batchData["itemsInside"] as? List<Map<String, Any>>
+                            itemsInside = itemsData?.map { itemData ->
+                                Item().apply {
+                                    // Configura los atributos del Item según tu estructura
+                                }
+                            }?.toMutableList() ?: mutableListOf()
+                        }
+
+                        batchesList.add(batch)
+                    }
+                }
+            }
+
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("getBatchesForUser", "Error al obtener lotes: $exception")
+        }
+
+        return batchesList
+    }
+
+
     suspend fun getBatchInfoById(userEmail: String, batchId: String): BatchInfo? {
         try {
             // Referencia al documento del usuario
@@ -307,6 +372,7 @@ object FireStore {
         return null // Retorna null si no se encuentra el lote con el idBatch específico
     }
 
+
     suspend fun getAllJewels() {
         // Referencia a la colección de joyas
         val jewelsCollection = db.collection("jewelsCatalog")
@@ -338,43 +404,6 @@ object FireStore {
             println("Error al obtener datos: $exception")
         }
     }
-
-//    suspend fun getAllDistinctTypes() { // De esta forma recopilaba los tipos desde los items
-//        // Referencia a la colección
-//        val itemsCollection = db.collection("items")
-//
-//        // Conjunto para almacenar los resultados únicos
-//        val typesSet = mutableSetOf<String>()
-//
-//        try {
-//            val querySnapshot = itemsCollection.get().await()
-//
-//            for (document in querySnapshot.documents) {
-//                val attributes = document.get("attributes") as? List<Map<String, Any>>
-//
-//                // Buscar el atributo con nombre "Type"
-//                val typeAttribute = attributes?.find { it["name"] == "Type" }
-//
-//                // Agregar el valor del atributo "Type" al conjunto
-//                val typeValue = typeAttribute?.get("content") as? String
-//                if (typeValue != null) {
-//                    typesSet.add(typeValue)
-//                }
-//            }
-//
-//            // Conservar los tipos antiguos
-//            val oldTypes = Store.ItemsTypes.allTypesList
-//
-//            // Agregar los tipos antiguos al conjunto
-//            typesSet.addAll(oldTypes)
-//
-//            // Actualizar la lista en Store.itemsTypes
-//            Store.ItemsTypes.allTypesList = typesSet.sorted().toMutableList()
-//
-//        } catch (exception: Exception) {
-//            println("Error al obtener datos: $exception")
-//        }
-//    }
 
 
     suspend fun getAllDistinctTypes() {
@@ -423,7 +452,6 @@ object FireStore {
                     }
                 }
             }
-
             // Crear una lista de pares (tipo de componente, cantidad)
             val componentCountList = countsMap.entries.map { ObjectQuantity(it.key, it.value) }
 
@@ -468,6 +496,7 @@ object FireStore {
         return null
     }
 
+
     suspend fun getAllRoles(): ArrayList<String> {
         val rolesCollection = db.collection("roles")
         val rolesList = ArrayList<String>()
@@ -488,7 +517,6 @@ object FireStore {
 
         return rolesList
     }
-
 
 
 
@@ -539,10 +567,6 @@ object FireStore {
 
     //    ------------------------- UPDATES ------------------------------- //
 
-    suspend fun chargeDataBase() {
-        updateItemsStore()
-    }
-
     suspend fun updateAllDataUser(user: Model.Users.User){
         var us = hashMapOf(
             "name" to user.name,
@@ -563,6 +587,7 @@ object FireStore {
             }
     }
 
+
     suspend fun updatePhotoByEmail(email: String, newPhotoUrl: String) {
         val userDocument = db.collection("users").document(email)
 
@@ -578,9 +603,6 @@ object FireStore {
             Log.e("UpdatePhoto", "Error al obtener datos: $exception")
         }
     }
-
-
-
 
 
     suspend fun updateLocalTypesFromFirebase(): List<String> {
@@ -758,18 +780,6 @@ object FireStore {
         }
     }
 
-    fun deleteUserPicture (mail:String){
-        val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference
-        val archivoRef = storageRef.child("usersPictures/" + mail)
-        archivoRef.delete()
-            .addOnSuccessListener {
-                // El archivo se ha eliminado con éxito
-            }
-            .addOnFailureListener { exception ->
-                // Ha ocurrido un error al eliminar el archivo
-            }
-    }
 
     suspend fun deleteUserByEmailAndRefresh(email: String):ArrayList<Model.Users.User> {
         var updatedUsers = ArrayList<Model.Users.User>()
@@ -793,6 +803,68 @@ object FireStore {
     }
 
 
+    suspend fun deleteBatchByIdIfNotReceived(batchId: String) {
+        try {
+            // Obtén una referencia a la colección de usuarios
+            val usersCollection = db.collection("users")
+
+            // Realiza una consulta para obtener todos los documentos de usuarios
+            val usersDocuments = usersCollection.get().await()
+
+            // Itera sobre los documentos de usuarios
+            for (userDocument in usersDocuments.documents) {
+                // Obtiene la lista de lotes del usuario
+                val batchesList = userDocument["batches"] as? List<Map<String, Any>>
+
+                // Verifica si la lista de lotes no es nula
+                if (batchesList != null) {
+                    // Itera sobre los lotes del usuario
+                    for (batchMap in batchesList) {
+                        // Obtiene el ID del lote actual
+                        val currentBatchId = batchMap["idBatch"] as? String
+
+                        // Verifica si el ID del lote actual coincide con el ID que se desea eliminar
+                        if (currentBatchId == batchId) {
+                            // Obtiene el atributo "received" del lote actual
+                            val received = batchMap["received"] as? Boolean
+
+                            // Verifica si el lote no ha sido recibido
+                            if (received != true) {
+                                // Elimina el lote solo si no ha sido recibido
+                                userDocument.reference.update("batches", FieldValue.arrayRemove(batchMap))
+                                Log.d("deleteBatchByIdIfNotReceived", "Lote eliminado con éxito: $batchId")
+                            } else {
+                                Log.d("deleteBatchByIdIfNotReceived", "No se puede eliminar, el lote ha sido recibido: $batchId")
+                            }
+                            break  // No es necesario seguir buscando en otros lotes
+                        }
+                    }
+                }
+            }
+
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("deleteBatchByIdIfNotReceived", "Error al eliminar lote: $exception")
+        }
+    }
+
+
+
+    suspend fun deleteImageFromStorage(imageId: String, folderPath: String) {
+        try {
+            val storageRef = Firebase.storage.reference.child("$folderPath/$imageId")
+
+            // Elimina la imagen del almacenamiento
+            storageRef.delete().await()
+
+            Log.d("deleteImageFromStorage", "Imagen eliminada con éxito: $imageId")
+
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("deleteImageFromStorage", "Error al eliminar imagen del almacenamiento: $exception")
+        }
+    }
+
 
 
 
@@ -805,20 +877,7 @@ object FireStore {
     //    ------------------------- TO CHECK THINGS ------------------------------- //
 
 
-    suspend fun addItemToFireStore(item: Item){
-        var it = hashMapOf(
-            "itemId" to item.idItem,
-            "attributes" to item.attributes,
-        )
-        db.collection("items")
-            .document(it.get("itemId").toString())
-            .set(it).addOnSuccessListener {
-                Log.d("addItemToFireStore", "Item agregado con éxito")
-            }
-            .addOnFailureListener { e ->
-                Log.e("addItemToFireStore", "Error al agregar item: $e")
-            }
-    }
+
 
 
 }

@@ -1,4 +1,4 @@
-package Controllers
+package Controllers.Welcome
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

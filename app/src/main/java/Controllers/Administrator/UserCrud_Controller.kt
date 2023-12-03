@@ -1,6 +1,10 @@
-package Controllers
+package Controllers.Administrator
 
-import Adapters.RecyAdapterJeweler
+import Adapters.RecyAdapterAdminUsers
+import Auxiliaries.InterWindows
+import Controllers.Accounts.CreateAccountEmail_Controller
+import Controllers.Shared.UserDetails_Controller
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class JewelsCrud_Controller : AppCompatActivity() {
+class UserCrud_Controller : AppCompatActivity() {
     lateinit var miRecyclerView : RecyclerView
     lateinit var binding: ActivityCrudBinding
     var context = this
@@ -27,17 +31,17 @@ class JewelsCrud_Controller : AppCompatActivity() {
 
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
-
-                Connections.FireStore.getAllJewels()
+                InterWindows.iwUsersAL.clear()
+                InterWindows.iwUsersAL = Connections.FireStore.getAllUsers()
             }
             trabajo.join()
         }
 
-        miRecyclerView = binding.objetRecycler
+        miRecyclerView = binding.objetRecycler as RecyclerView
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterJeweler(Store.JewelsCatalog.jewelsList, context)
+        var miAdapter = RecyAdapterAdminUsers(InterWindows.iwUsersAL, context)
         miRecyclerView.adapter = miAdapter
 
 
@@ -47,13 +51,13 @@ class JewelsCrud_Controller : AppCompatActivity() {
 
 
         binding.btnUserAdmin.setOnClickListener {
-//            var inte: Intent = Intent(this, Estadisticas::class.java)
-//            startActivity(inte)
+            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            startActivity(inte)
         }
 
         binding.btnAddObject.setOnClickListener {
-//            var inte: Intent = Intent(this, CreateAccountEmail_Controller::class.java)
-//            startActivity(inte)
+            var inte: Intent = Intent(this, CreateAccountEmail_Controller::class.java)
+            startActivity(inte)
         }
     }
 
@@ -61,8 +65,8 @@ class JewelsCrud_Controller : AppCompatActivity() {
         super.onResume()
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
-                Store.JewelsCatalog.jewelsList.clear()
-                Connections.FireStore.getAllJewels()
+                InterWindows.iwUsersAL.clear()
+                InterWindows.iwUsersAL = Connections.FireStore.getAllUsers()
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             trabajo.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
@@ -71,7 +75,7 @@ class JewelsCrud_Controller : AppCompatActivity() {
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterJeweler(Store.JewelsCatalog.jewelsList, context)
+        var miAdapter = RecyAdapterAdminUsers(InterWindows.iwUsersAL, context)
         miRecyclerView.adapter = miAdapter
 
     }

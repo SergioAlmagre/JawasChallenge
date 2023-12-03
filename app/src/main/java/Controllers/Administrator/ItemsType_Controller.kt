@@ -1,4 +1,4 @@
-package Controllers
+package Controllers.Administrator
 
 import Auxiliaries.InterWindows
 import Connections.FireStore

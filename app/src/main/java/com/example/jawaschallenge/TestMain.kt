@@ -1,9 +1,10 @@
 package com.example.jawaschallenge
 
 import Connections.FireStore
-import Controllers.ItemsType_Controller
-import Controllers.JewelsCrud_Controller
-import Controllers.UserCrud_Controller
+import Controllers.Donor.BatchesDonorCrud_Controller
+import Controllers.Administrator.ItemsType_Controller
+import Controllers.Jeweler.JewelsCrud_Controller
+import Controllers.Administrator.UserCrud_Controller
 import Factories.Factory
 import Model.Hardware.BatchInfo
 import Model.Jewels.Jewel
@@ -24,7 +25,7 @@ class TestMain: AppCompatActivity() {
 //        setContentView(R.layout.activity_main)
 
         lifecycleScope.launch {
-            Connections.FireStore.chargeDataBase()
+            Connections.FireStore.updateItemsStore()
         }
 
 
@@ -281,8 +282,8 @@ class TestMain: AppCompatActivity() {
                 try {
                     val result = withContext(Dispatchers.Default) {
                         Connections.FireStore.addOrUpdateBatchToDonor(
-                            "DANIEL.MILLER@EXAMPLE.COM",
-                            Factory.createBatch("DANIEL.MILLER@EXAMPLE.COM")
+                            "SERGIOALMAGRE@GMAIL.COM",
+                            Factory.createBatch("SERGIOALMAGRE@GMAIL.COM")
                         )
                     }
 
@@ -372,7 +373,10 @@ class TestMain: AppCompatActivity() {
             startActivity(inte)
         }
 
-
+        binding.btnDonorCrud.setOnClickListener {
+            var inte: Intent = Intent(this, BatchesDonorCrud_Controller::class.java)
+            startActivity(inte)
+        }
 
 
         // END OF ONCREATE

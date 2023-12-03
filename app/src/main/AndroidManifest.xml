@@ -2,10 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- permissions to access the internet -->
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <uses-permission android:name="android.permission.INTERNET" /> <!-- permissions to access the gallery -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- permissions to access the camera -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- <uses-feature android:name="android.hardware.camera" /> -->
+
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
         android:name="android.hardware.camera"
@@ -17,44 +23,58 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logoredondo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logoredondo"
         android:supportsRtl="true"
         android:theme="@style/Theme.JawasChallenge"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA73CBBVRYx4BzKIUg9DcQF9zGgkpGx0ZU" />
+
         <activity
-            android:name="Controllers.AdministratorElection_Controller"
+            android:name="Controllers.Donor.AddBatch_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.ItemsType_Controller"
+            android:name="Controllers.Donor.BatchDetails_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.UserDetails_Controller"
+            android:name="Controllers.Donor.BatchesDonorCrud_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.UserDetailsAdmin_Controller"
+            android:name="Controllers.Administrator.AdministratorElection_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.UserCrud_Controller"
+            android:name="Controllers.Administrator.ItemsType_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.JewelsCrud_Controller"
+            android:name="Controllers.Shared.UserDetails_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.GuideContact_Controller"
+            android:name="Controllers.Administrator.UserDetailsAdmin_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.Welcome_Controller"
+            android:name="Controllers.Administrator.UserCrud_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.CreateAccountGoogle_Controller"
+            android:name="Controllers.Jeweler.JewelsCrud_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.CreateAccountEmail_Controller"
+            android:name="Controllers.Welcome.GuideContact_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.Login_Controller"
+            android:name="Controllers.Welcome.Welcome_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Accounts.CreateAccountGoogle_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Accounts.CreateAccountEmail_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Accounts.Login_Controller"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
