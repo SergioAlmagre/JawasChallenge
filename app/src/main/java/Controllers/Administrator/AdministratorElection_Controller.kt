@@ -2,7 +2,7 @@ package Controllers.Administrator
 
 import Controllers.Jeweler.JewelsCrud_Controller
 import Controllers.Accounts.Login_Controller
-import Controllers.Donor.BatchesDonorCrud_Controller
+import Controllers.Donor.DonorCrud_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -36,7 +36,7 @@ class AdministratorElection_Controller : AppCompatActivity() {
         }
 
         binding.btnDonor.setOnClickListener {
-            var inte: Intent = Intent(this, BatchesDonorCrud_Controller::class.java)
+            var inte: Intent = Intent(this, DonorCrud_Controller::class.java)
             startActivity(inte)
         }
 

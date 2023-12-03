@@ -1,5 +1,6 @@
 package Connections
 
+import Auxiliaries.InterWindows
 import Auxiliaries.ObjectQuantity
 import Auxiliaries.QuantitiesSumarize
 import Model.Hardware.Batch
@@ -11,7 +12,6 @@ import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 
@@ -248,7 +248,7 @@ object FireStore {
             val sortedBatches = allBatches.sortedBy { it.creationDate }
 
             // Actualizar la lista en el objeto Store.BatchesStore
-            Store.PendingBatches.batchList = sortedBatches.toMutableList()
+            InterWindows.pendingBatches = sortedBatches.toMutableList()
         } catch (exception: Exception) {
             Log.d("Batches", "Error al obtener datos: $exception")
             println("Error al obtener datos: $exception")

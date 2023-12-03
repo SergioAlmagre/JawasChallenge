@@ -46,6 +46,7 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        InterWindows.iwUser.picture = Routes.defaultUserPictureName
 
         binding = ActivityCreateAccountEmailBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -64,15 +65,17 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
                 var password = binding.userPasswordInput.text.toString()
                 var rPassword = binding.userRepeatPasswordInput.text.toString()
 
+
                 if(password != rPassword){
                     showAlert("The passwords are not the same")
                 } else {
                     InterWindows.iwUser = User(name, mail, address, phone, InterWindows.iwUser.picture, defaultRole)
-
+                    if(InterWindows.iwUser.picture != Routes.defaultUserPictureName){
+                        uploadPictureOK()
+                    }
                     createAccount(InterWindows.iwUser, password)
                 }
 
-                uploadPictureOK()
             } else {
                 showAlert("Rellene los campos")
             }

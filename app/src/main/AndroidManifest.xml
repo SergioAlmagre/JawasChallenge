@@ -41,7 +41,10 @@
             android:name="Controllers.Donor.BatchDetails_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.Donor.BatchesDonorCrud_Controller"
+            android:name="Controllers.Donor.DonorCrud_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Classifier.ClassifierCrud_Controller"
             android:exported="false" />
         <activity
             android:name="Controllers.Administrator.AdministratorElection_Controller"

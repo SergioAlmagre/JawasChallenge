@@ -26,12 +26,14 @@ import Model.Users.*
 import android.content.Intent
 import android.util.Log
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterDonor.ViewHolder>() {
+class RecyAdapterClassifier(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterClassifier.ViewHolder>() {
 
     companion object {
         //Esta variable estática nos será muy útil para saber cual está marcado o no.
@@ -102,14 +104,20 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
         fun bind(
             bat: Batch,
             context: Context,
-
             pos: Int,
-            miAdaptadorRecycler: RecyAdapterDonor
+            miAdaptadorRecycler: RecyAdapterClassifier
         ) {
             val builder = AlertDialog.Builder(context)
             creationDate.text = bat.creationDate
             fileDownload(bat.picture)
-            checkRecibed.visibility = View.INVISIBLE
+            checkRecibed.visibility = View.VISIBLE
+
+            if(bat.received)
+            {
+                checkRecibed.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
+            }else{
+                checkRecibed.setBackgroundColor(ContextCompat.getColor(context, R.color.red))
+            }
 
             itemView.setOnLongClickListener() {
 
@@ -122,7 +130,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
                         runBlocking {
                             val trabajo : Job = launch(context = Dispatchers.Default) {
 
-                                Store.AllBatchesDonor.batchList.remove(bat)
+                                InterWindows.pendingBatches.remove(bat)
                                 FireStore.deleteBatchByIdIfNotReceived(bat.idBatch)
 
                                 Log.d("DeleteBatch", "Borrando batch: " + bat.idBatch)
@@ -147,7 +155,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
-                InterWindows.iwBatch = Store.AllBatchesDonor.batchList[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
+                InterWindows.iwBatch = InterWindows.pendingBatches[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
 
                 if (InterWindows.iwBatch != null){
                     Toast.makeText(

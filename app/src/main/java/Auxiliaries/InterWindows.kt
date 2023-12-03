@@ -10,8 +10,9 @@ object InterWindows {
     var iwUsersAL = ArrayList<User>()
 
     var iwBatch = Batch()
-
     var iwJewel = Jewel()
+
+    var pendingBatches: MutableList<Batch> = mutableListOf()
 
 
 

@@ -1,14 +1,12 @@
-package Controllers.Donor
+package Controllers.Classifier
 
-import Adapters.RecyAdapterDonor
-import Adapters.RecyAdapterJeweler
+import Adapters.RecyAdapterClassifier
 import Auxiliaries.InterWindows
-import Controllers.Accounts.CreateAccountEmail_Controller
+import Controllers.Donor.AddBatch_Controller
 import Controllers.Shared.UserDetails_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jawaschallenge.databinding.ActivityCrudBinding
@@ -18,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class BatchesDonorCrud_Controller : AppCompatActivity() {
+class ClassifierCrud_Controller : AppCompatActivity() {
     lateinit var miRecyclerView : RecyclerView
     lateinit var binding: ActivityCrudBinding
     var context = this
@@ -33,22 +31,18 @@ class BatchesDonorCrud_Controller : AppCompatActivity() {
 
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
-                Log.d("recyclerBatchDentro",InterWindows.iwUser.email)
-                Store.AllBatchesDonor.batchList = Connections.FireStore.getBatchesForUser(InterWindows.iwUser.email)
-                Log.d("recyclerBatchDentro",Store.AllBatchesDonor.batchList.toString())
 
+                Connections.FireStore.getAllPendingBatchesFromUsers()
             }
             trabajo.join()
+            miRecyclerView = binding.objetRecycler
+            miRecyclerView.setHasFixedSize(true)
+            miRecyclerView.layoutManager = LinearLayoutManager(context)
+
+            var miAdapter = RecyAdapterClassifier(InterWindows.pendingBatches, context)
+            miRecyclerView.adapter = miAdapter
+
         }
-        Log.d("recyclerBatchFuera",InterWindows.iwUser.email)
-        Log.d("recyclerBatchFuera",Store.AllBatchesDonor.batchList.toString())
-
-        miRecyclerView = binding.objetRecycler
-        miRecyclerView.setHasFixedSize(true)
-        miRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        var miAdapter = RecyAdapterDonor(Store.AllBatchesDonor.batchList, context)
-        miRecyclerView.adapter = miAdapter
 
 
         binding.btnHomeAdmin.setOnClickListener{
@@ -71,8 +65,8 @@ class BatchesDonorCrud_Controller : AppCompatActivity() {
         super.onResume()
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
-                Store.AllBatchesDonor.batchList.clear()
-                Store.AllBatchesDonor.batchList = Connections.FireStore.getBatchesForUser(InterWindows.iwUser.email)
+                InterWindows.pendingBatches.clear()
+                Connections.FireStore.getAllPendingBatchesFromUsers()
             }
             trabajo.join()
         }
@@ -80,7 +74,7 @@ class BatchesDonorCrud_Controller : AppCompatActivity() {
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterDonor(Store.AllBatchesDonor.batchList, context)
+        var miAdapter = RecyAdapterClassifier(InterWindows.pendingBatches, context)
         miRecyclerView.adapter = miAdapter
 
     }
