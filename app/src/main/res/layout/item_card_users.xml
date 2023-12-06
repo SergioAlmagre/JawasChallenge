@@ -38,7 +38,7 @@
             tools:srcCompat="@drawable/defaultuserpicture" />
 
         <FrameLayout
-            android:id="@+id/checkRecibed"
+            android:id="@+id/colorLayoutReceived"
             android:layout_width="51dp"
             android:layout_height="47dp"
             android:background="#D7FF8A"

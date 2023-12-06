@@ -39,7 +39,7 @@ class ClassifierCrud_Controller : AppCompatActivity() {
             miRecyclerView.setHasFixedSize(true)
             miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-            var miAdapter = RecyAdapterClassifier(InterWindows.pendingBatches, context)
+            var miAdapter = RecyAdapterClassifier(InterWindows.iwPendingBatches, context)
             miRecyclerView.adapter = miAdapter
 
         }
@@ -59,13 +59,13 @@ class ClassifierCrud_Controller : AppCompatActivity() {
             var inte: Intent = Intent(this, AddBatch_Controller::class.java)
             startActivity(inte)
         }
-    }
+    } // End onCreate
 
     override fun onResume() {
         super.onResume()
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
-                InterWindows.pendingBatches.clear()
+                InterWindows.iwPendingBatches.clear()
                 Connections.FireStore.getAllPendingBatchesFromUsers()
             }
             trabajo.join()
@@ -74,7 +74,7 @@ class ClassifierCrud_Controller : AppCompatActivity() {
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterClassifier(InterWindows.pendingBatches, context)
+        var miAdapter = RecyAdapterClassifier(InterWindows.iwPendingBatches, context)
         miRecyclerView.adapter = miAdapter
 
     }

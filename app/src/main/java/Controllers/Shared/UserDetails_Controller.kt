@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
@@ -53,6 +54,8 @@ class UserDetails_Controller : AppCompatActivity() {
 
         firebaseauth = FirebaseAuth.getInstance()
         val builder = AlertDialog.Builder(this)
+
+
 
         var roles = ArrayList<String>()
         runBlocking {

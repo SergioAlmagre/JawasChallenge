@@ -1,5 +1,6 @@
 package Connections
 
+import Auxiliaries.Attribute
 import Auxiliaries.InterWindows
 import Auxiliaries.ObjectQuantity
 import Auxiliaries.QuantitiesSumarize
@@ -248,7 +249,7 @@ object FireStore {
             val sortedBatches = allBatches.sortedBy { it.creationDate }
 
             // Actualizar la lista en el objeto Store.BatchesStore
-            InterWindows.pendingBatches = sortedBatches.toMutableList()
+            InterWindows.iwPendingBatches = sortedBatches.toMutableList()
         } catch (exception: Exception) {
             Log.d("Batches", "Error al obtener datos: $exception")
             println("Error al obtener datos: $exception")
@@ -288,6 +289,79 @@ object FireStore {
     }
 
 
+    suspend fun getItemsForBatchReceived(batchId: String): MutableList<Item> {
+        val itemsList = mutableListOf<Item>()
+
+        try {
+            // Obtén una referencia a la colección de usuarios
+            val usersCollection = db.collection("users")
+
+            // Realiza una consulta para obtener todos los documentos de la colección
+            val querySnapshot = usersCollection.get().await()
+
+            // Itera sobre los documentos de la colección de usuarios
+            for (userDocument in querySnapshot.documents) {
+                // Verifica si el documento del usuario existe y contiene la lista de batches
+                if (userDocument.exists()) {
+                    // Obtén la lista de batches del usuario
+                    val batchesData = userDocument.get("batches") as? List<Map<String, Any>>
+
+                    // Verifica que la lista de batches no sea nula
+                    if (batchesData != null) {
+                        // Filtra los batches con "received" igual a true
+                        val receivedBatches = batchesData.filter { it["received"] == true }
+
+                        // Busca el batch con el ID deseado en la lista de batches recibidos
+                        val targetBatch = receivedBatches.find { it["idBatch"] == batchId }
+
+                        // Verifica que el batch con el ID deseado existe
+                        if (targetBatch != null) {
+                            // Obtén la lista de itemsInside del batch
+                            val itemsInsideData = targetBatch["itemsInside"] as? List<Map<String, Any>>
+
+                            // Verifica que la lista de itemsInside no sea nula
+                            if (itemsInsideData != null) {
+                                // Itera sobre cada item y convierte los datos a objetos Item
+                                for (itemData in itemsInsideData) {
+                                    val attributesData = itemData["attributes"] as? List<Map<String, String>>
+                                    val attributes = attributesData?.map { attributeData ->
+                                        Attribute(
+                                            name = attributeData["name"] ?: "",
+                                            content = attributeData["content"] ?: ""
+                                        )
+                                    }?.toMutableList() ?: mutableListOf()
+
+                                    val item = Item().apply {
+                                        // Configura los atributos del Item según los datos de Firebase
+                                        idItem = itemData["idItem"] as? String ?: ""
+                                        this.attributes = attributes
+                                    }
+
+                                    itemsList.add(item)
+                                    Log.d("getItemsForBatchReceived", "Item agregado: $item")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("getItemsForBatchReceived", "Error al obtener items: $exception")
+        }
+
+        return itemsList
+    }
+
+
+
+
+
+
+
+
+
+
     suspend fun getBatchesForUser(userId: String): MutableList<Batch> {
         val batchesList = mutableListOf<Batch>()
 
@@ -321,7 +395,9 @@ object FireStore {
                             val itemsData = batchData["itemsInside"] as? List<Map<String, Any>>
                             itemsInside = itemsData?.map { itemData ->
                                 Item().apply {
-                                    // Configura los atributos del Item según tu estructura
+                                    // Configura los atributos del Item según los datos de Firebase
+                                    idItem = itemData["idItem"] as? String ?: ""
+                                    attributes = itemData["attributes"] as? MutableList<Attribute> ?: mutableListOf()
                                 }
                             }?.toMutableList() ?: mutableListOf()
                         }

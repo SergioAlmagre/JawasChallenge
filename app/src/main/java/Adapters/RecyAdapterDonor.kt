@@ -89,7 +89,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 
         val creationDate = view.findViewById(R.id.txtInfo) as TextView
         val batchPicture = view.findViewById(R.id.ObjetPicture) as ImageView
-        val checkRecibed = view.findViewById(R.id.checkRecibed) as FrameLayout
+        val colorLayaoutReceived = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -109,7 +109,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
             val builder = AlertDialog.Builder(context)
             creationDate.text = bat.creationDate
             fileDownload(bat.picture)
-            checkRecibed.visibility = View.INVISIBLE
+            colorLayaoutReceived.visibility = View.INVISIBLE
 
             itemView.setOnLongClickListener() {
 

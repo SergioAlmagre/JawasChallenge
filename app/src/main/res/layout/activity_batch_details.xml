@@ -44,7 +44,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="361dp"
+        android:layout_width="385dp"
         android:layout_height="627dp"
         android:background="#ECECEC"
         app:circularflow_radiusInDP="15"
@@ -159,7 +159,7 @@
         app:layout_constraintVertical_bias="0.359" />
 
     <FrameLayout
-        android:id="@+id/checkRecibed"
+        android:id="@+id/colorLayoutReceived"
         android:layout_width="69dp"
         android:layout_height="55dp"
         android:background="#D7FF8A"
@@ -257,5 +257,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.954" />
+
+    <CheckBox
+        android:id="@+id/chkRecived"
+        android:layout_width="214dp"
+        android:layout_height="39dp"
+        android:text="Recibido?"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.786"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.885"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

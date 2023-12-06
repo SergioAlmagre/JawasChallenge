@@ -76,7 +76,7 @@ class TestMain: AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = InterWindows.pendingBatches.toString()
+                        binding.textView.text = InterWindows.iwPendingBatches.toString()
                         Log.d("ItemsInBatch", result.toString())
 
                     }
@@ -96,7 +96,7 @@ class TestMain: AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = InterWindows.pendingBatches.toString()
+                        binding.textView.text = InterWindows.iwPendingBatches.toString()
                         Log.d("Batches", result.toString())
 
                     }

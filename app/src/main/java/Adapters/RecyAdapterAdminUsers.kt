@@ -24,6 +24,7 @@ import com.google.firebase.storage.storage
 import java.io.File
 import Model.Users.*
 import android.content.Intent
+import android.widget.FrameLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -90,6 +91,9 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
 
         val storage = Firebase.storage
         val storageRef = storage.reference
+        val colorLayaoutReceived = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
+
+
 
         /**
          * Éste método se llama desde el método onBindViewHolder de la clase contenedora. Como no vuelve a crear un objeto
@@ -97,7 +101,7 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
          */
         @SuppressLint("ResourceAsColor")
         fun bind(
-            usu: Model.Users.User,
+            usu: User,
             context: Context,
             pos: Int,
             miAdaptadorRecycler: RecyAdapterAdminUsers
@@ -105,6 +109,8 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
             val builder = AlertDialog.Builder(context)
             mailUser.text = usu.email
             fileDownload(usu.picture)
+            colorLayaoutReceived.visibility = View.INVISIBLE
+
 
             itemView.setOnLongClickListener() {
 
