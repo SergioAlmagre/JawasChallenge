@@ -36,7 +36,7 @@ class BatchDetails_Controller : AppCompatActivity() {
         var context = this
         val builder = AlertDialog.Builder(context)
 
-        if(InterWindows.iwUser.role == "3") {
+        if(InterWindows.iwUser.role == "3" || InterWindows.iwUser.role == "1"){
             binding.chkRecived.isVisible = true
         }
 
@@ -58,19 +58,20 @@ class BatchDetails_Controller : AppCompatActivity() {
             else{
                 Log.d("BatchDetails","selectedBatch is null")
             }
-            if (!selectedBatch!!.isReceived) {
-                binding.chkRecived.isChecked = false
-                binding.lblSiNo.text= "NO"
-                binding.colorLayoutReceived.setBackgroundColor(0xFFFF8A80.toInt())
-            } else {
-                binding.chkRecived.isChecked = true
-                binding.lblSiNo.text= "SI"
-                binding.colorLayoutReceived.setBackgroundColor(0xFFA9FF77.toInt())
+            if(selectedBatch != null) {
+                if (!selectedBatch!!.isReceived) {
+                    binding.chkRecived.isChecked = false
+                    binding.lblSiNo.text = "NO"
+                    binding.colorLayoutReceived.setBackgroundColor(0xFFFF8A80.toInt())
+                } else {
+                    binding.chkRecived.isChecked = true
+                    binding.lblSiNo.text = "SI"
+                    binding.colorLayoutReceived.setBackgroundColor(0xFFA9FF77.toInt())
+                }
             }
 
 
-
-            if(InterWindows.iwUser.role == "3") {
+            if(InterWindows.iwUser.role == "3" || InterWindows.iwUser.role == "1") {
                 binding.chkRecived.isVisible = true
 
                 binding.chkRecived.setOnClickListener {
@@ -85,7 +86,6 @@ class BatchDetails_Controller : AppCompatActivity() {
                                 binding.colorLayoutReceived.setBackgroundColor(0xFFA9FF77.toInt())
 
                                 InterWindows.iwBatch.received = true
-
                                 runBlocking {
                                     val trabajo : Job = launch(context = Dispatchers.Default) {
                                         FireStore.addOrUpdateBatchToDonor(InterWindows.iwUser.email,InterWindows.iwBatch)
@@ -109,6 +109,14 @@ class BatchDetails_Controller : AppCompatActivity() {
                             setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
                                 binding.lblSiNo.text= "NO"
                                 binding.colorLayoutReceived.setBackgroundColor(0xFFFF8A80.toInt())
+
+                                InterWindows.iwBatch.received = false
+                                runBlocking {
+                                    val trabajo : Job = launch(context = Dispatchers.Default) {
+                                        FireStore.addOrUpdateBatchToDonor(InterWindows.iwUser.email,InterWindows.iwBatch)
+                                    }
+                                    trabajo.join()
+                                }
                             }))
                             setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
                                 binding.chkRecived.isChecked = true

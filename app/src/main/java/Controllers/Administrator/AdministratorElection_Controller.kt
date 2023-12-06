@@ -2,6 +2,7 @@ package Controllers.Administrator
 
 import Controllers.Jeweler.JewelsCrud_Controller
 import Controllers.Accounts.Login_Controller
+import Controllers.Classifier.ClassifierCrud_Controller
 import Controllers.Donor.DonorCrud_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +28,8 @@ class AdministratorElection_Controller : AppCompatActivity() {
         }
 
         binding.btnClassifer.setOnClickListener {
-
+            var inte: Intent = Intent(this, ClassifierCrud_Controller::class.java)
+            startActivity(inte)
         }
 
         binding.btnDesigner.setOnClickListener {

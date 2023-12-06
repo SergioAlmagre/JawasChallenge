@@ -259,24 +259,24 @@ class TestMain: AppCompatActivity() {
 
 
         binding.btnEndBatch.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    val result = withContext(Dispatchers.Default) {
-                        Connections.FireStore.endBatch(
-                            "DANIEL.MILLER@EXAMPLE.COM",
-                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
-                        )
-                    }
-
-                    withContext(Dispatchers.Main) {
-                        // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = "Batch ended"
-                        Log.d("Count", result.toString())
-                    }
-                } catch (e: Exception) {
-                    Log.e("Count", "Error: $e")
-                }
-            }
+//            lifecycleScope.launch {
+//                try {
+//                    val result = withContext(Dispatchers.Default) {
+//                        Connections.FireStore.endBatch(
+//                            "DANIEL.MILLER@EXAMPLE.COM",
+//                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
+//                        )
+//                    }
+//
+//                    withContext(Dispatchers.Main) {
+//                        // Actualizar vistas de la interfaz de usuario aquí
+//                        binding.textView.text = "Batch ended"
+//                        Log.d("Count", result.toString())
+//                    }
+//                } catch (e: Exception) {
+//                    Log.e("Count", "Error: $e")
+//                }
+//            }
         }
 
         binding.btnInsertarBatch.setOnClickListener {

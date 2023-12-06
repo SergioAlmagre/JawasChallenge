@@ -5,12 +5,16 @@ import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
 import Controllers.Shared.UserDetails_Controller
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -65,8 +69,6 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
         }
 
 
-
-
         binding.btnHomeAdmin.setOnClickListener {
             finish()
         }
@@ -78,26 +80,42 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
 
 
         binding.btnAddItem.setOnClickListener {
-//            var inte: Intent = Intent(this, AddItemsDetails_Controller::class.java)
-//            startActivity(inte)
+            var inte: Intent = Intent(this, AddItemBatch_Controller::class.java)
+            startActivity(inte)
         }
 
 
         binding.btnEndBatchItems.setOnClickListener {
+            with(builder)
+            {
+                setTitle("Esta acción es irreversible")
+                setMessage("El lote se cerrará y no se podrán añadir más items. ¿Seguro que quieres continuar?")
+                setPositiveButton(
+                    "Si",
+                    android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
+                        runBlocking {
+                            val trabajo: Job = launch(context = Dispatchers.Default) {
+                                var emailOwner = FireStore.getUserEmailByBatchId(InterWindows.iwBatch.idBatch)
 
-            for (item in InterWindows.iwItemsInside){
-                if(item.attributes[positionPicture].content != Routes.defaultItemPictureName){
-                    fileDownload(item.attributes[positionPicture].content)
-                }
+                                FireStore.endBatch(emailOwner!!,InterWindows.iwBatch.idBatch)
+                            }
+                            trabajo.join()
+                            finish()
+
+                        }
+                    })
+                )
+                setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
+                }))
+                show()
             }
+
         }
 
         //Como puedo detectar que se ha pulsado?
 //        binding.rVItemsInsideBatch.setOnClickListener  {
 //            Toast.makeText(this,"Click",Toast.LENGTH_SHORT).show()
 //        }
-
-
 
 
     }// End onCreate

@@ -2,6 +2,8 @@ package Adapters
 
 
 import Auxiliaries.InterWindows
+import Connections.FireStore
+import Constants.Routes
 import Model.Hardware.Item
 import android.annotation.SuppressLint
 import android.content.Context
@@ -87,8 +89,6 @@ class RecyAdapterItemsTxt(var itemsInside : MutableList<Item>, var  context: Con
         val itemType = view.findViewById(R.id.txtInfo) as TextView
         val storage = Firebase.storage
         val storageRef = storage.reference
-        val positionText = 0
-
 
 
         /**
@@ -105,9 +105,8 @@ class RecyAdapterItemsTxt(var itemsInside : MutableList<Item>, var  context: Con
             val builder = AlertDialog.Builder(context)
 
 
-
-            Log.d("RecyAdapterItemsTxt", "itemType.text: ${ite.attributes[positionText].content}")
-            itemType.text = ite.attributes[positionText].content.toString() //item type name
+            Log.d("RecyAdapterItemsTxt", "itemType.text: ${ite.attributes[Routes.typeNamePositionAttribute].content}")
+            itemType.text = ite.attributes[Routes.typeNamePositionAttribute].content.toString() //item type name
 
 
             val positiveButtonClick = { dialog: DialogInterface, which: Int ->
@@ -120,20 +119,23 @@ class RecyAdapterItemsTxt(var itemsInside : MutableList<Item>, var  context: Con
 
                 with(builder)
                 {
-                    setTitle("Estas a punto de borrar un batch")
+                    setTitle("Estas a punto de borrar un item añadido a este batch")
                     setMessage("¿Seguro que quieres continuar?")
                     setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
 
                         runBlocking {
                             val trabajo : Job = launch(context = Dispatchers.Default) {
 
-                                InterWindows.iwItemsInside.remove(ite) //Is fantasy because until the batch is not completed it is not in the database
+                                InterWindows.iwItemsInside.remove(ite)
+                                Log.d("RecyAdapterItemsTxt", "InterWindows.iwItemsInside: ${InterWindows.iwBatch.idBatch}")
+                                Log.d("RecyAdapterItemsTxt", "InterWindows.iwItemsInside: ${ite.idItem}")
+                                FireStore.deleteItemFromBatch(InterWindows.iwBatch.idBatch,ite.idItem)
 
+                                var itemPicture = ite.attributes[Routes.picturePositionAttribute].content
 
-
-//                                if(bat.picture != Routes.defaultBatchPictureName){
-//                                    FireStore.deleteImageFromStorage(bat.picture!!, Routes.batchesPicturesPath)
-//                                }
+                                if(itemPicture != Routes.defaultItemPictureName){
+                                    FireStore.deleteImageFromStorage(InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content!!, Routes.itemsPicturesPath)
+                                }
 
                             }
                             trabajo.join()
@@ -145,9 +147,6 @@ class RecyAdapterItemsTxt(var itemsInside : MutableList<Item>, var  context: Con
                     }))
                     show()
                 }
-
-
-
 
                 true
             }

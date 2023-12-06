@@ -573,6 +573,43 @@ object FireStore {
     }
 
 
+    suspend fun getUserEmailByBatchId(batchId: String): String? {
+        try {
+            // Obtén una referencia a la colección de usuarios
+            val usersCollection = db.collection("users")
+
+            // Realiza una consulta para obtener todos los documentos de la colección
+            val querySnapshot = usersCollection.get().await()
+
+            // Itera sobre los documentos de la colección de usuarios
+            for (userDocument in querySnapshot.documents) {
+                // Verifica si el documento del usuario existe y contiene la lista de batches
+                if (userDocument.exists()) {
+                    val batchesData = userDocument.get("batches") as? List<Map<String, Any>>
+
+                    // Verifica que la lista de batches no sea nula
+                    if (batchesData != null) {
+                        // Encuentra el lote con el ID deseado
+                        val targetBatch = batchesData.find { it["idBatch"] == batchId }
+
+                        // Verifica que el lote con el ID deseado existe
+                        if (targetBatch != null) {
+                            // Retorna el correo electrónico del usuario
+                            return userDocument.id
+                        }
+                    }
+                }
+            }
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("getUserEmailByBatchId", "Error al obtener el correo electrónico: $exception")
+        }
+
+        // Si no se encuentra el lote, retorna null
+        return null
+    }
+
+
     suspend fun getAllRoles(): ArrayList<String> {
         val rolesCollection = db.collection("roles")
         val rolesList = ArrayList<String>()
@@ -639,6 +676,7 @@ object FireStore {
             Log.e("endBatch", "Error al obtener datos: $exception")
         }
     }
+
 
 
     //    ------------------------- UPDATES ------------------------------- //
@@ -839,6 +877,59 @@ object FireStore {
             Log.e("deleteItemById", "Error al eliminar ítem: $exception")
         }
     }
+
+
+    suspend fun deleteItemFromBatch(batchId: String, itemId: String) {
+        try {
+            // Obtén una referencia a la colección de usuarios
+            val usersCollection = db.collection("users")
+
+            // Realiza una consulta para obtener todos los documentos de la colección
+            val querySnapshot = usersCollection.get().await()
+
+            // Itera sobre los documentos de la colección de usuarios
+            for (userDocument in querySnapshot.documents) {
+                // Verifica si el documento del usuario existe y contiene la lista de batches
+                if (userDocument.exists()) {
+                    val batchesData = userDocument.get("batches") as? List<MutableMap<String, Any>>
+
+                    // Verifica que la lista de batches no sea nula
+                    if (batchesData != null) {
+                        // Encuentra el lote con el ID deseado
+                        val targetBatch = batchesData.find { it["idBatch"] == batchId }
+
+                        // Verifica que el lote con el ID deseado existe
+                        if (targetBatch != null) {
+                            // Obtén la lista de itemsInside del batch
+                            val itemsInsideData = targetBatch["itemsInside"] as? MutableList<Map<String, Any>>
+
+                            // Verifica que la lista de itemsInside no sea nula
+                            if (itemsInsideData != null) {
+                                // Filtra los itemsInside para excluir el item con el ID deseado
+                                val updatedItemsInside = itemsInsideData.filterNot { it["idItem"] == itemId }.toMutableList()
+
+                                // Actualiza la lista de itemsInside en el lote
+                                targetBatch["itemsInside"] = updatedItemsInside
+
+                                // Actualiza el documento del usuario con la nueva información de lotes
+                                usersCollection.document(userDocument.id).update("batches", batchesData)
+                                    .addOnSuccessListener {
+                                        Log.d("deleteItemFromBatch", "Item borrado con éxito")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.e("deleteItemFromBatch", "Error al borrar item: $e")
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (exception: Exception) {
+            // Maneja las excepciones aquí
+            Log.e("deleteItemFromBatch", "Error al borrar item: $exception")
+        }
+    }
+
 
 
     suspend fun deleteUserByEmail(email: String) {
