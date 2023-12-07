@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
@@ -44,6 +43,7 @@ class UserDetails_Controller : AppCompatActivity() {
 
     val storage = Firebase.storage
     val storageRef = storage.reference
+    var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +51,7 @@ class UserDetails_Controller : AppCompatActivity() {
 
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         firebaseauth = FirebaseAuth.getInstance()
         val builder = AlertDialog.Builder(this)
@@ -84,34 +85,73 @@ class UserDetails_Controller : AppCompatActivity() {
         }
 
         binding.btnHomeAdmin.setOnClickListener {
-            finish()
+            Log.d("userAdmin", InterWindows.iwUser.toString())
+
+            if(isDifferent()){
+                with(builder)
+                {
+                    setTitle("Cambios en perfil detectados")
+                    setMessage("Desea guardar los cambios?")
+                    setPositiveButton(
+                        "Si",
+                        android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
+                            buildUser()
+                            runBlocking {
+                                val job : Job = launch(context = Dispatchers.Default) {
+                                    FireStore.updateAllDataUser(user!!)
+                                    uploadPictureOK()
+                                    InterWindows.iwUser = user!!
+                                }
+                                //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+                                job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+                            }
+                            Toast.makeText(context, "Cambios guardados", Toast.LENGTH_SHORT).show()
+                            finish()
+                        })
+                    )
+                    setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
+
+                        finish()
+
+                    }))
+                    show()
+                }
+
+            }else{
+                finish()
+            }
+
         }
 
         binding.btnSaveChangesUserAdmin.setOnClickListener {
-            var name = binding.txtNameUserAdmin.text.toString().uppercase().trim()
-            var email = binding.txtEmailUserAdmin.text.toString().uppercase().trim()
-            var address = binding.txtAddressUserAdmin.text.toString().uppercase().trim()
-            var phone = binding.txtPhoneUserAdmin.text.toString().uppercase().trim()
-            var picture = InterWindows.iwUser.picture
-            var role = InterWindows.iwUser.role
-
-            var user = User(
-                name,
-                email,
-                address,
-                phone,
-                picture,
-                role!!
-            )
-            user.batches = InterWindows.iwUser.batches
-            uploadPictureOK()
+//            var name = binding.txtNameUserAdmin.text.toString().uppercase().trim()
+//            var email = binding.txtEmailUserAdmin.text.toString().uppercase().trim()
+//            var address = binding.txtAddressUserAdmin.text.toString().uppercase().trim()
+//            var phone = binding.txtPhoneUserAdmin.text.toString().uppercase().trim()
+//            var picture = InterWindows.iwUser.picture
+//            var role = InterWindows.iwUser.role
+//
+//                user = User(
+//                name,
+//                email,
+//                address,
+//                phone,
+//                picture,
+//                role!!
+//            )
+//            user!!.batches = InterWindows.iwUser.batches
+            buildUser()
             runBlocking {
                 val job : Job = launch(context = Dispatchers.Default) {
-                    FireStore.updateAllDataUser(user)
+                    FireStore.updateAllDataUser(user!!)
+                    uploadPictureOK()
+                    InterWindows.iwUser = user!!
                 }
                 //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
                 job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
             }
+            Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
+            finish()
         }
 
         binding.btnAddPhotoEm2.setOnClickListener {
@@ -139,6 +179,46 @@ class UserDetails_Controller : AppCompatActivity() {
 
 
     }// End of onCreate
+
+
+    fun buildUser(){
+        var name = binding.txtNameUserAdmin.text.toString().uppercase().trim()
+        var email = binding.txtEmailUserAdmin.text.toString().uppercase().trim()
+        var address = binding.txtAddressUserAdmin.text.toString().uppercase().trim()
+        var phone = binding.txtPhoneUserAdmin.text.toString().uppercase().trim()
+        var picture = InterWindows.iwUser.picture
+        var role = InterWindows.iwUser.role
+
+            user = User(
+            name,
+            email,
+            address,
+            phone,
+            picture,
+            role!!
+        )
+        user!!.batches = InterWindows.iwUser.batches
+    }
+
+    fun isDifferent(): Boolean{
+        var isDifferent = false
+        if(InterWindows.iwUser.name != binding.txtNameUserAdmin.text.toString().uppercase().trim()){
+            isDifferent = true
+        }
+        if(InterWindows.iwUser.email != binding.txtEmailUserAdmin.text.toString().uppercase().trim()){
+            isDifferent = true
+        }
+        if(InterWindows.iwUser.address != binding.txtAddressUserAdmin.text.toString().uppercase().trim()){
+            isDifferent = true
+        }
+        if(InterWindows.iwUser.phone != binding.txtPhoneUserAdmin.text.toString().uppercase().trim()){
+            isDifferent = true
+        }
+        if(InterWindows.iwUser.picture != InterWindows.iwUser.email){
+            isDifferent = true
+        }
+        return isDifferent
+    }
 
     fun signOutAndRedirectToLogin() {
         FirebaseAuth.getInstance().signOut()

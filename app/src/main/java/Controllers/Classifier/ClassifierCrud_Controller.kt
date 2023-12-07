@@ -46,7 +46,7 @@ class ClassifierCrud_Controller : AppCompatActivity() {
 
 
         binding.btnHomeAdmin.setOnClickListener{
-            finish()
+//            finish()
         }
 
 

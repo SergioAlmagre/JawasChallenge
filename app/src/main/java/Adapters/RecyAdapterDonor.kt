@@ -102,7 +102,6 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
         fun bind(
             bat: Batch,
             context: Context,
-
             pos: Int,
             miAdaptadorRecycler: RecyAdapterDonor
         ) {
@@ -112,26 +111,35 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
             colorLayaoutReceived.visibility = View.INVISIBLE
 
             itemView.setOnLongClickListener() {
-
                 with(builder)
                 {
                     setTitle("Estas a punto de borrar un batch")
                     setMessage("¿Seguro que quieres continuar?")
                     setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
 
-                        runBlocking {
-                            val trabajo : Job = launch(context = Dispatchers.Default) {
 
-                                Store.AllBatchesDonor.batchList.remove(bat)
-                                FireStore.deleteBatchByIdIfNotReceived(bat.idBatch)
+                        if(!bat.received) {
+                            runBlocking {
+                                val trabajo: Job = launch(context = Dispatchers.Default) {
 
-                                Log.d("DeleteBatch", "Borrando batch: " + bat.idBatch)
-                                if(bat.picture != Routes.defaultBatchPictureName){
-                                    FireStore.deleteImageFromStorage(bat.picture!!, Routes.batchesPicturesPath)
+                                    Store.AllBatchesDonor.batchList.remove(bat)
+                                    FireStore.deleteBatchByIdIfNotReceived(bat.idBatch)
+
+                                    Log.d("DeleteBatch", "Borrando batch: " + bat.idBatch)
+                                    if (bat.picture != Routes.defaultBatchPictureName) {
+                                        FireStore.deleteImageFromStorage(
+                                            bat.picture!!,
+                                            Routes.batchesPicturesPath
+                                        )
+                                    }
                                 }
-
+                                trabajo.join()
                             }
-                            trabajo.join()
+                        }else{
+                            val innerBuilder = AlertDialog.Builder(context)
+                            innerBuilder.setTitle("El lote ya ha sido recibido")
+                            innerBuilder.setMessage("Solo puedes borrar los lotes que aún no hayan sido recibidos")
+                            innerBuilder.show()
                             miAdaptadorRecycler.notifyDataSetChanged()
                         }
                     }))

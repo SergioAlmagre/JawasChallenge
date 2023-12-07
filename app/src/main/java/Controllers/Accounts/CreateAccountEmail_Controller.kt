@@ -3,6 +3,10 @@ package Controllers.Accounts
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
+import Controllers.Administrator.AdministratorElection_Controller
+import Controllers.Classifier.ClassifierCrud_Controller
+import Controllers.Donor.DonorCrud_Controller
+import Controllers.Jeweler.JewelsCrud_Controller
 import Model.Users.User
 import android.content.DialogInterface
 import android.content.Intent
@@ -38,7 +42,6 @@ import java.io.File
 class CreateAccountEmail_Controller : AppCompatActivity() {
     lateinit var binding: ActivityCreateAccountEmailBinding
     private lateinit var firebaseauth: FirebaseAuth
-    var defaultRole = "2"
     private lateinit var bitmap: Bitmap
 
     val storage = Firebase.storage
@@ -69,7 +72,11 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
                 if(password != rPassword){
                     showAlert("The passwords are not the same")
                 } else {
-                    InterWindows.iwUser = User(name, mail, address, phone, InterWindows.iwUser.picture, defaultRole)
+                    if(name.isEmpty()){
+                        name = mail.substringBefore("@").uppercase().trim()
+                    }
+
+                    InterWindows.iwUser = User(name, mail, address, phone, InterWindows.iwUser.picture, Routes.defaultRole)
                     if(InterWindows.iwUser.picture != Routes.defaultUserPictureName){
                         uploadPictureOK()
                     }
@@ -170,19 +177,23 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
-
         } else if (user.role == "1") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, AdministratorElection_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }else if (user.role == "2") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, DonorCrud_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }else if (user.role == "3") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, ClassifierCrud_Controller::class.java).apply {
+                Auxiliaries.InterWindows.iwUser = user
+            }
+            startActivity(homeIntent)
+        }else if (user.role == "4") {
+            val homeIntent = Intent(this, JewelsCrud_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)

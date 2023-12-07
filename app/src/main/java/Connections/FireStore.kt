@@ -390,6 +390,7 @@ object FireStore {
                             received = batchData["received"] as? Boolean ?: false
                             picture = batchData["picture"] as? String
                             isClassifed = batchData["isClassifed"] as? Boolean ?: false
+                            aditionalInfo = batchData["aditionalInfo"] as? String ?: ""
 
                             // Puedes iterar sobre la lista de items dentro del lote
                             val itemsData = batchData["itemsInside"] as? List<Map<String, Any>>
@@ -435,7 +436,7 @@ object FireStore {
                         batchID = batch.idBatch,
                         userName = user.name,
                         email = user.email,
-                        address = user.address ?: "",
+                        address = user.address?:"",
                         creationDate = batch.creationDate,
                         isReceived = batch.received
                     )

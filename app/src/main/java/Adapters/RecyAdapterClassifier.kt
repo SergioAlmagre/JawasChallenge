@@ -101,7 +101,7 @@ class RecyAdapterClassifier(var batch : MutableList<Batch>, var  context: Contex
             miAdaptadorRecycler: RecyAdapterClassifier
         ) {
             val builder = AlertDialog.Builder(context)
-            creationDate.text = bat.creationDate
+            creationDate.text = bat.userName + " - " + bat.creationDate
             fileDownload(bat.picture)
             checkRecibed.visibility = View.VISIBLE
 

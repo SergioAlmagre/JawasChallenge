@@ -4,6 +4,7 @@ import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
 import Controllers.Shared.UserDetails_Controller
+import Model.Hardware.Batch
 import Model.Hardware.BatchInfo
 import Store.AllBatchesDonor
 import android.content.DialogInterface
@@ -42,10 +43,10 @@ class BatchDetails_Controller : AppCompatActivity() {
 
 
         var selectedBatch:BatchInfo? = null
-
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
                 selectedBatch = FireStore.getBatchInfoById(InterWindows.iwUser.email,InterWindows.iwBatch.idBatch)
+                selectedBatch!!.address = InterWindows.iwBatch.address.toString()
             }
             trabajo.join()
             if(selectedBatch != null){
@@ -54,6 +55,9 @@ class BatchDetails_Controller : AppCompatActivity() {
                 binding.lblUserBatchEmail.text = selectedBatch!!.email
                 binding.lblAddressBatch.text = selectedBatch!!.address
                 binding.lblCreationDateBatch.text = selectedBatch!!.creationDate
+                binding.lblDescrObserva.text = InterWindows.iwBatch.aditionalInfo.toString()
+                Log.d("BatchDetails",selectedBatch.toString())
+                Log.d("BatchDetails",InterWindows.iwBatch.aditionalInfo.toString())
             }
             else{
                 Log.d("BatchDetails","selectedBatch is null")

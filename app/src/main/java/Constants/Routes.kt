@@ -16,4 +16,8 @@ object Routes {
     var typeNamePositionAttribute = 0
     var descriptionPositionAttribute = 1
     var picturePositionAttribute = 2
+
+    //ROLES
+    var defaultRole = "2" // Donor
+
 }

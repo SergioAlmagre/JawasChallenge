@@ -2,6 +2,7 @@ package Controllers.Accounts
 
 import Auxiliaries.InterWindows
 import Connections.FireStore
+import Constants.Routes
 import Model.Users.User
 import android.app.Activity
 import android.content.DialogInterface
@@ -265,7 +266,11 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
                         var phone = binding.userPhoneInput.text.toString()
                         var picture = "userdefaultpicture.jpg"
 
-                        var newUser = User(name,mail,address,phone,picture,"1")
+                        if(name.isEmpty()){
+                            name = mail.substringBefore("@").uppercase().trim()
+                        }
+
+                        var newUser = User(name,mail,address,phone,picture,Routes.defaultRole)
 
                         FireStore.addUser(newUser)
                         goHome(newUser)
