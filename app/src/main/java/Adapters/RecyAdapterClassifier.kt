@@ -2,8 +2,8 @@ package Adapters
 
 
 import Auxiliaries.InterWindows
-import Connections.FireStore
 import Constants.Routes
+import Controllers.Classifier.ViewItemsBatch_Controller
 import Controllers.Donor.BatchDetails_Controller
 import Model.Hardware.Batch
 import android.annotation.SuppressLint
@@ -22,16 +22,11 @@ import com.example.jawaschallenge.R
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import java.io.File
-import Model.Users.*
 import android.content.Intent
-import android.util.Log
 import android.widget.FrameLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import androidx.core.content.ContextCompat
 
-class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterDonor.ViewHolder>() {
+class RecyAdapterClassifier(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterClassifier.ViewHolder>() {
 
     companion object {
         //Esta variable estática nos será muy útil para saber cual está marcado o no.
@@ -89,7 +84,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 
         val creationDate = view.findViewById(R.id.txtInfo) as TextView
         val batchPicture = view.findViewById(R.id.ObjetPicture) as ImageView
-        val colorLayaoutReceived = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
+        val checkRecibed = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -98,56 +93,51 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
          * Éste método se llama desde el método onBindViewHolder de la clase contenedora. Como no vuelve a crear un objeto
          * sino que usa el ya creado en onCreateViewHolder, las asociaciones findViewById no vuelven a hacerse y es más eficiente.
          */
-        @SuppressLint("ResourceAsColor")
+        @SuppressLint("ResourceAsColor", "SuspiciousIndentation")
         fun bind(
             bat: Batch,
             context: Context,
             pos: Int,
-            miAdaptadorRecycler: RecyAdapterDonor
+            miAdaptadorRecycler: RecyAdapterClassifier
         ) {
             val builder = AlertDialog.Builder(context)
-            creationDate.text = bat.creationDate
+            creationDate.text = bat.userName + " - " + bat.creationDate
             fileDownload(bat.picture)
-            colorLayaoutReceived.visibility = View.INVISIBLE
+            checkRecibed.visibility = View.VISIBLE
+
+            val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                Toast.makeText(context,
+                    "Has pulsado sí", Toast.LENGTH_SHORT).show()
+            }
+
+
+            if(bat.received)
+            {
+                checkRecibed.setBackgroundColor(ContextCompat.getColor(context, R.color.green))
+            }else{
+                checkRecibed.setBackgroundColor(ContextCompat.getColor(context, R.color.red))
+            }
 
             itemView.setOnLongClickListener() {
-                with(builder)
-                {
-                    setTitle("Estas a punto de borrar un batch")
-                    setMessage("¿Seguro que quieres continuar?")
-                    setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
+                InterWindows.iwBatch = InterWindows.iwPendingBatches[pos]
+                   if(!InterWindows.iwBatch.received){
 
+                       val builder = AlertDialog.Builder(context)
+                       with(builder)
+                       {
+                           setTitle("Ojo!")
+                           setMessage("No puedes clasificar sin haber recibido el lote")
+                           setPositiveButton("Aceptar", DialogInterface.OnClickListener(function = positiveButtonClick))
+                           show()
+                       }
 
-                        if(!bat.received) {
-                            runBlocking {
-                                val trabajo: Job = launch(context = Dispatchers.Default) {
+                   }else{
 
-                                    Store.AllBatchesDonor.batchList.remove(bat)
-                                    FireStore.deleteBatchByIdIfNotReceived(bat.idBatch)
+                       var intent = Intent(context, ViewItemsBatch_Controller::class.java)
+                       context.startActivity(intent)
 
-                                    Log.d("DeleteBatch", "Borrando batch: " + bat.idBatch)
-                                    if (bat.picture != Routes.defaultBatchPictureName) {
-                                        FireStore.deleteImageFromStorage(
-                                            bat.picture!!,
-                                            Routes.batchesPicturesPath
-                                        )
-                                    }
-                                }
-                                trabajo.join()
-                            }
-                        }else{
-                            val innerBuilder = AlertDialog.Builder(context)
-                            innerBuilder.setTitle("El lote ya ha sido recibido")
-                            innerBuilder.setMessage("Solo puedes borrar los lotes que aún no hayan sido recibidos")
-                            innerBuilder.show()
-                            miAdaptadorRecycler.notifyDataSetChanged()
-                        }
-                    }))
-                    setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
-//                                Toast.makeText(context, "Has pulsado no", Toast.LENGTH_SHORT).show()
-                    }))
-                    show()
-                }
+                   }
+
 
                 true
             }
@@ -155,7 +145,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
-                InterWindows.iwBatch = Store.AllBatchesDonor.batchList[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
+                InterWindows.iwBatch = InterWindows.iwPendingBatches[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
 
                 if (InterWindows.iwBatch != null){
                     Toast.makeText(

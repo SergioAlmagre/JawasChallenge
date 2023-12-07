@@ -12,6 +12,12 @@ object Routes {
     var defaultBatchPictureName = "defaultBatchPicture.jpg"
     var defaultJewelPictureName = "defaultJewelPicture.jpg"
 
+    //ITEMS
+    var typeNamePositionAttribute = 0
+    var descriptionPositionAttribute = 1
+    var picturePositionAttribute = 2
 
+    //ROLES
+    var defaultRole = "2" // Donor
 
 }

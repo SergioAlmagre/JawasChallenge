@@ -7,6 +7,7 @@ import Controllers.Shared.UserDetails_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jawaschallenge.databinding.ActivityCrudBinding
@@ -29,6 +30,7 @@ class UserCrud_Controller : AppCompatActivity() {
         var storage = com.google.firebase.ktx.Firebase.storage
         var storageRef = storage.reference
 
+
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
                 InterWindows.iwUsersAL.clear()
@@ -46,7 +48,7 @@ class UserCrud_Controller : AppCompatActivity() {
 
 
         binding.btnHomeAdmin.setOnClickListener{
-            finish()
+//            finish()
         }
 
 

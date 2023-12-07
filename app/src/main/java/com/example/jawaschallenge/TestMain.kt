@@ -1,10 +1,12 @@
 package com.example.jawaschallenge
 
+import Auxiliaries.InterWindows
 import Connections.FireStore
-import Controllers.Donor.BatchesDonorCrud_Controller
+import Controllers.Donor.DonorCrud_Controller
 import Controllers.Administrator.ItemsType_Controller
 import Controllers.Jeweler.JewelsCrud_Controller
 import Controllers.Administrator.UserCrud_Controller
+import Controllers.Classifier.ClassifierCrud_Controller
 import Factories.Factory
 import Model.Hardware.BatchInfo
 import Model.Jewels.Jewel
@@ -74,7 +76,7 @@ class TestMain: AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = Store.PendingBatches.batchList.toString()
+                        binding.textView.text = InterWindows.iwPendingBatches.toString()
                         Log.d("ItemsInBatch", result.toString())
 
                     }
@@ -94,7 +96,7 @@ class TestMain: AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = Store.PendingBatches.batchList.toString()
+                        binding.textView.text = InterWindows.iwPendingBatches.toString()
                         Log.d("Batches", result.toString())
 
                     }
@@ -257,24 +259,24 @@ class TestMain: AppCompatActivity() {
 
 
         binding.btnEndBatch.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    val result = withContext(Dispatchers.Default) {
-                        Connections.FireStore.endBatch(
-                            "DANIEL.MILLER@EXAMPLE.COM",
-                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
-                        )
-                    }
-
-                    withContext(Dispatchers.Main) {
-                        // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = "Batch ended"
-                        Log.d("Count", result.toString())
-                    }
-                } catch (e: Exception) {
-                    Log.e("Count", "Error: $e")
-                }
-            }
+//            lifecycleScope.launch {
+//                try {
+//                    val result = withContext(Dispatchers.Default) {
+//                        Connections.FireStore.endBatch(
+//                            "DANIEL.MILLER@EXAMPLE.COM",
+//                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
+//                        )
+//                    }
+//
+//                    withContext(Dispatchers.Main) {
+//                        // Actualizar vistas de la interfaz de usuario aquí
+//                        binding.textView.text = "Batch ended"
+//                        Log.d("Count", result.toString())
+//                    }
+//                } catch (e: Exception) {
+//                    Log.e("Count", "Error: $e")
+//                }
+//            }
         }
 
         binding.btnInsertarBatch.setOnClickListener {
@@ -374,10 +376,14 @@ class TestMain: AppCompatActivity() {
         }
 
         binding.btnDonorCrud.setOnClickListener {
-            var inte: Intent = Intent(this, BatchesDonorCrud_Controller::class.java)
+            var inte: Intent = Intent(this, DonorCrud_Controller::class.java)
             startActivity(inte)
         }
 
+        binding.btnClassifierCrud.setOnClickListener {
+            var inte: Intent = Intent(this, ClassifierCrud_Controller::class.java)
+            startActivity(inte)
+        }
 
         // END OF ONCREATE
     }

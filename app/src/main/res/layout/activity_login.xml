@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/recursos3"
+    android:background="@drawable/background3"
     tools:context="Controllers.Accounts.Login_Controller">
 
 
@@ -21,31 +21,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.871" />
 
-    <Button
-        android:id="@+id/btnSingInMail"
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        android:layout_width="261dp"
+    <ImageButton
+        android:id="@+id/btnInfoApp"
+        android:layout_width="46dp"
         android:layout_height="44dp"
-        android:text="Sign in with email"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintHorizontal_bias="0.956"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
-
-    <Button
-        android:id="@+id/btnSignInGoogle"
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        android:layout_width="262dp"
-        android:layout_height="47dp"
-        android:text="Sign In with Google"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.528"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.698" />
+        app:layout_constraintVertical_bias="0.976"
+        app:srcCompat="@drawable/info" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/userInputLayout"
@@ -53,9 +41,10 @@
         android:layout_height="61dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.389"
+        app:layout_constraintVertical_bias="0.267"
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -75,9 +64,10 @@
         app:endIconMode="password_toggle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.501"
+        app:layout_constraintVertical_bias="0.379"
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -87,22 +77,36 @@
             android:background="#FFFFFF"
             android:inputType="textPassword"
             android:textAlignment="center"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="78dp"
+            tools:layout_editor_absoluteY="304dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageButton
-        android:id="@+id/btnInfoApp"
-        android:layout_width="46dp"
+    <Button
+        android:id="@+id/btnSingInMail"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="261dp"
         android:layout_height="44dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
+        android:text="Sign in with email"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976"
-        app:srcCompat="@drawable/info" />
+        app:layout_constraintVertical_bias="0.498" />
+
+    <Button
+        android:id="@+id/btnSignInGoogle"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="262dp"
+        android:layout_height="47dp"
+        android:text="Sign In with Google"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.578" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

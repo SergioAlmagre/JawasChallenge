@@ -4,34 +4,31 @@ package Adapters
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
-import Controllers.Donor.BatchDetails_Controller
-import Model.Hardware.Batch
+import Model.Hardware.Item
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import android.graphics.BitmapFactory
 import com.example.jawaschallenge.R
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
-import java.io.File
 import Model.Users.*
-import android.content.Intent
 import android.util.Log
-import android.widget.FrameLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterDonor.ViewHolder>() {
+class RecyAdapterItemsTxt(var itemsInside : MutableList<Item>, var  context: Context) : RecyclerView.Adapter<RecyAdapterItemsTxt.ViewHolder>() {
+
+
+    var onItemClickListener: ViewHolder.OnItemClickListener? = null
 
     companion object {
         //Esta variable estática nos será muy útil para saber cual está marcado o no.
@@ -51,8 +48,9 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
      * ViewHolder(clase interna, ver abajo) para que esta pinte todos los valores y active el evento onClick en cada uno.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = batch.get(position)
+        val item = itemsInside.get(position)
         holder.bind(item, context, position, this)
+
     }
 
     /**
@@ -62,8 +60,9 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 //        val layoutInflater = LayoutInflater.from(parent.context)
 //        //return ViewHolder(layoutInflater.inflate(R.layout.item_lo,parent,false))
 //        return ViewHolder(layoutInflater.inflate(R.layout.item_card,parent,false))
-        val vista = LayoutInflater.from(parent.context).inflate(R.layout.item_card_users, parent, false)
+        val vista = LayoutInflater.from(parent.context).inflate(R.layout.item_card_itemstxt, parent, false)
         val viewHolder = ViewHolder(vista)
+
 
         // Configurar el OnClickListener
         viewHolder.itemView.setOnClickListener {
@@ -77,7 +76,7 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
      * getItemCount() nos devuelve el tamaño de la lista, que lo necesita el RecyclerView.
      */
     override fun getItemCount(): Int {
-        return batch.size
+        return itemsInside.size
     }
 
     //--------------------------------- Clase interna ViewHolder -----------------------------------
@@ -87,12 +86,10 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val creationDate = view.findViewById(R.id.txtInfo) as TextView
-        val batchPicture = view.findViewById(R.id.ObjetPicture) as ImageView
-        val colorLayaoutReceived = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
-
+        val itemType = view.findViewById(R.id.txtInfo) as TextView
         val storage = Firebase.storage
         val storageRef = storage.reference
+
 
         /**
          * Éste método se llama desde el método onBindViewHolder de la clase contenedora. Como no vuelve a crear un objeto
@@ -100,46 +97,48 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
          */
         @SuppressLint("ResourceAsColor")
         fun bind(
-            bat: Batch,
+            ite: Item,
             context: Context,
             pos: Int,
-            miAdaptadorRecycler: RecyAdapterDonor
+            miAdaptadorRecycler: RecyAdapterItemsTxt
         ) {
             val builder = AlertDialog.Builder(context)
-            creationDate.text = bat.creationDate
-            fileDownload(bat.picture)
-            colorLayaoutReceived.visibility = View.INVISIBLE
+
+
+            Log.d("RecyAdapterItemsTxt", "itemType.text: ${ite.attributes[Routes.typeNamePositionAttribute].content}")
+            itemType.text = ite.attributes[Routes.typeNamePositionAttribute].content.toString() //item type name
+
+
+            val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                Toast.makeText(context,
+                    "Has pulsado sí", Toast.LENGTH_SHORT).show()
+            }
 
             itemView.setOnLongClickListener() {
+                InterWindows.iwItem = InterWindows.iwItemsInside[pos]
+
                 with(builder)
                 {
-                    setTitle("Estas a punto de borrar un batch")
+                    setTitle("Estas a punto de borrar un item añadido a este batch")
                     setMessage("¿Seguro que quieres continuar?")
                     setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
 
+                        runBlocking {
+                            val trabajo : Job = launch(context = Dispatchers.Default) {
 
-                        if(!bat.received) {
-                            runBlocking {
-                                val trabajo: Job = launch(context = Dispatchers.Default) {
+                                InterWindows.iwItemsInside.remove(ite)
+                                Log.d("RecyAdapterItemsTxt", "InterWindows.iwItemsInside: ${InterWindows.iwBatch.idBatch}")
+                                Log.d("RecyAdapterItemsTxt", "InterWindows.iwItemsInside: ${ite.idItem}")
+                                FireStore.deleteItemFromBatch(InterWindows.iwBatch.idBatch,ite.idItem)
 
-                                    Store.AllBatchesDonor.batchList.remove(bat)
-                                    FireStore.deleteBatchByIdIfNotReceived(bat.idBatch)
+                                var itemPicture = ite.attributes[Routes.picturePositionAttribute].content
 
-                                    Log.d("DeleteBatch", "Borrando batch: " + bat.idBatch)
-                                    if (bat.picture != Routes.defaultBatchPictureName) {
-                                        FireStore.deleteImageFromStorage(
-                                            bat.picture!!,
-                                            Routes.batchesPicturesPath
-                                        )
-                                    }
+                                if(itemPicture != Routes.defaultItemPictureName){
+                                    FireStore.deleteImageFromStorage(InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content!!, Routes.itemsPicturesPath)
                                 }
-                                trabajo.join()
+
                             }
-                        }else{
-                            val innerBuilder = AlertDialog.Builder(context)
-                            innerBuilder.setTitle("El lote ya ha sido recibido")
-                            innerBuilder.setMessage("Solo puedes borrar los lotes que aún no hayan sido recibidos")
-                            innerBuilder.show()
+                            trabajo.join()
                             miAdaptadorRecycler.notifyDataSetChanged()
                         }
                     }))
@@ -155,33 +154,21 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
-                InterWindows.iwBatch = Store.AllBatchesDonor.batchList[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
+                InterWindows.iwItem = InterWindows.iwItemsInside[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
 
-                if (InterWindows.iwBatch != null){
-                    Toast.makeText(
-                        context,
-                        "Seleccionado " + InterWindows.iwBatch!!.creationDate,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    var inte: Intent = Intent(context, BatchDetails_Controller::class.java)
-                    context.startActivity(inte)
+//                onItemClickListener?.onItemClick(it, adapterPosition)
+
                 }
-            }
-
-
-        }
-        fun fileDownload(identificador: String?) {
-
-            var spaceRef = storageRef.child(Routes.batchesPicturesPath + identificador)
-            val localfile = File.createTempFile(identificador!!, "jpeg")
-            spaceRef.getFile(localfile).addOnSuccessListener {
-                val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-                batchPicture.setImageBitmap(bitmap)
-            }.addOnFailureListener {
 
             }
+
+        interface OnItemClickListener {
+            fun onItemClick(view: View, position: Int)
         }
-    }
 
 
-}
+    }// End of class ViewHolder
+
+
+
+}// End of class RecyAdapterItemsTxt

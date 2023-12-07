@@ -3,6 +3,8 @@ package Controllers.Accounts
 import Connections.FireStore
 import Constants.Routes
 import Controllers.Administrator.AdministratorElection_Controller
+import Controllers.Classifier.ClassifierCrud_Controller
+import Controllers.Donor.DonorCrud_Controller
 import Controllers.Jeweler.JewelsCrud_Controller
 import Controllers.Welcome.Welcome_Controller
 import Model.Users.User
@@ -251,19 +253,23 @@ class Login_Controller : AppCompatActivity() {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
-
-        } else if (user.role == "1") {
+        }else if (user.role == "1") {
             val homeIntent = Intent(this, AdministratorElection_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }else if (user.role == "2") {
-            val homeIntent = Intent(this, JewelsCrud_Controller::class.java).apply {
+            val homeIntent = Intent(this, DonorCrud_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }else if (user.role == "3") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, ClassifierCrud_Controller::class.java).apply {
+                Auxiliaries.InterWindows.iwUser = user
+            }
+            startActivity(homeIntent)
+        }else if (user.role == "4") {
+            val homeIntent = Intent(this, JewelsCrud_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)

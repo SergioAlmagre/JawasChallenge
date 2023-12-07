@@ -12,7 +12,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.location.Geocoder
@@ -22,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.CheckBox
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,13 +39,11 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PointOfInterest
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -58,7 +54,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.IOException
 
 
@@ -105,13 +100,19 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                 setTitle("Confirmación")
                 setMessage("¿Quieres solicitar la recogida?")
                 setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
-                    if (newBatch.longitude == null && newBatch.address == null && !binding.chkDefaultAddress.isChecked) {
+                    if (newBatch.longitude == null && InterWindows.iwUser.address.isNullOrBlank()) {
                         val innerBuilder = AlertDialog.Builder(this@AddBatch_Controller)
                         innerBuilder.setTitle("Primero debes seleccionar una ubicación")
                         innerBuilder.setMessage("También puedes usar la dirección de tu perfil o llevarlo personalmente al taller")
                         innerBuilder.show()
-                    } else {
-                        newBatch.address = InterWindows.iwUser.address
+                    }
+                    else {
+                        if(!InterWindows.iwUser.address.isNullOrBlank() || binding.chkDefaultAddress.isChecked){
+                            newBatch.address = InterWindows.iwUser.address
+                        }else{
+                            newBatch.address = newBatch.longitude.toString() + "," + newBatch.latitude.toString()
+                            Log.d("Location",newBatch.longitude.toString() + "," + newBatch.latitude.toString())
+                        }
                         newBatch.userName = InterWindows.iwUser.name
                         newBatch.isClassifed = false
                         newBatch.received = false
@@ -121,10 +122,15 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                             uploadPictureOK()
                         }
                         newBatch.aditionalInfo = binding.txtAditionalInfo.text.toString()
+                        Log.d("AditionalInfo",binding.txtAditionalInfo.text.toString())
+                        Log.d("AditionalInfo",newBatch.aditionalInfo.toString())
+                        InterWindows.iwBatch.aditionalInfo = binding.txtAditionalInfo.text.toString()
+//                        InterWindows.iwBatch = newBatch
 
                         runBlocking {
                             val trabajo: Job = launch(context = Dispatchers.Default) {
                                 FireStore.addOrUpdateBatchToDonor(InterWindows.iwUser.email, newBatch)
+
                             }
                             trabajo.join()
                             Toast.makeText(this@AddBatch_Controller, "Solicitud enviada", Toast.LENGTH_SHORT).show()
@@ -173,15 +179,13 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
             startActivity(inte)
         }
 
-        val checkBox = binding.chkDefaultAddress // Asegúrate de cambiar "tuCheckBox" al ID de tu CheckBox.
-
+        val checkBox = binding.chkDefaultAddress
         checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 centerMapOnAddressWithMarker(InterWindows.iwUser.address!!,map,context)
 
             } else {
-                // El CheckBox ha sido desmarcado
-                // Coloca aquí el código que deseas ejecutar cuando el CheckBox es desmarcado.
+//                newBatch.address = newBatch.longitude.toString() + "," + newBatch.latitude.toString()
             }
         }
 

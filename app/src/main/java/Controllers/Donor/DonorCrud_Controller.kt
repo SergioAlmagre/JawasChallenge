@@ -1,9 +1,7 @@
 package Controllers.Donor
 
 import Adapters.RecyAdapterDonor
-import Adapters.RecyAdapterJeweler
 import Auxiliaries.InterWindows
-import Controllers.Accounts.CreateAccountEmail_Controller
 import Controllers.Shared.UserDetails_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class BatchesDonorCrud_Controller : AppCompatActivity() {
+class DonorCrud_Controller : AppCompatActivity() {
     lateinit var miRecyclerView : RecyclerView
     lateinit var binding: ActivityCrudBinding
     var context = this
@@ -52,7 +50,7 @@ class BatchesDonorCrud_Controller : AppCompatActivity() {
 
 
         binding.btnHomeAdmin.setOnClickListener{
-            finish()
+//            finish()
         }
 
 

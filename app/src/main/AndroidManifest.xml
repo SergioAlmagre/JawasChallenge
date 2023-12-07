@@ -2,16 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- permissions to access the internet -->
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.INTERNET" /> <!-- permissions to access the gallery -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- permissions to access the camera -->
     <uses-permission android:name="android.permission.CAMERA" /> <!-- <uses-feature android:name="android.hardware.camera" /> -->
-
-
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
         android:name="android.hardware.camera"
@@ -29,6 +25,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JawasChallenge"
         tools:targetApi="31">
+        <activity
+            android:name="Controllers.Classifier.AddItemBatch_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Classifier.ViewItemsBatch_Controller"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -41,7 +43,10 @@
             android:name="Controllers.Donor.BatchDetails_Controller"
             android:exported="false" />
         <activity
-            android:name="Controllers.Donor.BatchesDonorCrud_Controller"
+            android:name="Controllers.Donor.DonorCrud_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Classifier.ClassifierCrud_Controller"
             android:exported="false" />
         <activity
             android:name="Controllers.Administrator.AdministratorElection_Controller"

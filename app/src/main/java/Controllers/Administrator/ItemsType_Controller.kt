@@ -44,7 +44,6 @@ class ItemsType_Controller : AppCompatActivity() {
 
     val storage = Firebase.storage
     val storageRef = storage.reference
-    val filePath = "UsersPictures/"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
