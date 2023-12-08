@@ -79,4 +79,5 @@
     <string name="btnGoLogin">Ir al login</string>
     <string name="btnMakeDonation">Hacer una donación</string>
     <string name="contactarAdministrador">Contactar con el administrador</string>
+    <string name="key_btnDeleteItem">Borrar item</string>
 </resources>

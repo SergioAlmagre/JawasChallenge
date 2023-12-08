@@ -131,8 +131,7 @@
     <string name="btnGoLogin">Go to login</string>
     <string name="btnMakeDonation">Make a donation</string>
 
-
-
-
+    // INVENTORY
+    <string name="key_btnDeleteItem">Delete item</string>
 
 </resources>

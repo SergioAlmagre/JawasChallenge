@@ -20,7 +20,8 @@ object InterWindows {
 
     var iwItemToJewel = ObjectQuantity()
 
-
+    var inventoryList: List<ObjectQuantity> = listOf()
+    var inventory = QuantitiesSumarize(inventoryList)
 
 
 
