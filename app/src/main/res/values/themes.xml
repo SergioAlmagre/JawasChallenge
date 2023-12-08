@@ -3,6 +3,8 @@
 <!--    <style name="Base.Theme.JawasChallenge" parent="Theme.Material3.DayNight.NoActionBar">-->
     <style name="Base.Theme.JawasChallenge" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
@@ -19,4 +21,5 @@
 
 
     <style name="Theme.JawasChallenge" parent="Base.Theme.JawasChallenge" />
+
 </resources>

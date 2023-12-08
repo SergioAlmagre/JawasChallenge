@@ -3,6 +3,9 @@ package Controllers.Accounts
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
+import Controllers.Administrator.AdministratorElection_Controller
+import Controllers.Donor.DonorCrud_Controller
+import Controllers.Jeweler.JewelsCrud_Controller
 import Model.Users.User
 import android.app.Activity
 import android.content.DialogInterface
@@ -48,7 +51,6 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
     private lateinit var firebaseauth: FirebaseAuth
     val TAG = "Sergio"
     var user = InterWindows.iwUser
-    var defaultRole = "2"
     private val cameraRequest = 1888
     private lateinit var bitmap: Bitmap
 
@@ -70,7 +72,7 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
             var phone = binding.userPhoneInput.text.toString()
             var address = binding.userAddressInput.text.toString().uppercase().trim()
 
-            var newUser = User(name,user.email,address,phone,user.picture,defaultRole)
+            var newUser = User(name,user.email,address,phone,user.picture,Routes.defaultRole)
 
             updateUserDataCreateAccount(newUser)
             uploadPictureOK()
@@ -352,17 +354,17 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
             startActivity(homeIntent)
 
         } else if (user.role == "1") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, AdministratorElection_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }else if (user.role == "2") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, DonorCrud_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)
         }else if (user.role == "3") {
-            val homeIntent = Intent(this, TestMain::class.java).apply {
+            val homeIntent = Intent(this, JewelsCrud_Controller::class.java).apply {
                 Auxiliaries.InterWindows.iwUser = user
             }
             startActivity(homeIntent)

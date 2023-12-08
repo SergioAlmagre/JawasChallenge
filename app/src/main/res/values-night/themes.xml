@@ -1,7 +1,30 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.JawasChallenge" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.JawasChallenge" parent="Theme.Material3.Light.NoActionBar">
+<!--        &lt;!&ndash; Customize your dark theme here. &ndash;&gt;-->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+<!--        <item name="colorOnPrimary">@color/design_default_color_on_primary</item>-->
+<!--        <item name="colorSecondary">@color/design_default_color_secondary</item>-->
+<!--        <item name="colorSecondaryVariant">@color/design_default_color_secondary_variant</item>-->
+<!--        <item name="colorOnSecondary">@color/white</item>-->
+<!--&lt;!&ndash;        <item name="colorAccent">@color/design_default_color_accent</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="colorOnAccent">@color/design_default_color_on_accent</item>&ndash;&gt;-->
+
+<!--        <item name="android:textColorPrimary">@color/design_default_color_on_primary</item>-->
+<!--        <item name="android:textColorSecondary">@color/white</item>-->
+<!--        <item name="android:textColorTertiary">@color/white</item>-->
+<!--&lt;!&ndash;        <item name="android:textColorHint">@color/design_default_color_hint</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:textColorError">@color/design_default_color_error</item>&ndash;&gt;-->
+
+<!--        <item name="android:background">@color/design_default_color_background</item>-->
+<!--        <item name="android:windowBackground">@color/design_default_color_background</item>-->
+<!--        <item name="android:navigationBarColor">@color/design_default_color_background</item>-->
+<!--        <item name="android:statusBarColor">@color/design_default_color_background</item>-->
+
+<!--&lt;!&ndash;        <item name="actionBarTheme">@style/ThemeOverlay.Material3.Light.ActionBar</item>&ndash;&gt;-->
+<!--        <item name="windowActionBarOverlay">true</item>-->
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="android:windowNoTitle">true</item>-->
     </style>
 </resources>
