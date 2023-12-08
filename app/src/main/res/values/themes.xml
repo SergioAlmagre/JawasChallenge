@@ -10,6 +10,11 @@
         <item name="android:textColor">#FFFFFF</item>  <!-- Color del texto en formato hexadecimal -->
     </style>
 
+    <style name="NonEditableEditText">
+        <item name="android:textColor">@android:color/black</item>
+        <!-- Otros atributos de estilo si es necesario -->
+    </style>
+
 
 
     <style name="Theme.JawasChallenge" parent="Base.Theme.JawasChallenge" />

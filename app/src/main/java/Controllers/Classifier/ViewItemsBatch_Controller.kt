@@ -1,6 +1,6 @@
 package Controllers.Classifier
 
-import Adapters.RecyAdapterItemsTxt
+import Adapters.RecyAdapterItemsFromBatch
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
@@ -12,9 +12,6 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -63,7 +60,7 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
             miRecyclerView.setHasFixedSize(true)
             miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-            var miAdapter = RecyAdapterItemsTxt(InterWindows.iwItemsInside, context)
+            var miAdapter = RecyAdapterItemsFromBatch(InterWindows.iwItemsInside, context)
             miRecyclerView.adapter = miAdapter
 
         }
@@ -145,7 +142,7 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
             miRecyclerView.setHasFixedSize(true)
             miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-            var miAdapter = RecyAdapterItemsTxt(InterWindows.iwItemsInside, context)
+            var miAdapter = RecyAdapterItemsFromBatch(InterWindows.iwItemsInside, context)
             miRecyclerView.adapter = miAdapter
         }
     }

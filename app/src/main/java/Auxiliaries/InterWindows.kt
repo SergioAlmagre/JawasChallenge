@@ -18,6 +18,10 @@ object InterWindows {
 
     var iwItemsInside: MutableList<Item> = mutableListOf()
 
+    var iwItemToJewel = ObjectQuantity()
+
+    var iwItemInsideJewel = QuantitiesSumarize(mutableListOf())
+
 
 
 

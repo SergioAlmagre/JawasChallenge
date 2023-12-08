@@ -33,7 +33,7 @@
         <ImageButton
             android:id="@+id/btnHomeAdmin"
             android:layout_width="180dp"
-            android:layout_height="66dp"
+            android:layout_height="58dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"

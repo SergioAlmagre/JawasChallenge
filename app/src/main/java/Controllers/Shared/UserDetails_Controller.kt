@@ -63,12 +63,14 @@ class UserDetails_Controller : AppCompatActivity() {
             val job : Job = launch(context = Dispatchers.Default) {
                 roles = FireStore.getAllRoles()
 
-                if(InterWindows.iwUser!!.picture != InterWindows.iwUser!!.email){
-                    Log.d("SergioFoto", "Foto: " + InterWindows.iwUser!!.picture)
-                    fileDownload(InterWindows.iwUser!!.picture!!)
-                }else{
-                    Log.d("SergioMail", "Foto: " + InterWindows.iwUser!!.email)
-                    fileDownload(InterWindows.iwUser!!.email)
+                if(!InterWindows.iwUser.email.isNullOrEmpty()){
+                    if(InterWindows.iwUser!!.picture != InterWindows.iwUser!!.email){
+                        Log.d("SergioFoto", "Foto: " + InterWindows.iwUser!!.picture)
+                        fileDownload(InterWindows.iwUser!!.picture!!)
+                    }else{
+                        Log.d("SergioMail", "Foto: " + InterWindows.iwUser!!.email)
+                        fileDownload(InterWindows.iwUser!!.email)
+                    }
                 }
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
@@ -214,7 +216,7 @@ class UserDetails_Controller : AppCompatActivity() {
         if(InterWindows.iwUser.phone != binding.txtPhoneUserAdmin.text.toString().uppercase().trim()){
             isDifferent = true
         }
-        if(InterWindows.iwUser.picture != InterWindows.iwUser.email){
+        if(InterWindows.iwUser.picture != InterWindows.iwUser.picture){
             isDifferent = true
         }
         return isDifferent
@@ -335,7 +337,6 @@ class UserDetails_Controller : AppCompatActivity() {
 
 
     fun fileDownload(identificador: String) {
-
         var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
         val localfile = File.createTempFile(identificador, "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {

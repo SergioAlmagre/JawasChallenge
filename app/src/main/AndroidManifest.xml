@@ -26,6 +26,22 @@
         android:theme="@style/Theme.JawasChallenge"
         tools:targetApi="31">
         <activity
+            android:name="Controllers.Jeweler.RandomJewel_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.JewelInstructions_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.ViewRecipe_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.AddItemToJewel_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.AddJewel_Controller"
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
             android:name="Controllers.Classifier.AddItemBatch_Controller"
             android:exported="false" />
         <activity

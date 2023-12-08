@@ -1,41 +1,24 @@
 package Controllers.Administrator
 
-import Auxiliaries.InterWindows
 import Connections.FireStore
-import Model.Users.User
 import android.content.DialogInterface
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.jawaschallenge.R
 import com.example.jawaschallenge.databinding.ActivityItemsTypeBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.ByteArrayOutputStream
-import java.io.File
 
 class ItemsType_Controller : AppCompatActivity() {
     lateinit var binding: ActivityItemsTypeBinding
@@ -47,7 +30,6 @@ class ItemsType_Controller : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_user_details_admin)
 
         binding = ActivityItemsTypeBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -55,7 +37,7 @@ class ItemsType_Controller : AppCompatActivity() {
         firebaseauth = FirebaseAuth.getInstance()
         val builder = AlertDialog.Builder(this)
 
-        chargeCombo()
+        loadCombo()
 
         binding.cboItemsType.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , Store.ItemsTypes.allTypesList)
 
@@ -78,7 +60,7 @@ class ItemsType_Controller : AppCompatActivity() {
                 lifecycleScope.launch {
                     try {
                         FireStore.addNewTypeToFirebase(newItemTypeName)
-                        chargeCombo()
+                        loadCombo()
                     } catch (e: Exception) {
                         // Manejar excepciones si es necesario
                         Log.e("AddNewType", "Error: $e")
@@ -106,7 +88,7 @@ class ItemsType_Controller : AppCompatActivity() {
                             }
                             job.join()
                             //binding.cboItemsType.adapter = ArrayAdapter(contex,android.R.layout.simple_spinner_dropdown_item , Store.ItemsTypes.allTypesList)
-                            chargeCombo()
+                            loadCombo()
 
                         }
                         Toast.makeText(contex,"Elemento ${nameItem} eliminado", Toast.LENGTH_SHORT).show()
@@ -125,7 +107,7 @@ class ItemsType_Controller : AppCompatActivity() {
 
     }// End of onCreate
 
-    fun chargeCombo(){
+    fun loadCombo(){
         runBlocking {
             val job : Job = launch(context = Dispatchers.Default) {
                 FireStore.getAllDistinctTypes()

@@ -26,6 +26,7 @@ import Model.Users.*
 import android.content.Intent
 import android.util.Log
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -90,6 +91,8 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
         val creationDate = view.findViewById(R.id.txtInfo) as TextView
         val batchPicture = view.findViewById(R.id.ObjetPicture) as ImageView
         val colorLayaoutReceived = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
+        val playIcon = view.findViewById(R.id.btnBuildJewel) as ImageButton
+
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -109,6 +112,8 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
             creationDate.text = bat.creationDate
             fileDownload(bat.picture)
             colorLayaoutReceived.visibility = View.INVISIBLE
+            playIcon.visibility = View.INVISIBLE
+
 
             itemView.setOnLongClickListener() {
                 with(builder)

@@ -24,6 +24,7 @@ import com.google.firebase.storage.storage
 import java.io.File
 import android.content.Intent
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 
 class RecyAdapterClassifier(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterClassifier.ViewHolder>() {
@@ -85,6 +86,8 @@ class RecyAdapterClassifier(var batch : MutableList<Batch>, var  context: Contex
         val creationDate = view.findViewById(R.id.txtInfo) as TextView
         val batchPicture = view.findViewById(R.id.ObjetPicture) as ImageView
         val checkRecibed = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
+        val playIcon = view.findViewById(R.id.btnBuildJewel) as ImageButton
+
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -104,6 +107,8 @@ class RecyAdapterClassifier(var batch : MutableList<Batch>, var  context: Contex
             creationDate.text = bat.userName + " - " + bat.creationDate
             fileDownload(bat.picture)
             checkRecibed.visibility = View.VISIBLE
+            playIcon.visibility = View.INVISIBLE
+
 
             val positiveButtonClick = { dialog: DialogInterface, which: Int ->
                 Toast.makeText(context,
