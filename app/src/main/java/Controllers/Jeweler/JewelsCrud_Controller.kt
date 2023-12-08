@@ -1,6 +1,10 @@
 package Controllers.Jeweler
 
 import Adapters.RecyAdapterJeweler
+import Auxiliaries.InterWindows
+import Controllers.Shared.UserDetails_Controller
+import Model.Jewels.Jewel
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +25,8 @@ class JewelsCrud_Controller : AppCompatActivity() {
 
         binding = ActivityCrudBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.btnHomeAdmin.visibility = android.view.View.GONE
 
         var storage = com.google.firebase.ktx.Firebase.storage
         var storageRef = storage.reference
@@ -47,13 +53,14 @@ class JewelsCrud_Controller : AppCompatActivity() {
 
 
         binding.btnUserAdmin.setOnClickListener {
-//            var inte: Intent = Intent(this, Estadisticas::class.java)
-//            startActivity(inte)
+            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            startActivity(inte)
         }
 
         binding.btnAddObject.setOnClickListener {
-//            var inte: Intent = Intent(this, CreateAccountEmail_Controller::class.java)
-//            startActivity(inte)
+            InterWindows.iwJewel = Jewel()
+            var inte: Intent = Intent(this, AddJewel_Controller::class.java)
+            startActivity(inte)
         }
     }
 

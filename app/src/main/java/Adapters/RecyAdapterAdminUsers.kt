@@ -25,6 +25,7 @@ import java.io.File
 import Model.Users.*
 import android.content.Intent
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -92,6 +93,8 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
         val storage = Firebase.storage
         val storageRef = storage.reference
         val colorLayaoutReceived = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
+        val playIcon = view.findViewById(R.id.btnBuildJewel) as ImageButton
+
 
 
 
@@ -110,10 +113,11 @@ class RecyAdapterAdminUsers(var users : ArrayList<User>, var  context: Context) 
             mailUser.text = usu.email
             fileDownload(usu.picture)
             colorLayaoutReceived.visibility = View.INVISIBLE
+            playIcon.visibility = View.INVISIBLE
+
 
 
             itemView.setOnLongClickListener() {
-
                 with(builder)
                 {
                     setTitle("Delete")

@@ -82,7 +82,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_add_batch)
 
         binding = ActivityAddBatchBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -143,7 +142,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                 }
                 show()
             }
-
         }
 
         binding.btnAddPhotoBatch.setOnClickListener {
@@ -508,7 +506,7 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                                     .addOnSuccessListener { taskSnapshot ->
                                         file_name.downloadUrl.addOnSuccessListener { uri ->
                                             // La imagen se subió correctamente y puedes obtener la URL de descarga
-                                            InterWindows.iwUser.picture = InterWindows.iwUser.email
+//                                            InterWindows.iwUser.picture = InterWindows.iwUser.email
 
                                             Log.d("actualizarDocumentoFotoCamara3", InterWindows.iwUser.toString()
                                             )
@@ -558,7 +556,7 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                                 file_name.downloadUrl.addOnSuccessListener { uri ->
                                     // La imagen se subió correctamente y puedes obtener la URL de descarga
 //                                    Conexion.actualizarDocumento(u!!.mail, u!!.mail)
-                                    InterWindows.iwUser.picture = InterWindows.iwUser.email
+//                                    InterWindows.iwUser.picture = InterWindows.iwUser.email
                                 }
                             }
                     }
@@ -593,7 +591,7 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
         val imagesRef = storageRef.child(Routes.batchesPicturesPath)
         var pictureName = newBatch.idBatch
 
-        InterWindows.iwUser.picture = InterWindows.iwUser.email
+//        InterWindows.iwUser.picture = InterWindows.iwUser.email
 
         val uploadTask = imagesRef.child(pictureName).putBytes(data2)
         uploadTask.addOnSuccessListener {

@@ -41,27 +41,32 @@ class BatchDetails_Controller : AppCompatActivity() {
             binding.chkRecived.isVisible = true
         }
 
-
         var selectedBatch:BatchInfo? = null
         runBlocking {
-            val trabajo : Job = launch(context = Dispatchers.Default) {
-                selectedBatch = FireStore.getBatchInfoById(InterWindows.iwUser.email,InterWindows.iwBatch.idBatch)
-                selectedBatch!!.address = InterWindows.iwBatch.address.toString()
-            }
-            trabajo.join()
-            if(selectedBatch != null){
-                binding.lblBatchId.text = selectedBatch!!.batchID
-                binding.lblNameDonoBatch.text = selectedBatch!!.userName
-                binding.lblUserBatchEmail.text = selectedBatch!!.email
-                binding.lblAddressBatch.text = selectedBatch!!.address
-                binding.lblCreationDateBatch.text = selectedBatch!!.creationDate
-                binding.lblDescrObserva.text = InterWindows.iwBatch.aditionalInfo.toString()
-                Log.d("BatchDetails",selectedBatch.toString())
-                Log.d("BatchDetails",InterWindows.iwBatch.aditionalInfo.toString())
-            }
-            else{
-                Log.d("BatchDetails","selectedBatch is null")
-            }
+
+                val trabajo: Job = launch(context = Dispatchers.Default) {
+                    selectedBatch = FireStore.getBatchInfoById(
+                        InterWindows.iwUser.email,
+                        InterWindows.iwBatch.idBatch
+                    )
+                    selectedBatch!!.address = InterWindows.iwBatch.address.toString()
+                }
+
+                trabajo.join()
+                if (selectedBatch != null) {
+                    binding.lblBatchId.text = selectedBatch!!.batchID
+                    binding.lblNameDonoBatch.text = selectedBatch!!.userName
+                    binding.lblUserBatchEmail.text = selectedBatch!!.email
+                    binding.lblAddressBatch.text = selectedBatch!!.address
+                    binding.lblCreationDateBatch.text = selectedBatch!!.creationDate
+                    binding.lblDescrObserva.text = InterWindows.iwBatch.aditionalInfo.toString()
+                    Log.d("BatchDetails", selectedBatch.toString())
+                    Log.d("BatchDetails", InterWindows.iwBatch.aditionalInfo.toString())
+                } else {
+                    Log.d("BatchDetails", "selectedBatch is null")
+                }
+
+
             if(selectedBatch != null) {
                 if (!selectedBatch!!.isReceived) {
                     binding.chkRecived.isChecked = false
@@ -73,7 +78,6 @@ class BatchDetails_Controller : AppCompatActivity() {
                     binding.colorLayoutReceived.setBackgroundColor(0xFFA9FF77.toInt())
                 }
             }
-
 
             if(InterWindows.iwUser.role == "3" || InterWindows.iwUser.role == "1") {
                 binding.chkRecived.isVisible = true
@@ -102,7 +106,6 @@ class BatchDetails_Controller : AppCompatActivity() {
                             }))
                             show()
                         }
-
 
                     } else {
 
