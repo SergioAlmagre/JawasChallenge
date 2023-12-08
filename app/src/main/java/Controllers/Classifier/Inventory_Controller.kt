@@ -1,10 +1,12 @@
 package Controllers.Classifier
 
+import Adapters.RecyAdapterInventory
 import Adapters.RecyAdapterItemsFromJewel
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
 import Store.AllBatchesDonor
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -50,7 +52,7 @@ class Inventory_Controller : AppCompatActivity() {
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterItemsFromJewel(InterWindows.inventory.sumarize.toMutableList(), context)
+        var miAdapter = RecyAdapterInventory(InterWindows.inventory.sumarize.toMutableList(), context)
         miRecyclerView.adapter = miAdapter
 
         binding.seekBarAmount3.setOnSeekBarChangeListener(
@@ -74,8 +76,40 @@ class Inventory_Controller : AppCompatActivity() {
             }
         )
 
+        binding.btnHomeAdmin.setOnClickListener{
+           finish()
+        }
 
+        binding.btnDeleteItem.setOnClickListener {
+            if (InterWindows.iwItemInventory.name != "") {
+                with(builder)
+                {
+                    setTitle("Vas a borrar ${binding.seekBarAmount3.progress} unidades de ${InterWindows.iwItemInventory.name}")
+                    setMessage("¿Seguro que quieres continuar?")
+                    setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
 
+                        runBlocking {
+                            val trabajo : Job = launch(context = Dispatchers.Default) {
+
+                                FireStore.deleteItemsByTypeAndQuantity(InterWindows.iwItemInventory.name, binding.seekBarAmount3.progress)
+
+                            }
+                            trabajo.join()
+                            onResume()
+                        }
+                    }))
+                    setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
+//                                Toast.makeText(context, "Has pulsado no", Toast.LENGTH_SHORT).show()
+                    }))
+                    show()
+                }
+            }else{
+                val innerBuilder = AlertDialog.Builder(this)
+                innerBuilder.setTitle("No has seleccionado ningún item")
+                innerBuilder.setMessage("Selecciona un item para poder borrarlo")
+                innerBuilder.show()
+            }
+        }
 
 
     }// End of onCreate
@@ -92,7 +126,7 @@ class Inventory_Controller : AppCompatActivity() {
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        var miAdapter = RecyAdapterItemsFromJewel(InterWindows.inventory.sumarize.toMutableList(), context)
+        var miAdapter = RecyAdapterInventory(InterWindows.inventory.sumarize.toMutableList(), context)
         miRecyclerView.adapter = miAdapter
     }
 

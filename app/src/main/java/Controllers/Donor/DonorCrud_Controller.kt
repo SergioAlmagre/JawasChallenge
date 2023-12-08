@@ -28,6 +28,7 @@ class DonorCrud_Controller : AppCompatActivity() {
 
         binding.btnHomeAdmin.visibility = android.view.View.GONE
         binding.btnRandomJewel.visibility = android.view.View.GONE
+        binding.btnInventory.visibility = android.view.View.GONE
 
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {

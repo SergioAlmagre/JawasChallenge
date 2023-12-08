@@ -27,6 +27,7 @@ class JewelsCrud_Controller : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnHomeAdmin.visibility = android.view.View.GONE
+        binding.btnInventory.visibility = android.view.View.GONE
 
 
         runBlocking {

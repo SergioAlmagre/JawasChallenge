@@ -30,6 +30,7 @@ class UserCrud_Controller : AppCompatActivity() {
 
         binding.btnHomeAdmin.visibility = android.view.View.GONE
         binding.btnRandomJewel.visibility = android.view.View.GONE
+        binding.btnInventory.visibility = android.view.View.GONE
 
 
         if(InterWindows.iwUser.role == "1"){

@@ -57,6 +57,12 @@ class ClassifierCrud_Controller : AppCompatActivity() {
             var inte: Intent = Intent(this, AddBatch_Controller::class.java)
             startActivity(inte)
         }
+
+        binding.btnInventory.setOnClickListener {
+            var inte: Intent = Intent(this, Inventory_Controller::class.java)
+            startActivity(inte)
+        }
+
     } // End onCreate
 
     override fun onResume() {

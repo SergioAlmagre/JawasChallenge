@@ -23,6 +23,8 @@ object InterWindows {
     var inventoryList: List<ObjectQuantity> = listOf()
     var inventory = QuantitiesSumarize(inventoryList)
 
+    var iwItemInventory = ObjectQuantity()
+
 
 
 
