@@ -5,15 +5,16 @@ import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class Batch {
-    val idBatch: String
-    val userName: String
+    var idBatch: String
+    var userName: String
     var latitude: Double?
     var longitude: Double?
     var address: String?
 
     private val date = LocalDateTime.now()
     private val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
-    val creationDate: String
+    var aditionalInfo: String? = null
+    var creationDate: String
 
     var received: Boolean
     var picture: String?
@@ -51,13 +52,6 @@ class Batch {
         itemsInside.add(item)
     }
 
-    // this option only must be push if the batch is classified
-//    fun classify() {
-//        for (item in itemsInside) {
-//            Store.ItemsStore.itemsList.add(item)
-//        }
-//        Store.PendingBatches.batchList.remove(this)
-//    }
 
     override fun toString(): String {
         return "Batch(idBatch=$idBatch, userName='$userName', latitude=$latitude, longitude=$longitude, creationDate='$date', delivered=$received,  picture=$picture, isClassifed=$isClassifed, itemsInside=$itemsInside\n\n)"

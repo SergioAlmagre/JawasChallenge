@@ -54,6 +54,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-firestore:24.9.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -62,4 +63,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     implementation ("com.github.bumptech.glide:glide:4.13.0")
+
+//    implementation ("com.eftimoff:circularlayoutmanager:1.3.2")
 }

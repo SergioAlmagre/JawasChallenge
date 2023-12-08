@@ -1,13 +1,27 @@
 package Model.Users
 
-open class User {
+import Model.Hardware.Batch
+import java.io.Serializable
 
+open class User: Serializable {
+
+    var batches: MutableList<Batch> = mutableListOf()
     var name: String
     var email: String
     var address: String?
     var phone: String?
     var picture: String?
     var role: String?
+
+    constructor() {
+        // Constructor sin argumentos necesario para la deserialización de Firebase
+        this.name = ""
+        this.email = ""
+        this.address = null
+        this.phone = null
+        this.picture = null
+        this.role = ""
+    }
 
     constructor(
         name: String,
@@ -25,11 +39,8 @@ open class User {
         this.role = role
     }
 
-
-
-
-
-
-
+    fun addBatch(batch: Batch) {
+        batches.add(batch)
+    }
 
 }

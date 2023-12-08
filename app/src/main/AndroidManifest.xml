@@ -1,19 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- permissions to access the internet -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- permissions to access the gallery -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- permissions to access the camera -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- <uses-feature android:name="android.hardware.camera" /> -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logocuadrado"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logoredondo"
         android:supportsRtl="true"
         android:theme="@style/Theme.JawasChallenge"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="Controllers.Classifier.Inventory_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.RandomJewel_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.JewelInstructions_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.AddItemToJewel_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.AddJewel_Controller"
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name="Controllers.Classifier.AddItemBatch_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Classifier.ViewItemsBatch_Controller"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA73CBBVRYx4BzKIUg9DcQF9zGgkpGx0ZU" />
+
+        <activity
+            android:name="Controllers.Donor.AddBatch_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Donor.BatchDetails_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Donor.DonorCrud_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Classifier.ClassifierCrud_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Administrator.AdministratorElection_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Administrator.ItemsType_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Shared.UserDetails_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Administrator.UserDetailsAdmin_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Administrator.UserCrud_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Jeweler.JewelsCrud_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Welcome.GuideContact_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Welcome.Welcome_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Accounts.CreateAccountGoogle_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Accounts.CreateAccountEmail_Controller"
+            android:exported="false" />
+        <activity
+            android:name="Controllers.Accounts.Login_Controller"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,20 +103,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TestMain"
+            android:exported="false" />
     </application>
-
-    <!-- permissions to access the gallery-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- permissions to access the camera-->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <!--    <uses-feature android:name="android.hardware.camera" />-->
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

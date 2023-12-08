@@ -1,35 +1,42 @@
 package com.example.jawaschallenge
 
+import Auxiliaries.InterWindows
 import Connections.FireStore
+import Controllers.Donor.DonorCrud_Controller
+import Controllers.Administrator.ItemsType_Controller
+import Controllers.Jeweler.JewelsCrud_Controller
+import Controllers.Administrator.UserCrud_Controller
+import Controllers.Classifier.ClassifierCrud_Controller
 import Factories.Factory
 import Model.Hardware.BatchInfo
 import Model.Jewels.Jewel
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import com.example.jawaschallenge.databinding.ActivityMainBinding
+import com.example.jawaschallenge.databinding.TestMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+class TestMain: AppCompatActivity() {
+    lateinit var binding: TestMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
 
         lifecycleScope.launch {
-            Connections.FireStore.chargeDataBase()
+            Connections.FireStore.updateItemsStore()
         }
 
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = TestMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
         binding.btnInsertarUser.setOnClickListener {
-            Connections.FireStore.addUser(Factory.createUser())
+            Connections.FireStore.addUser(Factory.createUser("1"))
         }
 
         binding.btnAddJewelCatalog.setOnClickListener {
@@ -69,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = Store.PendingBatches.batchList.toString()
+                        binding.textView.text = InterWindows.iwPendingBatches.toString()
                         Log.d("ItemsInBatch", result.toString())
 
                     }
@@ -77,7 +84,6 @@ class MainActivity : AppCompatActivity() {
                     Log.e("ItemsInBatch", "Error: $e")
                 }
             }
-            Log.d("idItemDepues", Constants.Ids.idItem.toString())
         }
 
         binding.btnAllBatches.setOnClickListener {
@@ -89,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
                     withContext(Dispatchers.Main) {
                         // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = Store.PendingBatches.batchList.toString()
+                        binding.textView.text = InterWindows.iwPendingBatches.toString()
                         Log.d("Batches", result.toString())
 
                     }
@@ -119,6 +125,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         binding.btnShowItemsInvertory.setOnClickListener {
             lifecycleScope.launch {
                 try {
@@ -139,8 +146,52 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnInsertDonor.setOnClickListener {
-            Connections.FireStore.addDonor(Factory.createDonor())
+            Connections.FireStore.addUser(Factory.createUser("2"))
         }
+        //    ------------------------- DELETE------------------------------- //
+
+        binding.btnDeleteUser.setOnClickListener {
+            lifecycleScope.launch {
+                val userEmailToDelete = "DANIEL.MILLER@EXAMPLE.COM"
+                FireStore.deleteUserByEmail(userEmailToDelete)
+
+            }
+        }
+
+        binding.btnDeleteJewel.setOnClickListener {
+            lifecycleScope.launch {
+                val jewelName = "ANILLO DE RESISTENCIA"
+                FireStore.deleteJewelByName(jewelName)
+            }
+        }
+
+        binding.btnDeleteItemsTypes.setOnClickListener {
+            lifecycleScope.launch {
+                val typeName = "Altavoces"
+                FireStore.deleteItemsTypeByName(typeName)
+            }
+        }
+
+        binding.btnDeleteItemById.setOnClickListener {
+            lifecycleScope.launch {
+                val itemId = "982271c6-014b-4f39-889e-ef0a17edfe95"
+                FireStore.deleteItemById(itemId)
+            }
+        }
+
+
+        //    ------------------------- UPDATES ------------------------------- //
+
+        binding.btnChangeRole.setOnClickListener {
+            lifecycleScope.launch {
+                val userEmailToUpdate = "AVA.MARTIN@EXAMPLE.COM"
+                val newRole = "2"
+                FireStore.updateUserRoleByEmail(userEmailToUpdate, newRole)
+            }
+        }
+
+
+
 
 
         //    ------------------------- DIFFERENT FROM EACH------------------------------- //
@@ -207,24 +258,24 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btnEndBatch.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    val result = withContext(Dispatchers.Default) {
-                        Connections.FireStore.endBatch(
-                            "DANIEL.MILLER@EXAMPLE.COM",
-                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
-                        )
-                    }
-
-                    withContext(Dispatchers.Main) {
-                        // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = "Batch ended"
-                        Log.d("Count", result.toString())
-                    }
-                } catch (e: Exception) {
-                    Log.e("Count", "Error: $e")
-                }
-            }
+//            lifecycleScope.launch {
+//                try {
+//                    val result = withContext(Dispatchers.Default) {
+//                        Connections.FireStore.endBatch(
+//                            "DANIEL.MILLER@EXAMPLE.COM",
+//                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
+//                        )
+//                    }
+//
+//                    withContext(Dispatchers.Main) {
+//                        // Actualizar vistas de la interfaz de usuario aquí
+//                        binding.textView.text = "Batch ended"
+//                        Log.d("Count", result.toString())
+//                    }
+//                } catch (e: Exception) {
+//                    Log.e("Count", "Error: $e")
+//                }
+//            }
         }
 
         binding.btnInsertarBatch.setOnClickListener {
@@ -232,8 +283,8 @@ class MainActivity : AppCompatActivity() {
                 try {
                     val result = withContext(Dispatchers.Default) {
                         Connections.FireStore.addOrUpdateBatchToDonor(
-                            "DANIEL.MILLER@EXAMPLE.COM",
-                            Factory.createBatch("DANIEL.MILLER@EXAMPLE.COM")
+                            "SERGIOALMAGRE@GMAIL.COM",
+                            Factory.createBatch("SERGIOALMAGRE@GMAIL.COM")
                         )
                     }
 
@@ -308,8 +359,30 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.btnAdminUsers.setOnClickListener {
+            var inte: Intent = Intent(this, UserCrud_Controller::class.java)
+            startActivity(inte)
+        }
 
+        binding.btnViewJewelCatalog.setOnClickListener {
+            var inte: Intent = Intent(this, JewelsCrud_Controller::class.java)
+            startActivity(inte)
+        }
 
+        binding.btnGestType.setOnClickListener {
+            var inte: Intent = Intent(this, ItemsType_Controller::class.java)
+            startActivity(inte)
+        }
+
+        binding.btnDonorCrud.setOnClickListener {
+            var inte: Intent = Intent(this, DonorCrud_Controller::class.java)
+            startActivity(inte)
+        }
+
+        binding.btnClassifierCrud.setOnClickListener {
+            var inte: Intent = Intent(this, ClassifierCrud_Controller::class.java)
+            startActivity(inte)
+        }
 
         // END OF ONCREATE
     }

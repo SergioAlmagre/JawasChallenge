@@ -9,11 +9,11 @@ class Item {
     var attributes = mutableListOf<Attribute>()
     init {
         var itemType = Attribute("Type")
-        var itemObservations = Attribute("Observations")
+        var itemDescription = Attribute("Description")
         var itemPicture = Attribute("Picture")
 
         attributes.add(itemType)
-        attributes.add(itemObservations)
+        attributes.add(itemDescription)
         attributes.add(itemPicture)
     }
 

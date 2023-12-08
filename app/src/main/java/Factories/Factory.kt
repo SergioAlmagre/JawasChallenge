@@ -1,11 +1,10 @@
 package Factories
 
 import Auxiliaries.ObjectQuantity
+import Constants.Routes
 import Model.Hardware.Batch
 import Model.Hardware.Item
 import Model.Jewels.Jewel
-import Model.Users.Donor
-import Model.Users.User
 import kotlin.random.Random
 
 object Factory {
@@ -90,7 +89,7 @@ object Factory {
     )
 
 
-    var observations = mutableListOf(
+    var descriptions = mutableListOf(
         "Excelente estado",
         "Algunos arañazos leves",
         "Funciona perfectamente",
@@ -352,7 +351,7 @@ object Factory {
         var name = donorName
         var latitud = latitudes.random()
         var longitude = longitudes.random()
-        var picture = picturesName.random()
+        var picture = Routes.defaultBatchPictureName
         var address = addresses.random()
 
         var newBatch = Batch(name,latitud,longitude,address,picture)
@@ -367,14 +366,13 @@ object Factory {
     fun createItem(): Item {
 
         var itemType = itemTypes.random()
-        var obsevation = observations.random()
+        var description = descriptions.random()
         var pictureName = picturesName.random()
 
         var item = Item()
         item.attributes[0].content = itemType
-        item.attributes[1].content = obsevation
+        item.attributes[1].content = description
         item.attributes[2].content = pictureName
-
 
         return item
     }
@@ -409,32 +407,30 @@ object Factory {
         return roles.random()
     }
 
-    fun createUser(): User {
-        val newUser = User(
+    /**
+     * Roles:
+     * 1 - Admin
+     * 2 - Donor
+     * 3 - Designer
+     * 4 - Recycler
+     */
+
+    fun createUser(role: String): Model.Users.User {
+        val newUser = Model.Users.User(
             name = donorsNames.random(),
             email = emails.random(),
             address = addresses.random(),
             phone = phoneNumbers.random(),
             picture = picturesName.random(),
-            role = rolesRandom()
-        )
-        return newUser
-    }
-
-    fun createDonor(): Donor {
-        val newDonor = Donor(
-            name = donorsNames.random(),
-            email = emails.random(),
-            address = addresses.random(),
-            phone = phoneNumbers.random(),
-            picture = picturesName.random(),
-            role = "0"
+            role = role
         )
 
-        for (i in 0..5){
-            newDonor.addBatch(createBatch(newDonor.name))
+        if (role == "2"){
+            for (i in 0..3){
+                newUser.addBatch(createBatch(newUser.name))
+            }
         }
-        return newDonor
+        return newUser
     }
 
 
