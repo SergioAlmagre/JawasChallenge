@@ -8,6 +8,6 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="68dp"
-        android:hint="Fuerzas oscuras" />
+        android:hint="@string/hintText" />
 
 </LinearLayout>

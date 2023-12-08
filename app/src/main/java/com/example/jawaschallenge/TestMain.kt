@@ -84,7 +84,6 @@ class TestMain: AppCompatActivity() {
                     Log.e("ItemsInBatch", "Error: $e")
                 }
             }
-            Log.d("idItemDepues", Constants.Ids.idItem.toString())
         }
 
         binding.btnAllBatches.setOnClickListener {

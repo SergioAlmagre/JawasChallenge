@@ -1,6 +1,7 @@
 package Controllers.Accounts
 
 import Connections.FireStore
+import Connections.UserConfigurationDataSource
 import Constants.Routes
 import Controllers.Administrator.AdministratorElection_Controller
 import Controllers.Classifier.ClassifierCrud_Controller
@@ -61,6 +62,7 @@ class Login_Controller : AppCompatActivity() {
                 var email = binding.userMailInput.text.toString().uppercase().trim()
                 var password = binding.userPasswordInput.text.toString()
                 signIn(email,password)
+                handleUserLogin(email)
             } else {
                 showAlert("Rellene los campos")
             }
@@ -162,14 +164,15 @@ class Login_Controller : AppCompatActivity() {
         if (task.isSuccessful) {
             val account: GoogleSignInAccount? = task.result
             if (account != null) {
-                val mail = account.email.toString().uppercase().trim()
-                Log.d("mail", mail)
+                val email = account.email.toString().uppercase().trim()
+                handleUserLogin(email)
+                Log.d("mail", email)
                 // Verifica si el usuario ya existe en la base de datos
                 lifecycleScope.launch {
                     try {
                         var existingUser: User? = null
                         withContext(Dispatchers.Default) {
-                            existingUser = FireStore.getUserByEmail(mail!!)
+                            existingUser = FireStore.getUserByEmail(email!!)
                             Log.d("existingUser", existingUser.toString())
                         }
 
@@ -181,7 +184,7 @@ class Login_Controller : AppCompatActivity() {
                             } else {
                                 updateUI(account)
                                 // El usuario no existe, se redirige a la página de nueva cuenta
-                                Auxiliaries.InterWindows.iwUser = User("", mail!!,"","",Routes.defaultUserPictureName,"2")
+                                Auxiliaries.InterWindows.iwUser = User("", email!!,"","",Routes.defaultUserPictureName,"2")
                                 goNewAccountGoogle()
                             }
                         }
@@ -290,6 +293,23 @@ class Login_Controller : AppCompatActivity() {
     private fun goWelcome() {
         val homeIntent =  Intent(this, Welcome_Controller::class.java)
         startActivity(homeIntent)
+    }
+
+
+    // LOCAL DATABASE CONFIGURATION
+    fun handleUserLogin(email: String) {
+        // Guardar la configuración del usuario (puedes ajustar los valores según sea necesario)
+        UserConfigurationDataSource.saveUserConfiguration(this, email, "light", "english")
+
+        // Recuperar la configuración del usuario
+        val userConfiguration = UserConfigurationDataSource.getUserConfiguration(this, email)
+
+        // Puedes verificar si se recuperó con éxito y utilizar los valores
+        if (userConfiguration != null) {
+            val theme = userConfiguration.first
+            val language = userConfiguration.second
+            // Utilizar los valores según sea necesario
+        }
     }
 
 

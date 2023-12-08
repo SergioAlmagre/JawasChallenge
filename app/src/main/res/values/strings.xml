@@ -1,5 +1,119 @@
 <resources>
     <string name="app_name">JawasChallenge</string>
-    <string name="your_web_client_id">173000706716-3hdo4moo29d1uvpodddskmvv0k2kqvhn.apps.googleusercontent.com</string>
+    <string name="your_web_client_id" translatable="false">173000706716-3hdo4moo29d1uvpodddskmvv0k2kqvhn.apps.googleusercontent.com</string>
+
+    // LOGIN
+    <!-- Button text -->
+    <string name="key_btnNewAccount">New account</string>
+    <string name="key_btnSingInMail">Sign in with email</string>
+    <string name="key_btnSignInGoogle">Sign In with Google</string>
+    <!-- TextInputLayout hints -->
+    <string name="key_hint_userMailInput">Email</string>
+    <string name="key_hint_userPasswordInput">Password</string>
+
+    // ADD_BATCH
+    <!-- Button text -->
+    <string name="key_btnRequestPickup">Request pickup</string>
+    <!-- TextView text -->
+    <string name="key_lblWherePicked">Where is the package picked up?</string>
+    <!-- EditText hint -->
+    <string name="key_hint_txtAditionalInfo">Additional info...16C 2ºB Ring the doorbell</string>
+    <!-- CheckBox text -->
+    <string name="key_chkDefaultAddress">Use my profile address</string>
+
+    // ADD_ITEM_BATCH
+    <!-- Texto del botón -->
+    <string name="key_btnEndItem">Completed item</string>
+    <!-- Textos de los TextView -->
+    <string name="key_lblCantidad">Amount</string>
+
+
+    <!-- Consejos de AutoCompleteTextView -->
+    <string name="key_hint_txtTypeItem">Item type</string>
+    <string name="key_hint_txtExtraAttribute1">Other attribute</string>
+    <string name="key_hint_txtExtraAttribute2">Other attribute</string>
+    <!-- Consejo de EditText -->
+    <string name="key_hint_txtDescription">Description</string>
+
+    // ADD_ITEM_TO_JEWEL
+    <!-- Texto del botón -->
+    <string name="key_btnAddItemAndAmound">Add item and amount</string>
+
+    // ADD_JEWEL
+    <!-- Etiquetas de los botones -->
+    <string name="key_btnEndJewel">Save jewel</string>
+    <string name="key_btnAddItemToJewel">Add item</string>
+    <string name="key_btnAddInstructions">Add manual</string>
+    <!-- Etiquetas de los textos -->
+    <string name="key_itemsNecessary">Necessary items</string>
+    <string name="key_jewelNameHint">Jewel name</string>
+    <string name="key_instructionsHint">Assembly instructions</string>
+
+    // ADMINISTRATOR_ELECTION
+    <!-- Etiquetas de los botones -->
+    <string name="key_btnLogOut">Log out</string>
+    <string name="key_btnClassifer">Clasiffier</string>
+    <string name="key_btnAdmin">Administrator</string>
+    <string name="key_btnDonor">Donor</string>
+    <string name="key_btnDesigner">Designer</string>
+    <!-- Etiquetas de los textos -->
+    <string name="key_textComoQuieresEntrar">What role do you want to enter with?</string>
+
+    // BATCH DETAILS
+    <string name="key_lblInfoBatch">Batch information</string>
+    <string name="key_lblObservations">Observations:</string>
+    <string name="key_lblBatchId7">Batch ID:</string>
+    <string name="key_lblBatchId10">Pickup address:</string>
+    <string name="key_lblAddressBatch">Address</string>
+    <string name="key_lblNameDonoBatch">User name</string>
+    <string name="key_lblBatchId9">User email:</string>
+    <string name="key_lblBatchId11">Creation date:</string>
+    <string name="key_lblRecibedBatch">Received in the workshop?</string>
+    <string name="key_lblSiNo">YES</string>
+    <string name="key_lblCreationDateBatch">X</string>
+    <string name="key_lblBatchId">X</string>
+    <string name="key_lblBatchId8">X</string>
+    <string name="key_lblUserBatchEmail">X</string>
+
+    // CREATE ACCOUNT EMAIL AND GOOGLE
+    <!-- Strings for user input hints -->
+    <string name="hint_name">Name</string>
+    <string name="hint_mail">Email *</string>
+    <string name="hint_phone_number">Phone number</string>
+    <string name="hint_default_address">Default address</string>
+    <string name="hint_repeat_password">Repeat password *</string>
+    <string name="hint_password">Password *</string>
+    <!-- Strings for checkbox and terms conditions -->
+    <string name="agree_terms_conditions">I agree to the Terms and Conditions</string>
+    <string name="read_terms_conditions">Read Terms and Conditions</string>
+    <!-- String for button text -->
+    <string name="button_enter">Enter</string>
+
+    // ITEMS TYPE
+    <string name="delete_type">Delete type</string>
+
+    // RAMDOM JEWEL
+    <string name="key_btnCreateJewel">Create jewel</string>
+    <string name="key_hint_txtPrompRandom">Enter your prompt</string>
+
+    // USER DETAILS
+    <string name="save_changes">Save changes</string>
+
+    // VIEW ITEMS BATCH
+    <string name="key_lblItemAdded">Added items</string>
+    <string name="key_btnAddItem">Add item</string>
+    <string name="key_btnEndBatch">End batch</string>
+
+    // WELCOME
+    <string name="key_btnComeBackLogin">Come back</string>
+    <string name="key_btnGuideContact">Guide/Contact</string>
+    <string name="key_lblWelcome">Welcome to ReCrea!</string>
+    <string name="key_lblSumarize">In ReCrea, we are committed to the idea that something that is no longer useful for some can become a treasure for others. Our mission is to give a second life to those old or broken electronic devices that often end up in a forgotten corner. We want you to see the potential in what you no longer use and, together, we will transform those devices into jewels of all kinds.\n\n  The magic of ReCrea lies in the collaboration of generous people and companies who wish to donate their old electronic devices for a charitable cause. In partnership with the Virgen De Gracia center in Puertollano and other non-profit organizations, we channel our efforts to raise funds and bring help to those who need it most.\n\n  Here, we are all agents of change. Whether you have an old phone, a computer that no longer turns on, or any other device that you think is no longer useful, ReCrea offers you a platform where you can donate and make a difference.\n\n  Every donation counts. Every small gesture of generosity becomes an opportunity to improve lives and communities. So join us, discover the potential in what you no longer use, and help make the world a better place.\n\n  Thank you for being part of ReCrea. Together, we can turn old technology into smiles and hope. Welcome to a community of positive change!</string>
+
+    // ALERT DIALOG
+    <string name="hintText">Dark forces</string>
+
+
+
 
 </resources>

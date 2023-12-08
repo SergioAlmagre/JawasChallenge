@@ -76,7 +76,7 @@
         android:editable="true"
         android:ems="10"
         android:gravity="top|start"
-        android:hint="Descripción"
+        android:hint="@string/key_hint_txtDescription"
         android:inputType="textMultiLine"
         android:lines="60"
         android:singleLine="false"
