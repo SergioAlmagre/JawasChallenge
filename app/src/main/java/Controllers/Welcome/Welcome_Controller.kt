@@ -9,7 +9,6 @@ class Welcome_Controller : AppCompatActivity() {
     lateinit var binding: ActivityWelcomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_welcome)
 
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)

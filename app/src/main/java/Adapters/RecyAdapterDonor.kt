@@ -24,6 +24,13 @@ import com.google.firebase.storage.storage
 import java.io.File
 import Model.Users.*
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -33,19 +40,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : RecyclerView.Adapter<RecyAdapterDonor.ViewHolder>() {
-
-    companion object {
-        //Esta variable estática nos será muy útil para saber cual está marcado o no.
-        var seleccionado: Int = -1
-        /*
-        PAra marcar o desmarcar un elemento de la lista lo haremos diferente a una listView. En la listView el listener
-        está en la activity por lo que podemos controlar desde fuera el valor de seleccionado y pasarlo al adapter, asociamos
-        el adapter a la listview y resuelto.
-        En las RecyclerView usamos para pintar cada elemento la función bind (ver código más abajo, en la clase ViewHolder).
-        Esto se carga una vez, solo una vez, de ahí la eficiencia de las RecyclerView. Si queremos que el click que hagamos
-        se vea reflejado debemos recargar la lista, para ello forzamos la recarga con el método: notifyDataSetChanged().
-         */
-    }
 
     /**
      * onBindViewHolder() se encarga de coger cada una de las posiciones de la lista de personajes y pasarlas a la clase
@@ -60,16 +54,13 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
      *  Como su nombre indica lo que hará será devolvernos un objeto ViewHolder al cual le pasamos la celda que hemos creado.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        val layoutInflater = LayoutInflater.from(parent.context)
-//        //return ViewHolder(layoutInflater.inflate(R.layout.item_lo,parent,false))
-//        return ViewHolder(layoutInflater.inflate(R.layout.item_card,parent,false))
+
         val vista = LayoutInflater.from(parent.context).inflate(R.layout.item_card_users, parent, false)
         val viewHolder = ViewHolder(vista)
 
         // Configurar el OnClickListener
         viewHolder.itemView.setOnClickListener {
-//            val intent = Intent(context, VentanaLista::class.java)
-//            context.startActivity(intent)
+
         }
         return viewHolder
     }
@@ -92,7 +83,6 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
         val batchPicture = view.findViewById(R.id.ObjetPicture) as ImageView
         val colorLayaoutReceived = view.findViewById(R.id.colorLayoutReceived) as FrameLayout
         val playIcon = view.findViewById(R.id.btnBuildJewel) as ImageButton
-
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -121,8 +111,6 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
                     setTitle("Estas a punto de borrar un batch")
                     setMessage("¿Seguro que quieres continuar?")
                     setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
-
-
                         if(!bat.received) {
                             runBlocking {
                                 val trabajo: Job = launch(context = Dispatchers.Default) {
@@ -157,17 +145,12 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
                 true
             }
 
-
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
                 InterWindows.iwBatch = Store.AllBatchesDonor.batchList[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
 
                 if (InterWindows.iwBatch != null){
-                    Toast.makeText(
-                        context,
-                        "Seleccionado " + InterWindows.iwBatch!!.creationDate,
-                        Toast.LENGTH_SHORT
-                    ).show()
+
                     var inte: Intent = Intent(context, BatchDetails_Controller::class.java)
                     context.startActivity(inte)
                 }
@@ -175,16 +158,46 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
 
 
         }
-        fun fileDownload(identificador: String?) {
+//        fun fileDownload(identificador: String?) {
+//            var spaceRef = storageRef.child(Routes.batchesPicturesPath + identificador)
+//            val localfile = File.createTempFile(identificador!!, "jpeg")
+//            spaceRef.getFile(localfile).addOnSuccessListener {
+//                val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+//                batchPicture.setImageBitmap(bitmap)
+//            }.addOnFailureListener {
+//
+//            }
+//        }
 
+        fun fileDownload(identificador: String?) {
             var spaceRef = storageRef.child(Routes.batchesPicturesPath + identificador)
             val localfile = File.createTempFile(identificador!!, "jpeg")
             spaceRef.getFile(localfile).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-                batchPicture.setImageBitmap(bitmap)
-            }.addOnFailureListener {
 
+                // Crear una máscara con esquinas redondeadas
+                val roundedBitmap = getRoundedCornerBitmap(bitmap, 45f)
+
+                // Mostrar la imagen redondeada en la ImageView
+                batchPicture.setImageBitmap(roundedBitmap)
+            }.addOnFailureListener {
+                // Manejo de errores
             }
+        }
+
+        private fun getRoundedCornerBitmap(bitmap: Bitmap, radius: Float): Bitmap {
+            val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(output)
+            val paint = Paint()
+            val rect = Rect(0, 0, bitmap.width, bitmap.height)
+            val rectF = RectF(rect)
+
+            paint.isAntiAlias = true
+            canvas.drawRoundRect(rectF, radius, radius, paint)
+            paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+            canvas.drawBitmap(bitmap, rect, rect, paint)
+
+            return output
         }
     }
 

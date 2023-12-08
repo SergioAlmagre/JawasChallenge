@@ -6,21 +6,8 @@
     android:layout_height="match_parent"
     tools:context="Controllers.Administrator.UserDetailsAdmin_Controller">
 
-    <ImageButton
-        android:id="@+id/btnAddPhotoEm2"
-        android:layout_width="43dp"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.445"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.202"
-        app:srcCompat="@drawable/camera" />
-
     <Button
+        android:backgroundTint="@color/green"
         android:id="@+id/btnSaveChangesUserAdmin"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="263dp"
@@ -39,7 +26,7 @@
         android:layout_height="142dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.152"
+        app:layout_constraintHorizontal_bias="0.232"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.059"
@@ -112,6 +99,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.487" />
+
+    <ImageButton
+        android:id="@+id/btnAddPhotoEm2"
+        android:layout_width="43dp"
+        android:layout_height="40dp"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.198"
+        app:srcCompat="@drawable/camera" />
 
     <LinearLayout
         android:id="@+id/linearLayout"

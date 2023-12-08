@@ -49,7 +49,6 @@ class AddItemBatch_Controller : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityAddItemBatchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -57,7 +56,6 @@ class AddItemBatch_Controller : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         loadAutocomplete()
         InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content = Routes.defaultItemPictureName
-
 
         binding.seekBarAmount.setOnSeekBarChangeListener(
             object : SeekBar.OnSeekBarChangeListener {
@@ -88,10 +86,8 @@ class AddItemBatch_Controller : AppCompatActivity() {
                 var descriptionItem = binding.txtDescription.text.toString()
 
                 for (i in 0..amountItem - 1) {
-
                     runBlocking {
                         val trabajo: Job = launch(context = Dispatchers.Default) {
-
                             newItem.attributes[Routes.typeNamePositionAttribute].content = typeItem
                             newItem.attributes[Routes.descriptionPositionAttribute].content = descriptionItem
                             newItem.attributes[Routes.picturePositionAttribute].content = InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content
@@ -126,7 +122,6 @@ class AddItemBatch_Controller : AppCompatActivity() {
                     android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
 
                         requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-//                    saveImageToGallery(intent.getStringExtra("mail").toString() + "jpg")
 
                     })
                 )
@@ -145,7 +140,7 @@ class AddItemBatch_Controller : AppCompatActivity() {
         }
 
         binding.btnUserAdmin.setOnClickListener {
-            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            var inte = Intent(this, UserDetails_Controller::class.java)
             startActivity(inte)
         }
 
@@ -177,7 +172,7 @@ class AddItemBatch_Controller : AppCompatActivity() {
         }
     }
 
-    //------------------------------CAMERA------------------------------------
+
 //__________________________CAMERA_______________________________
 //Segunda activity para lanzar la cámara.
     val openCamera =
@@ -271,7 +266,7 @@ class AddItemBatch_Controller : AppCompatActivity() {
                             .addOnSuccessListener { taskSnapshot ->
                                 file_name.downloadUrl.addOnSuccessListener { uri ->
                                     // La imagen se subió correctamente y puedes obtener la URL de descarga
-//                                    Conexion.actualizarDocumento(u!!.mail, u!!.mail)
+
                                     InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content = newItem.idItem
                                 }
                             }
@@ -299,7 +294,7 @@ class AddItemBatch_Controller : AppCompatActivity() {
         uploadTask.addOnSuccessListener {
 
         }.addOnFailureListener{
-            //Toast.makeText(this@Registro, "Error en la subida de la imagen", Toast.LENGTH_SHORT).show()
+
         }
     }
 

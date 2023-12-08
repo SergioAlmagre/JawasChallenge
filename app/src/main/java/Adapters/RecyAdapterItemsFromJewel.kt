@@ -31,18 +31,6 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
 
     var onItemClickListener: ViewHolder.OnItemClickListener? = null
 
-    companion object {
-        //Esta variable estática nos será muy útil para saber cual está marcado o no.
-        var seleccionado: Int = -1
-        /*
-        PAra marcar o desmarcar un elemento de la lista lo haremos diferente a una listView. En la listView el listener
-        está en la activity por lo que podemos controlar desde fuera el valor de seleccionado y pasarlo al adapter, asociamos
-        el adapter a la listview y resuelto.
-        En las RecyclerView usamos para pintar cada elemento la función bind (ver código más abajo, en la clase ViewHolder).
-        Esto se carga una vez, solo una vez, de ahí la eficiencia de las RecyclerView. Si queremos que el click que hagamos
-        se vea reflejado debemos recargar la lista, para ello forzamos la recarga con el método: notifyDataSetChanged().
-         */
-    }
 
     /**
      * onBindViewHolder() se encarga de coger cada una de las posiciones de la lista de personajes y pasarlas a la clase
@@ -58,17 +46,13 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
      *  Como su nombre indica lo que hará será devolvernos un objeto ViewHolder al cual le pasamos la celda que hemos creado.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        val layoutInflater = LayoutInflater.from(parent.context)
-//        //return ViewHolder(layoutInflater.inflate(R.layout.item_lo,parent,false))
-//        return ViewHolder(layoutInflater.inflate(R.layout.item_card,parent,false))
         val vista = LayoutInflater.from(parent.context).inflate(R.layout.item_card_itemstxt, parent, false)
         val viewHolder = ViewHolder(vista)
 
 
         // Configurar el OnClickListener
         viewHolder.itemView.setOnClickListener {
-//            val intent = Intent(context, VentanaLista::class.java)
-//            context.startActivity(intent)
+
         }
         return viewHolder
     }
@@ -86,7 +70,6 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
      * se puede declarar aquí.
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
         val itemInfo = view.findViewById(R.id.txtInfo) as TextView
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -104,7 +87,6 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
             miAdaptadorRecycler: RecyAdapterItemsFromJewel
         ) {
             val builder = AlertDialog.Builder(context)
-
             itemInfo.text = iteYewInfo.name + "    -    " + iteYewInfo.quantity //item type name
 
 
@@ -116,7 +98,6 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
             itemView.setOnLongClickListener() {
 //                InterWindows.iwItem = InterWindows.iwItemsInside[pos]
                 InterWindows.iwItemToJewel = InterWindows.iwJewel.components[pos]
-
                 with(builder)
                 {
                     setTitle("Estas a punto de borrar un item añadido a esta joya")
@@ -138,7 +119,6 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
                     }))
                     show()
                 }
-
                 true
             }
 
@@ -159,7 +139,5 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
 
 
     }// End of class ViewHolder
-
-
 
 }// End of class RecyAdapterItemsTxt

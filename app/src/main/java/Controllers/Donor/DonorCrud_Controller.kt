@@ -26,9 +26,6 @@ class DonorCrud_Controller : AppCompatActivity() {
         binding = ActivityCrudBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var storage = com.google.firebase.ktx.Firebase.storage
-        var storageRef = storage.reference
-
         binding.btnHomeAdmin.visibility = android.view.View.GONE
         binding.btnRandomJewel.visibility = android.view.View.GONE
 

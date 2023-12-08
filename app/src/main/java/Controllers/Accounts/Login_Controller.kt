@@ -45,7 +45,7 @@ class Login_Controller : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_formulario)
+
         val builder = AlertDialog.Builder(this)
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -83,7 +83,6 @@ class Login_Controller : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
 
-
         binding.btnNewAccount.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Registro")
@@ -110,8 +109,6 @@ class Login_Controller : AppCompatActivity() {
         binding.btnInfoApp.setOnClickListener {
             goWelcome()
         }
-
-
     }
 
 
@@ -249,7 +246,7 @@ class Login_Controller : AppCompatActivity() {
         dialog.show()
     }
 
-    //*********************************************************************************
+
     private fun goHome(user: User) {
         if (user.role == "0") {
             val homeIntent = Intent(this, TestMain::class.java).apply {
@@ -314,4 +311,4 @@ class Login_Controller : AppCompatActivity() {
 
 
 
-}
+}// End class

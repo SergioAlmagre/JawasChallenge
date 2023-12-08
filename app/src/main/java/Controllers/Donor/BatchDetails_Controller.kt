@@ -43,16 +43,15 @@ class BatchDetails_Controller : AppCompatActivity() {
 
         var selectedBatch:BatchInfo? = null
         runBlocking {
-
                 val trabajo: Job = launch(context = Dispatchers.Default) {
                     selectedBatch = FireStore.getBatchInfoById(
                         InterWindows.iwUser.email,
                         InterWindows.iwBatch.idBatch
                     )
-                    selectedBatch!!.address = InterWindows.iwBatch.address.toString()
                 }
 
                 trabajo.join()
+                selectedBatch!!.address = InterWindows.iwBatch.address.toString()
                 if (selectedBatch != null) {
                     binding.lblBatchId.text = selectedBatch!!.batchID
                     binding.lblNameDonoBatch.text = selectedBatch!!.userName
@@ -139,7 +138,6 @@ class BatchDetails_Controller : AppCompatActivity() {
         }//End of runBlocking
 
 
-
         binding.btnHomeAdmin.setOnClickListener{
             finish()
         }
@@ -151,7 +149,6 @@ class BatchDetails_Controller : AppCompatActivity() {
 
 
     }// End of onCreate
-
 
 
 }// End of class BatchDetails_Controller

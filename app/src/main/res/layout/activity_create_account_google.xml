@@ -98,6 +98,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        android:backgroundTint="@color/green"
         android:id="@+id/bntEnter"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="259dp"

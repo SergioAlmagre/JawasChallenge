@@ -7,6 +7,7 @@
     tools:context="Controllers.Jeweler.AddJewel_Controller">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:backgroundTint="@color/green"
         android:id="@+id/btnEndJewel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

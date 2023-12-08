@@ -55,6 +55,7 @@
         app:layout_constraintVertical_bias="0.503" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:backgroundTint="@color/green"
         android:id="@+id/btnAddObject"
         android:layout_width="60dp"
         android:layout_height="64dp"

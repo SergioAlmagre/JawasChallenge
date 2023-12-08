@@ -20,7 +20,7 @@ object InterWindows {
 
     var iwItemToJewel = ObjectQuantity()
 
-    var iwItemInsideJewel = QuantitiesSumarize(mutableListOf())
+
 
 
 

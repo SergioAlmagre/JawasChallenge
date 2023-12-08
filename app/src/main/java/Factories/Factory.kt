@@ -374,7 +374,6 @@ object Factory {
         item.attributes[1].content = description
         item.attributes[2].content = pictureName
 
-
         return item
     }
 

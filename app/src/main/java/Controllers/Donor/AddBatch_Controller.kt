@@ -187,12 +187,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
             }
         }
 
-
-
-
-
-
-
     }// End of onCreate
 
 
@@ -249,12 +243,7 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
      */
     private fun createMarker() {
         val markerCIFP = LatLng(38.69332,-4.10860)
-        /*
-        Los markers se crean de una forma muy sencilla, basta con crear una instancia de un objeto LatLng() que recibirá dos
-        parámetros, la latitud y la longitud. Yo en este ejemplo he puesto las coordenadas de mi playa favorita.
-        */
-        //map.addMarker(MarkerOptions().position(markerCIFP).title("Mi CIFP favorito!"))
-        //Si queremos cambiar el color del icono, en este caso azul cyan, con un subtexto.
+
         val markCIFP = map.addMarker(
             MarkerOptions().position(markerCIFP).title("Taller de joyas").icon(
                 BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).snippet("CIFP Virgen de Gracia"))
@@ -360,13 +349,7 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
     }
 
 
-
-    //Investigar los polígonos: triángulos...
-
-    //-----------------------------------------------------------------------------------------------------
     //----------------------------------------- Eventos en el mapa ----------------------------------------
-    //-----------------------------------------------------------------------------------------------------
-
     /**
      * Se dispara cuando pulsamos la diana que nos centra en el mapa (punto negro, arriba a la derecha en forma de diana).
      */
@@ -419,7 +402,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
             newBatch.latitude = p0.latitude
             newBatch.longitude = p0.longitude
             Toast.makeText(this, "Ubicación actualizada", Toast.LENGTH_SHORT).show()
-
         }
     }
 
@@ -462,7 +444,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
 
 
     //------------------------------CAMERA------------------------------------
-    //__________________________CAMERA_______________________________
     //Segunda activity para lanzar la cámara.
     val openCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -506,7 +487,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                                     .addOnSuccessListener { taskSnapshot ->
                                         file_name.downloadUrl.addOnSuccessListener { uri ->
                                             // La imagen se subió correctamente y puedes obtener la URL de descarga
-//                                            InterWindows.iwUser.picture = InterWindows.iwUser.email
 
                                             Log.d("actualizarDocumentoFotoCamara3", InterWindows.iwUser.toString()
                                             )
@@ -555,8 +535,7 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                             .addOnSuccessListener { taskSnapshot ->
                                 file_name.downloadUrl.addOnSuccessListener { uri ->
                                     // La imagen se subió correctamente y puedes obtener la URL de descarga
-//                                    Conexion.actualizarDocumento(u!!.mail, u!!.mail)
-//                                    InterWindows.iwUser.picture = InterWindows.iwUser.email
+
                                 }
                             }
                     }
@@ -566,19 +545,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
         }
     }
 
-
-//
-//    fun fileDownload(identificador: String) {
-//
-//        var spaceRef = storageRef.child(Routes.batchesPicturesPath + identificador)
-//        val localfile = File.createTempFile(identificador, "jpg")
-//        spaceRef.getFile(localfile).addOnSuccessListener {
-//            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-//            binding.pictureBatch.setImageBitmap(bitmap)
-//        }.addOnFailureListener {
-//            Toast.makeText(this, "Algo ha fallado en la descarga", Toast.LENGTH_SHORT).show()
-//        }
-//    }
 
     fun uploadPictureOK(){
         binding.pictureBatch.isDrawingCacheEnabled = true
@@ -600,7 +566,6 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
             //Toast.makeText(this@Registro, "Error en la subida de la imagen", Toast.LENGTH_SHORT).show()
         }
     }
-
 
 
 

@@ -24,7 +24,6 @@ class JewelInstructions_Controller : AppCompatActivity() {
         Log.d("JewelInstructions", InterWindows.iwJewel.instructions.toString())
 
 
-
         binding.btnHomeAdmin.setOnClickListener {
             InterWindows.iwJewel.instructions = binding.txtInstructions.text.toString()
             Log.d("JewelInstructions", InterWindows.iwJewel.instructions.toString())
@@ -32,10 +31,6 @@ class JewelInstructions_Controller : AppCompatActivity() {
             Toast.makeText(this, "Instrucciones guardadas", Toast.LENGTH_SHORT).show()
             finish()
         }
-
-
-
-
 
 
 

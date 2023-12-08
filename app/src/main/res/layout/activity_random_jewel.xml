@@ -60,6 +60,7 @@
     </LinearLayout>
 
     <Button
+        android:backgroundTint="@color/green"
         android:id="@+id/btnCreateJewel"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="261dp"
@@ -87,9 +88,9 @@
         android:id="@+id/lblNameJewelRandom"
         android:layout_width="324dp"
         android:layout_height="33dp"
-        android:text="TextView"
+        android:text="¿?"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.534"

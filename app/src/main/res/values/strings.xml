@@ -113,6 +113,25 @@
     // ALERT DIALOG
     <string name="hintText">Dark forces</string>
 
+    // GUIDE/CONTACT
+
+    <string name="permiteClasificar">Allows you to classify a batch by adding the items it contains.</string>
+    <string name="verDetalles">View details</string>
+    <string name="pulsacionLarga">Long press:</string>
+    <string name="pulsacionCorta">Short press:</string>
+    <string name="borrarItemDelBatch">Delete item from the batch</string>
+    <string name="firma">Developed by: Sergio Núñez Bautista</string>
+    <string name="verEditarDetalles">View/Edit details</string>
+    <string name="botonSePuedeHacer">Button that indicates that there is enough stock to build that jewel. When pressed, the necessary stock is automatically deleted</string>
+    <string name="borrarItemDeJoya">Delete item from the jewel</string>
+    <string name="ItemPulsacionLarga">Items - Long press:</string>
+    <string name="borrarJoya">Delete Jewel</string>
+    <string name="borrarBatch">Delete batch if it has not been collected</string>
+    <string name="contactarAdministrador">Contact administrator</string>
+    <string name="btnGoLogin">Go to login</string>
+    <string name="btnMakeDonation">Make a donation</string>
+
+
 
 
 

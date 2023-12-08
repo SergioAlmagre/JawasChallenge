@@ -19,6 +19,7 @@
         app:srcCompat="@drawable/defaultbatchpicture" />
 
     <Button
+        android:backgroundTint="@color/green"
         android:id="@+id/btnEndBatchItems"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="261dp"
@@ -32,6 +33,7 @@
         app:layout_constraintVertical_bias="0.871" />
 
     <Button
+        android:backgroundTint="@color/blue"
         android:id="@+id/btnAddItem"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="261dp"

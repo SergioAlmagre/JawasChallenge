@@ -64,4 +64,19 @@
     <string name="key_lblWelcome">Bienvenidos a ReCrea!</string>
     <string name="key_lblSumarize">En ReCrea, estamos comprometidos con la idea de que algo que ya no sirve para unos puede convertirse en un tesoro para otros. Nuestra misión es dar una segunda vida a esos aparatos electrónicos antiguos o rotos que muchas veces terminan en un rincón olvidado. Queremos que veas el potencial en lo que ya no utilizas y, juntos, transformaremos esos dispositivos en joyas de todo tipo.\\n\\n  La magia de ReCrea radica en la colaboración de personas y empresas generosas que desean donar sus aparatos electrónicos en desuso para una causa benéfica. En asociación con el centro Virgen De Gracia de Puertollano y otras organizaciones sin ánimo de lucro, canalizamos nuestros esfuerzos para recaudar fondos y llevar ayuda a quienes más lo necesitan.\\n\\n  Aquí, todos somos agentes de cambio. Ya sea que tengas un viejo teléfono, una computadora que ya no enciende o cualquier otro dispositivo que piensas que ya no tiene utilidad, ReCrea te ofrece una plataforma donde puedes donar y marcar la diferencia.\\n\\n  Cada donación cuenta. Cada pequeño gesto de generosidad se convierte en una oportunidad para mejorar vidas y comunidades. Así que únete a nosotros, descubre el potencial en lo que ya no usas y ayuda a hacer del mundo un lugar mejor.\\n\\n  Gracias por ser parte de ReCrea. Juntos, podemos convertir la tecnología antigua en sonrisas y esperanza. ¡Bienvenidos a una comunidad de cambivo positivo!</string>
     <string name="hintText">Fuerzas oscuras</string>
+    <string name="permiteClasificar">Permite clasificar los lotes añadiendo items dentro</string>
+    <string name="verDetalles">Ver detalles</string>
+    <string name="pulsacionLarga">Pulsacion larga</string>
+    <string name="pulsacionCorta">Pulsacion corta</string>
+    <string name="borrarItemDelBatch">Borra un item de un lote</string>
+    <string name="firma">Desarrollado por: Sergio Núñez Bautista</string>
+    <string name="verEditarDetalles">Ver/Editar detalles</string>
+    <string name="botonSePuedeHacer">Boton que indica que hay stock suficiente para construir esa joya. Cuando se pulsa se elimina el stock necesario automaticamente</string>
+    <string name="borrarItemDeJoya">Borrar item de la joya</string>
+    <string name="ItemPulsacionLarga">Item - Pulsación larga</string>
+    <string name="borrarJoya">Borrar una joya</string>
+    <string name="borrarBatch">Borra un lote si este no ha sido recibido</string>
+    <string name="btnGoLogin">Ir al login</string>
+    <string name="btnMakeDonation">Hacer una donación</string>
+    <string name="contactarAdministrador">Contactar con el administrador</string>
 </resources>
