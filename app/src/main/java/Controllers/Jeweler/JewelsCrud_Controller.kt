@@ -62,6 +62,12 @@ class JewelsCrud_Controller : AppCompatActivity() {
             var inte: Intent = Intent(this, AddJewel_Controller::class.java)
             startActivity(inte)
         }
+
+        binding.btnRandomJewel.setOnClickListener {
+            var inte: Intent = Intent(this, RandomJewel_Controller::class.java)
+            startActivity(inte)
+        }
+
     }
 
     override fun onResume() {

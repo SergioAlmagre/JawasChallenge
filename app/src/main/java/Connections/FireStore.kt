@@ -482,6 +482,35 @@ object FireStore {
         }
     }
 
+    suspend fun getAllObjetcJewel(): MutableList<Jewel> {
+        // Crear una lista mutable para almacenar los objetos Jewel
+        val jewelList = mutableListOf<Jewel>()
+
+        try {
+            // Obtener una referencia a la colección "jewels"
+            val jewelsCollection = Firebase.firestore.collection("jewelsCatalog")
+
+            // Realizar la consulta para obtener todos los documentos de la colección
+            val querySnapshot = jewelsCollection.get().await()
+
+            // Iterar sobre los documentos y convertirlos a objetos Jewel
+            for (document in querySnapshot.documents) {
+                // Convertir el documento a un objeto Jewel y agregarlo a la lista
+                val jewel = document.toObject(Jewel::class.java)
+                jewel?.let {
+                    jewelList.add(it)
+                }
+            }
+
+        } catch (e: Exception) {
+            // Manejar excepciones aquí según tus necesidades
+            e.printStackTrace()
+        }
+
+        // Devolver la lista de objetos Jewel
+        return jewelList
+    }
+
 
     suspend fun getAllDistinctTypes() {
         // Referencia a la colección
