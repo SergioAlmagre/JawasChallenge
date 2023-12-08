@@ -2,15 +2,22 @@ package Controllers.Jeweler
 
 import Auxiliaries.InterWindows
 import Connections.FireStore
+import Constants.Routes
 import Model.Jewels.Jewel
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.example.jawaschallenge.R
 import com.example.jawaschallenge.databinding.ActivityRandomJewelBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.storage
@@ -18,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.File
 
 
 class RandomJewel_Controller : AppCompatActivity() {
@@ -46,23 +54,23 @@ class RandomJewel_Controller : AppCompatActivity() {
 
 
         binding.btnPlayRandom.setOnClickListener {
-
+            clearResults()
+            Toast.makeText(this,"Buscando joya...", Toast.LENGTH_SHORT).show()
             runBlocking {
                 val job : Job = launch(context = Dispatchers.Default) {
                     getAllJewels()
                     getAllPosibleJewels()
-                    Log.d("Jewel", "Jewels: ${allJewels}")
-                    Log.d("Jewel", "Posibles: ${posiblesJewels}")
                 }
                 job.join()
                 searchJewelPromp(binding.txtPrompRandom.text.toString().uppercase().trim())
-                Log.d("Jewel", "Posibles: ${posiblesJewels}")
+
                 if(allJewels.size == 0){
                     binding.lblNameJewelRandom.text = "No hay joyas posibles"
                 }else{
                     selectedJewel = finalJewels.random()
+                    fileDownload(selectedJewel.picture)
+                    Log.d("RandomJewel", "selected: ${selectedJewel}")
                 }
-                Log.d("Jewel", "Label: ${binding.lblNameJewelRandom.text}")
 
                 binding.lblNameJewelRandom.text = selectedJewel.name
             }
@@ -102,6 +110,12 @@ class RandomJewel_Controller : AppCompatActivity() {
 
     }//End onCreate
 
+    fun clearResults(){
+        allJewels.clear()
+        posiblesJewels.clear()
+        finalJewels.clear()
+    }
+
 
     suspend fun getAllPosibleJewels(){
         for (jew in allJewels){
@@ -109,7 +123,7 @@ class RandomJewel_Controller : AppCompatActivity() {
                 posiblesJewels.add(jew)
             }
         }
-        Log.d("Jewel", "Posibles: ${posiblesJewels}")
+        Log.d("RandomJewel", "Posibles: ${posiblesJewels}")
     }
 
     suspend fun checkIfDoJewelIsPosible(jewel: Jewel): Boolean {
@@ -141,12 +155,25 @@ class RandomJewel_Controller : AppCompatActivity() {
 
             }
         }
-        Log.d("Jewel","finalJewels: ${finalJewels}" )
+        Log.d("RandomJewel","finalJewels: ${finalJewels}" )
     }
 
     suspend fun getAllJewels(){
         allJewels = FireStore.getAllObjetcJewel()
-        Log.d("Jewel", "All Jewels: ${allJewels}")
+        Log.d("RandomJewel", "All Jewels: ${allJewels}")
+    }
+
+    fun fileDownload(identificador: String?) {
+        var spaceRef = storageRef.child(Routes.jewelsPicturesPath + identificador)
+        val localfile = File.createTempFile(identificador!!, "jpg")
+        Log.d("fileDownload", "localfile: ${localfile.absolutePath}")
+        Log.d("fileDownload", "localfile: ${localfile.name}")
+        spaceRef.getFile(localfile).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+            binding.imageViewRandom.setImageBitmap(bitmap)
+        }.addOnFailureListener {
+            Log.d("fileDownload", "Error al descargar la imagen")
+        }
     }
 
 

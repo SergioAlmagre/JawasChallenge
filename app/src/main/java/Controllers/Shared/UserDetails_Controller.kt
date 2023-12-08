@@ -337,7 +337,6 @@ class UserDetails_Controller : AppCompatActivity() {
 
 
     fun fileDownload(identificador: String) {
-
         var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
         val localfile = File.createTempFile(identificador, "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {
