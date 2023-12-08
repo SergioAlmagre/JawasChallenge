@@ -259,8 +259,8 @@
 
     <TextView
         android:id="@+id/lblRecibedBatch"
-        android:layout_width="199dp"
-        android:layout_height="28dp"
+        android:layout_width="295dp"
+        android:layout_height="30dp"
         android:text="@string/key_lblRecibedBatch"
         android:textAlignment="center"
         android:textSize="16sp"

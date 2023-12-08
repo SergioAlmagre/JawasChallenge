@@ -46,7 +46,6 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_user_details_admin)
 
         binding = ActivityUserDetailsAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -67,11 +66,10 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                     fileDownload(InterWindows.iwUser!!.email)
                 }
             }
-            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
-            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+            job.join()
         }
-        binding.cboRoleUserAdmin.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , roles)
 
+        binding.cboRoleUserAdmin.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , roles)
         binding.txtNameUserAdmin.setText(InterWindows.iwUser.name)
         binding.txtEmailUserAdmin.setText(InterWindows.iwUser.email)
         binding.txtAddressUserAdmin.setText(InterWindows.iwUser.address)
@@ -109,8 +107,8 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                 val job : Job = launch(context = Dispatchers.Default) {
                     FireStore.updateAllDataUser(user)
                 }
-                //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
-                job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+                job.join()
+
             }
         }
 
@@ -122,9 +120,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                 setPositiveButton(
                     "Cámara",
                     android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
-
                         requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-//                    saveImageToGallery(intent.getStringExtra("mail").toString() + "jpg")
 
                     })
                 )
@@ -235,7 +231,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                             .addOnSuccessListener { taskSnapshot ->
                                 file_name.downloadUrl.addOnSuccessListener { uri ->
                                     // La imagen se subió correctamente y puedes obtener la URL de descarga
-//                                    Conexion.actualizarDocumento(u!!.mail, u!!.mail)
+
                                     InterWindows.iwUser.picture = InterWindows.iwUser.email
                                 }
                             }
@@ -249,7 +245,6 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
 
 
     fun fileDownload(identificador: String) {
-
         var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
         val localfile = File.createTempFile(identificador, "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {
@@ -277,7 +272,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
         uploadTask.addOnSuccessListener {
 
         }.addOnFailureListener{
-            //Toast.makeText(this@Registro, "Error en la subida de la imagen", Toast.LENGTH_SHORT).show()
+
         }
     }
 

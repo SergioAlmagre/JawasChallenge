@@ -89,7 +89,6 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
         }
 
         binding.btnAddPhotoEm.setOnClickListener{
-
             if(binding.userMailInput.text!!.isNotEmpty()){
                 InterWindows.iwUser.email = binding.userMailInput.text.toString().uppercase().trim()
                 with(builder)
@@ -119,6 +118,7 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
 
 
     } // End of onCreate
+
 
     // Función para crear una cuenta
     private fun createAccount(user:User, password: String) {
@@ -159,7 +159,6 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
 
 
     //************************************** Auxiliars Functions **************************************
-    //*********************************************************************************
     private fun showAlert(msg: String = "Se ha producido un error autenticando al usuario") {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
@@ -170,7 +169,6 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
     }
 
 
-    //*********************************************************************************
     private fun goHome(user: User) {
         if (user.role == "0") {
             val homeIntent = Intent(this, TestMain::class.java).apply {
@@ -310,7 +308,6 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
     }
 
 
-
     fun fileDownload(identificador: String) {
 
         var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
@@ -322,6 +319,7 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
             Toast.makeText(this, "Algo ha fallado en la descarga", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     fun uploadPictureOK(){
         binding.userPicture.isDrawingCacheEnabled = true

@@ -91,18 +91,15 @@ class AddItemToJewel_Controller : AppCompatActivity() {
             startActivity(inte)
         }
 
-
-
-
-
     }//End onCreate
+
 
     fun loadCombo(){
         runBlocking {
             val job : Job = launch(context = Dispatchers.Default) {
                 FireStore.getAllDistinctTypes()
             }
-            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+            job.join()
         }
         binding.cboItemsType2.adapter = ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item , Store.ItemsTypes.allTypesList)
     }

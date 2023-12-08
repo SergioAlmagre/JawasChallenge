@@ -10,7 +10,6 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jawaschallenge.databinding.ActivityCrudBinding
-import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -25,9 +24,6 @@ class ClassifierCrud_Controller : AppCompatActivity() {
 
         binding = ActivityCrudBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        var storage = com.google.firebase.ktx.Firebase.storage
-        var storageRef = storage.reference
 
         binding.btnHomeAdmin.visibility = android.view.View.GONE
         binding.btnRandomJewel.visibility = android.view.View.GONE
@@ -44,7 +40,6 @@ class ClassifierCrud_Controller : AppCompatActivity() {
 
             var miAdapter = RecyAdapterClassifier(InterWindows.iwPendingBatches, context)
             miRecyclerView.adapter = miAdapter
-
         }
 
 
@@ -62,6 +57,12 @@ class ClassifierCrud_Controller : AppCompatActivity() {
             var inte: Intent = Intent(this, AddBatch_Controller::class.java)
             startActivity(inte)
         }
+
+        binding.btnInventory.setOnClickListener {
+            var inte: Intent = Intent(this, Inventory_Controller::class.java)
+            startActivity(inte)
+        }
+
     } // End onCreate
 
     override fun onResume() {
@@ -79,6 +80,6 @@ class ClassifierCrud_Controller : AppCompatActivity() {
 
         var miAdapter = RecyAdapterClassifier(InterWindows.iwPendingBatches, context)
         miRecyclerView.adapter = miAdapter
-
     }
-}
+
+}// End Class

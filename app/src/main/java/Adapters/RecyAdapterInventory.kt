@@ -2,9 +2,10 @@ package Adapters
 
 
 import Auxiliaries.InterWindows
+import Auxiliaries.ObjectQuantity
 import Connections.FireStore
 import Constants.Routes
-import Model.Hardware.Item
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
@@ -19,13 +20,13 @@ import com.example.jawaschallenge.R
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import Model.Users.*
-import android.util.Log
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  context: Context) : RecyclerView.Adapter<RecyAdapterItemsFromBatch.ViewHolder>() {
+class RecyAdapterInventory(var itemsInside : MutableList<ObjectQuantity>, var  context: Context) : RecyclerView.Adapter<RecyAdapterInventory.ViewHolder>() {
 
 
     var onItemClickListener: ViewHolder.OnItemClickListener? = null
@@ -69,8 +70,7 @@ class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  contex
      * se puede declarar aquí.
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-        val itemType = view.findViewById(R.id.txtInfo) as TextView
+        val itemInfo = view.findViewById(R.id.txtInfo) as TextView
         val storage = Firebase.storage
         val storageRef = storage.reference
 
@@ -81,16 +81,13 @@ class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  contex
          */
         @SuppressLint("ResourceAsColor")
         fun bind(
-            ite: Item,
+            iteYewInfo: ObjectQuantity,
             context: Context,
             pos: Int,
-            miAdaptadorRecycler: RecyAdapterItemsFromBatch
+            miAdaptadorRecycler: RecyAdapterInventory
         ) {
             val builder = AlertDialog.Builder(context)
-
-
-            Log.d("RecyAdapterItemsTxt", "itemType.text: ${ite.attributes[Routes.typeNamePositionAttribute].content}")
-            itemType.text = ite.attributes[Routes.typeNamePositionAttribute].content.toString() //item type name
+            itemInfo.text = iteYewInfo.name + "    -    " + iteYewInfo.quantity //item type name
 
 
             val positiveButtonClick = { dialog: DialogInterface, which: Int ->
@@ -99,50 +96,42 @@ class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  contex
             }
 
             itemView.setOnLongClickListener() {
-                InterWindows.iwItem = InterWindows.iwItemsInside[pos]
-
-                with(builder)
-                {
-                    setTitle("Estas a punto de borrar un item añadido a este batch")
-                    setMessage("¿Seguro que quieres continuar?")
-                    setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
-
-                        runBlocking {
-                            val trabajo : Job = launch(context = Dispatchers.Default) {
-
-                                InterWindows.iwItemsInside.remove(ite)
-                                Log.d("RecyAdapterItemsTxt", "InterWindows.iwItemsInside: ${InterWindows.iwBatch.idBatch}")
-                                Log.d("RecyAdapterItemsTxt", "InterWindows.iwItemsInside: ${ite.idItem}")
-                                FireStore.deleteItemFromBatch(InterWindows.iwBatch.idBatch,ite.idItem)
-
-                                var itemPicture = ite.attributes[Routes.picturePositionAttribute].content
-
-                                if(itemPicture != Routes.defaultItemPictureName){
-                                    FireStore.deleteImageFromStorage(InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content!!, Routes.itemsPicturesPath)
-                                }
-
-                            }
-                            trabajo.join()
-                            miAdaptadorRecycler.notifyDataSetChanged()
-                        }
-                    }))
-                    setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
-//                                Toast.makeText(context, "Has pulsado no", Toast.LENGTH_SHORT).show()
-                    }))
-                    show()
-                }
+////                InterWindows.iwItem = InterWindows.iwItemsInside[pos]
+//                InterWindows.iwItemToJewel = InterWindows.iwJewel.components[pos]
+//                with(builder)
+//                {
+//                    setTitle("Estas a punto de borrar un item añadido a esta joya")
+//                    setMessage("¿Seguro que quieres continuar?")
+//                    setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
+//
+//                        runBlocking {
+//                            val trabajo : Job = launch(context = Dispatchers.Default) {
+//
+//                                InterWindows.iwJewel.components.remove(iteYewInfo)
+//
+//                            }
+//                            trabajo.join()
+//                            miAdaptadorRecycler.notifyDataSetChanged()
+//                        }
+//                    }))
+//                    setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
+////                                Toast.makeText(context, "Has pulsado no", Toast.LENGTH_SHORT).show()
+//                    }))
+//                    show()
+//                }
                 true
             }
 
 
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
-                InterWindows.iwItem = InterWindows.iwItemsInside[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
 
-//                onItemClickListener?.onItemClick(it, adapterPosition)
-
-                }
+                InterWindows.iwItemInventory = InterWindows.inventory.sumarize[pos]
+                Toast.makeText(context, "Has pulsado el item: " + InterWindows.iwItemInventory.name, Toast.LENGTH_SHORT).show()
+//                itemView.setBackgroundColor(R.color.green)
             }
+
+        }
 
         interface OnItemClickListener {
             fun onItemClick(view: View, position: Int)

@@ -67,7 +67,6 @@ class ItemsType_Controller : AppCompatActivity() {
                     }
                 }
             }
-
             builder.show()
         }
 
@@ -84,10 +83,9 @@ class ItemsType_Controller : AppCompatActivity() {
                         runBlocking {
                             val job : Job = launch(context = Dispatchers.Default) {
                                 FireStore.deleteItemsTypeByName(binding.cboItemsType.selectedItem.toString())
-                                //FireStore.getAllDistinctTypes()
+
                             }
                             job.join()
-                            //binding.cboItemsType.adapter = ArrayAdapter(contex,android.R.layout.simple_spinner_dropdown_item , Store.ItemsTypes.allTypesList)
                             loadCombo()
 
                         }

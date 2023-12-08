@@ -47,7 +47,7 @@ class UserDetails_Controller : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_user_details_admin)
+
 
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -55,7 +55,6 @@ class UserDetails_Controller : AppCompatActivity() {
 
         firebaseauth = FirebaseAuth.getInstance()
         val builder = AlertDialog.Builder(this)
-
 
 
         var roles = ArrayList<String>()
@@ -73,14 +72,13 @@ class UserDetails_Controller : AppCompatActivity() {
                     }
                 }
             }
-            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
-            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+
+            job.join()
         }
         binding.txtNameUserAdmin.setText(InterWindows.iwUser.name)
         binding.txtEmailUserAdmin.setText(InterWindows.iwUser.email)
         binding.txtAddressUserAdmin.setText(InterWindows.iwUser.address)
         binding.txtPhoneUserAdmin.setText(InterWindows.iwUser.phone)
-
 
         binding.btnLogOutUserAdmin.setOnClickListener {
            signOutAndRedirectToLogin()
@@ -104,8 +102,8 @@ class UserDetails_Controller : AppCompatActivity() {
                                     uploadPictureOK()
                                     InterWindows.iwUser = user!!
                                 }
-                                //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
-                                job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+
+                                job.join()
                             }
                             Toast.makeText(context, "Cambios guardados", Toast.LENGTH_SHORT).show()
                             finish()
@@ -126,22 +124,6 @@ class UserDetails_Controller : AppCompatActivity() {
         }
 
         binding.btnSaveChangesUserAdmin.setOnClickListener {
-//            var name = binding.txtNameUserAdmin.text.toString().uppercase().trim()
-//            var email = binding.txtEmailUserAdmin.text.toString().uppercase().trim()
-//            var address = binding.txtAddressUserAdmin.text.toString().uppercase().trim()
-//            var phone = binding.txtPhoneUserAdmin.text.toString().uppercase().trim()
-//            var picture = InterWindows.iwUser.picture
-//            var role = InterWindows.iwUser.role
-//
-//                user = User(
-//                name,
-//                email,
-//                address,
-//                phone,
-//                picture,
-//                role!!
-//            )
-//            user!!.batches = InterWindows.iwUser.batches
             buildUser()
             runBlocking {
                 val job : Job = launch(context = Dispatchers.Default) {
@@ -149,8 +131,8 @@ class UserDetails_Controller : AppCompatActivity() {
                     uploadPictureOK()
                     InterWindows.iwUser = user!!
                 }
-                //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
-                job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+
+                job.join()
             }
             Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
             finish()
@@ -166,14 +148,11 @@ class UserDetails_Controller : AppCompatActivity() {
                     android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
 
                         requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
-//                    saveImageToGallery(intent.getStringExtra("mail").toString() + "jpg")
-
                     })
                 )
                 setNegativeButton("Galería", ({ dialog: DialogInterface, which: Int ->
 
                     pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-
                 }))
                 show()
             }
@@ -221,6 +200,7 @@ class UserDetails_Controller : AppCompatActivity() {
         }
         return isDifferent
     }
+
 
     fun signOutAndRedirectToLogin() {
         FirebaseAuth.getInstance().signOut()
@@ -323,7 +303,7 @@ class UserDetails_Controller : AppCompatActivity() {
                             .addOnSuccessListener { taskSnapshot ->
                                 file_name.downloadUrl.addOnSuccessListener { uri ->
                                     // La imagen se subió correctamente y puedes obtener la URL de descarga
-//                                    Conexion.actualizarDocumento(u!!.mail, u!!.mail)
+
                                     InterWindows.iwUser.picture = InterWindows.iwUser.email
                                 }
                             }

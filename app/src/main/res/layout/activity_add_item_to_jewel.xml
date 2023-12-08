@@ -122,6 +122,7 @@
     </LinearLayout>
 
     <Button
+        android:backgroundTint="@color/green"
         android:id="@+id/btnAddItemAndAmound"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="261dp"

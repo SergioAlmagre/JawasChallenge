@@ -2,11 +2,13 @@ package Constants
 
 object Routes {
 
+    //PATHS
     var usersPicturesPath = "UsersPictures/"
     var itemsPicturesPath = "ItemsPictures/"
     var batchesPicturesPath = "BatchesPictures/"
     var jewelsPicturesPath = "JewelsPictures/"
 
+    //FILES
     var defaultUserPictureName = "defaultUserPicture.jpg"
     var defaultItemPictureName = "defaultItemPicture.jpg"
     var defaultBatchPictureName = "defaultBatchPicture.jpg"
@@ -19,5 +21,8 @@ object Routes {
 
     //ROLES
     var defaultRole = "2" // Donor
+
+    //DATA
+    var adminitratorEmail = "sergioalmagre@gmail.com"
 
 }

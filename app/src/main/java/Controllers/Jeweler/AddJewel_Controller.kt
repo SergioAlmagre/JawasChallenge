@@ -141,16 +141,16 @@ class AddJewel_Controller : AppCompatActivity() {
                 }
 
                 FireStore.addJewelToCatalog(InterWindows.iwJewel)
-                Toast.makeText(this, "Joya añadida!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Joya guadada!", Toast.LENGTH_SHORT).show()
                 finish()
             }else{
 
             }
         }
 
-
-
     }//End onCreate
+
+
 
     fun isModifyCorrect(): Boolean {
         var isCorrect = true
@@ -189,7 +189,6 @@ class AddJewel_Controller : AppCompatActivity() {
     fun thereAreChanges():Boolean{
         var changes = true
 
-
         return changes
     }
 
@@ -219,26 +218,14 @@ class AddJewel_Controller : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-//        if(!InterWindows.iwJewel.picture.isNullOrEmpty()){
-//            fileDownload(InterWindows.iwJewel.picture)
-//        }else{
-//            fileDownload(Routes.defaultJewelPictureName)
-//        }
-
         binding.txtInstructionsMain.setText(InterWindows.iwJewel.instructions.toString())
-        runBlocking {
-            val trabajo : Job = launch(context = Dispatchers.Default) {
-//                InterWindows.iwItemsInside.clear()
-//                InterWindows.iwItemsInside =  FireStore.getItemsForBatchReceived(InterWindows.iwBatch.idBatch)
-            }
-            trabajo.join()
-            miRecyclerView = binding.rVItemsFromJewel
-            miRecyclerView.setHasFixedSize(true)
-            miRecyclerView.layoutManager = LinearLayoutManager(context)
 
-            var miAdapter = RecyAdapterItemsFromJewel(InterWindows.iwJewel.components, context)
-            miRecyclerView.adapter = miAdapter
-        }
+        miRecyclerView = binding.rVItemsFromJewel
+        miRecyclerView.setHasFixedSize(true)
+        miRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        var miAdapter = RecyAdapterItemsFromJewel(InterWindows.iwJewel.components, context)
+        miRecyclerView.adapter = miAdapter
     }
 
 
@@ -347,8 +334,7 @@ class AddJewel_Controller : AppCompatActivity() {
                             .addOnSuccessListener { taskSnapshot ->
                                 file_name.downloadUrl.addOnSuccessListener { uri ->
                                     // La imagen se subió correctamente y puedes obtener la URL de descarga
-//                                    Conexion.actualizarDocumento(u!!.mail, u!!.mail)
-//                                    InterWindows.iwJewel.picture = InterWindows.iwJewel.name
+
                                 }
                             }
                     }

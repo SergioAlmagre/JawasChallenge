@@ -71,13 +71,13 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
         }
 
         binding.btnUserAdmin.setOnClickListener {
-            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            var inte = Intent(this, UserDetails_Controller::class.java)
             startActivity(inte)
         }
 
 
         binding.btnAddItem.setOnClickListener {
-            var inte: Intent = Intent(this, AddItemBatch_Controller::class.java)
+            var inte = Intent(this, AddItemBatch_Controller::class.java)
             startActivity(inte)
         }
 
@@ -98,7 +98,6 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
                             }
                             trabajo.join()
                             finish()
-
                         }
                     })
                 )
@@ -146,9 +145,6 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
             miRecyclerView.adapter = miAdapter
         }
     }
-
-
-
 
 
     fun fileDownload(identificador: String?) {

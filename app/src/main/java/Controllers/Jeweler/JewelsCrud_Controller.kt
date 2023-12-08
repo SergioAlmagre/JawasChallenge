@@ -27,13 +27,11 @@ class JewelsCrud_Controller : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnHomeAdmin.visibility = android.view.View.GONE
+        binding.btnInventory.visibility = android.view.View.GONE
 
-        var storage = com.google.firebase.ktx.Firebase.storage
-        var storageRef = storage.reference
 
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
-
                 Connections.FireStore.getAllJewels()
             }
             trabajo.join()
@@ -53,18 +51,18 @@ class JewelsCrud_Controller : AppCompatActivity() {
 
 
         binding.btnUserAdmin.setOnClickListener {
-            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            var inte = Intent(this, UserDetails_Controller::class.java)
             startActivity(inte)
         }
 
         binding.btnAddObject.setOnClickListener {
             InterWindows.iwJewel = Jewel()
-            var inte: Intent = Intent(this, AddJewel_Controller::class.java)
+            var inte = Intent(this, AddJewel_Controller::class.java)
             startActivity(inte)
         }
 
         binding.btnRandomJewel.setOnClickListener {
-            var inte: Intent = Intent(this, RandomJewel_Controller::class.java)
+            var inte = Intent(this, RandomJewel_Controller::class.java)
             startActivity(inte)
         }
 
@@ -77,10 +75,10 @@ class JewelsCrud_Controller : AppCompatActivity() {
                 Store.JewelsCatalog.jewelsList.clear()
                 Connections.FireStore.getAllJewels()
             }
-            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
-            trabajo.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+            trabajo.join()
+
         }
-        miRecyclerView = binding.objetRecycler as RecyclerView
+        miRecyclerView = binding.objetRecycler
         miRecyclerView.setHasFixedSize(true)
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 

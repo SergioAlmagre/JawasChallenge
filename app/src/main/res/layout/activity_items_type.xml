@@ -7,6 +7,7 @@
     tools:context="Controllers.Administrator.ItemsType_Controller">
 
     <Button
+        android:backgroundTint="@color/red"
         android:id="@+id/btnDeleteType"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="259dp"
@@ -49,6 +50,7 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:backgroundTint="@color/green"
         android:id="@+id/btnAddObject"
         android:layout_width="60dp"
         android:layout_height="64dp"

@@ -860,6 +860,34 @@ object FireStore {
         }
     }
 
+    suspend fun deleteItemsByTypeAndQuantity(type: String, quantity: Int) {
+        try {
+            // Referencia a la colección de items
+            val itemsCollection = db.collection("items")
+
+            // Realizar una consulta para obtener los items del tipo especificado
+            val querySnapshot = itemsCollection
+                .whereArrayContains("attributes", mapOf("name" to "Type", "content" to type))
+                .limit(quantity.toLong())
+                .get()
+                .await()
+
+            // Eliminar los items encontrados
+            for (document in querySnapshot.documents) {
+                val itemId = document.id
+                itemsCollection.document(itemId).delete().await()
+                Log.d("deleteItemsByTypeAndQuantity", "Ítem eliminado con éxito: $itemId")
+            }
+
+            Log.d("deleteItemsByTypeAndQuantity", "Tipo: $type, Cantidad eliminada: ${querySnapshot.size()}")
+
+        } catch (exception: Exception) {
+            Log.e("deleteItemsByTypeAndQuantity", "Error al eliminar ítems: $exception")
+        }
+    }
+
+
+
 
     suspend fun deleteJewelByName(jewelName: String) {
         try {

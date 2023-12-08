@@ -54,7 +54,7 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
 
     val storage = Firebase.storage
     val storageRef = storage.reference
-    val filePath = "UsersPictures/"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,7 +66,6 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
 
 
         binding.bntEnter.setOnClickListener {
-            //*********************************GOOGLE************************************************
             var name = binding.userNameInput.text.toString().uppercase().trim()
             var phone = binding.userPhoneInput.text.toString()
             var address = binding.userAddressInput.text.toString().uppercase().trim()
@@ -79,8 +78,6 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
             InterWindows.iwUser = newUser
             goHome(Auxiliaries.InterWindows.iwUser)
         }
-
-
 
 
         binding.btnAddPhotoGo.setOnClickListener {
@@ -106,11 +103,10 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
             }
         }
 
-
     }// End of onCreate
 
+
     //__________________________CAMERA_______________________________
-    //Segunda activity para lanzar la cámara.
     val openCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -217,8 +213,7 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
 
 
     fun fileDownload(identificador: String) {
-
-        var spaceRef = storageRef.child(filePath + identificador)
+        var spaceRef = storageRef.child(Routes.usersPicturesPath + identificador)
         val localfile = File.createTempFile(identificador, "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
@@ -314,7 +309,6 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
         }
     }
 
-
     private fun signInGoogle() {
         val signInClient = googleSignInClient.signInIntent
         Log.e(TAG, "Llego aquí 1")
@@ -349,7 +343,6 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
         dialog.show()
     }
 
-
     //*********************************************************************************
     private fun goHome(user: User) {
         if (user.role == "0") {
@@ -374,7 +367,6 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
             }
             startActivity(homeIntent)
         }
-
     }
 
     fun uploadPictureOK(){
