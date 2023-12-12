@@ -108,7 +108,7 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
 
         }
 
-        //Como puedo detectar que se ha pulsado?
+        //Como puedo detectar que se ha pulsado? // para poner la foto del item en el imageview
 //        binding.rVItemsInsideBatch.setOnClickListener  {
 //            Toast.makeText(this,"Click",Toast.LENGTH_SHORT).show()
 //        }

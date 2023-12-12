@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.jawaschallenge.R
 import com.example.jawaschallenge.TestMain
 import com.example.jawaschallenge.databinding.ActivityCreateAccountGoogleBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -74,8 +75,21 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
 
             var newUser = User(name,user.email,address,phone,user.picture,Routes.defaultRole)
 
-            updateUserDataCreateAccount(newUser)
-            uploadPictureOK()
+            val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                updateUserDataCreateAccount(newUser)
+                uploadPictureOK()
+                Toast.makeText(applicationContext,
+                    R.string.creatinganewprofile, Toast.LENGTH_SHORT).show()
+            }
+
+            val builder = AlertDialog.Builder(this)
+            with(builder)
+            {
+                setTitle(R.string.WelcomeTittle)
+                setMessage(R.string.InitialMesagge)
+                setPositiveButton(R.string.Letsgo, DialogInterface.OnClickListener(function = positiveButtonClick))
+                show()
+            }
 
             InterWindows.iwUser = newUser
             goHome(Auxiliaries.InterWindows.iwUser)
@@ -268,6 +282,7 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
                         }
 
                         var newUser = User(name,mail,address,phone,picture,Routes.defaultRole)
+
 
                         FireStore.addUser(newUser)
                         goHome(newUser)

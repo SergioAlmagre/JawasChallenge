@@ -40,6 +40,7 @@ class UserDetails_Controller : AppCompatActivity() {
     private lateinit var firebaseauth: FirebaseAuth
     private val cameraRequest = 1888
     private lateinit var bitmap: Bitmap
+    val auth = FirebaseAuth.getInstance()
 
     val storage = Firebase.storage
     val storageRef = storage.reference
@@ -48,13 +49,24 @@ class UserDetails_Controller : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         firebaseauth = FirebaseAuth.getInstance()
         val builder = AlertDialog.Builder(this)
+
+        binding.txtPasswordRecovery.setOnClickListener {
+            if(InterWindows.iwUser.email.isNotEmpty()){
+                auth.sendPasswordResetEmail(InterWindows.iwUser.email)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this, "Se ha enviado un correo para restablecer la contraseña", Toast.LENGTH_SHORT).show()
+                        } else {
+
+                        }
+                    }
+            }
+        }
 
 
         var roles = ArrayList<String>()
@@ -102,8 +114,8 @@ class UserDetails_Controller : AppCompatActivity() {
                                     uploadPictureOK()
                                     InterWindows.iwUser = user!!
                                 }
-
                                 job.join()
+
                             }
                             Toast.makeText(context, "Cambios guardados", Toast.LENGTH_SHORT).show()
                             finish()
@@ -120,7 +132,6 @@ class UserDetails_Controller : AppCompatActivity() {
             }else{
                 finish()
             }
-
         }
 
         binding.btnSaveChangesUserAdmin.setOnClickListener {
@@ -131,8 +142,8 @@ class UserDetails_Controller : AppCompatActivity() {
                     uploadPictureOK()
                     InterWindows.iwUser = user!!
                 }
-
                 job.join()
+
             }
             Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show()
             finish()
@@ -179,6 +190,7 @@ class UserDetails_Controller : AppCompatActivity() {
             role!!
         )
         user!!.batches = InterWindows.iwUser.batches
+        InterWindows.iwUser = user!!
     }
 
     fun isDifferent(): Boolean{

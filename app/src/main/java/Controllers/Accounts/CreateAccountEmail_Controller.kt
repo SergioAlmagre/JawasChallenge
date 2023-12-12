@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.jawaschallenge.R
 import com.example.jawaschallenge.TestMain
 import com.example.jawaschallenge.databinding.ActivityCreateAccountEmailBinding
 import com.google.firebase.Firebase
@@ -57,6 +58,9 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
         firebaseauth = FirebaseAuth.getInstance()
         val builder = AlertDialog.Builder(this)
 
+
+
+
         binding.bntEnter.setOnClickListener {
 
             //*********************************MAIL************************************************
@@ -80,7 +84,22 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
                     if(InterWindows.iwUser.picture != Routes.defaultUserPictureName){
                         uploadPictureOK()
                     }
-                    createAccount(InterWindows.iwUser, password)
+
+                    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+                        createAccount(InterWindows.iwUser, password)
+                        Toast.makeText(applicationContext,
+                            R.string.creatinganewprofile, Toast.LENGTH_SHORT).show()
+                    }
+
+                    val builder = AlertDialog.Builder(this)
+                    with(builder)
+                    {
+                        setTitle(R.string.WelcomeTittle)
+                        setMessage(R.string.InitialMesagge)
+                        setPositiveButton(R.string.Letsgo, DialogInterface.OnClickListener(function = positiveButtonClick))
+                        show()
+                    }
+
                 }
 
             } else {

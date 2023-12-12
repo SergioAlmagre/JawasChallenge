@@ -8,6 +8,18 @@
     tools:context="Controllers.Accounts.Login_Controller">
 
 
+    <TextView
+        android:id="@+id/txtPasswordRecovery2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recover password"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.653" />
+
     <Button
         android:id="@+id/btnNewAccount"
         style="@style/Widget.Material3.Button.ElevatedButton"

@@ -37,7 +37,7 @@ class BatchDetails_Controller : AppCompatActivity() {
         var context = this
         val builder = AlertDialog.Builder(context)
 
-        if(InterWindows.iwUser.role == "3" || InterWindows.iwUser.role == "1"){
+        if(InterWindows.iwUser.role == "3" || InterWindows.iwUser.role == "1"){ //Admin can see the checkbox in mode donor, but really, donor can't see it
             binding.chkRecived.isVisible = true
         }
 
@@ -51,6 +51,7 @@ class BatchDetails_Controller : AppCompatActivity() {
                 }
 
                 trabajo.join()
+            if(selectedBatch != null) {
                 selectedBatch!!.address = InterWindows.iwBatch.address.toString()
                 if (selectedBatch != null) {
                     binding.lblBatchId.text = selectedBatch!!.batchID
@@ -64,6 +65,7 @@ class BatchDetails_Controller : AppCompatActivity() {
                 } else {
                     Log.d("BatchDetails", "selectedBatch is null")
                 }
+            }
 
 
             if(selectedBatch != null) {

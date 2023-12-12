@@ -21,32 +21,32 @@
         app:srcCompat="@drawable/camera" />
 
     <Button
-        android:backgroundTint="@color/green"
         android:id="@+id/btnSaveChangesUserAdmin"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="258dp"
         android:layout_height="45dp"
+        android:backgroundTint="@color/green"
         android:text="@string/save_changes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.776" />
+        app:layout_constraintVertical_bias="0.793" />
 
     <Button
-        android:backgroundTint="@color/red"
         android:id="@+id/btnLogOutUserAdmin"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="258dp"
         android:layout_height="45dp"
+        android:backgroundTint="@color/red"
         android:text="@string/key_btnLogOut"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.842" />
+        app:layout_constraintVertical_bias="0.858" />
 
     <ImageView
         android:id="@+id/pictureUserAdmin"
@@ -58,7 +58,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.06"
-        app:srcCompat="@drawable/defaultuserpicture" />
+        app:srcCompat="@drawable/usuario2" />
+
+    <EditText
+        android:id="@+id/txtEmailUserAdmin"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="@string/hint_mail"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.467" />
 
     <EditText
         android:id="@+id/txtNameUserAdmin"
@@ -70,53 +85,38 @@
         android:text="Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.417" />
+        app:layout_constraintVertical_bias="0.397" />
+
+    <EditText
+        android:id="@+id/txtPhoneUserAdmin"
+        android:layout_width="277dp"
+        android:layout_height="50dp"
+        android:editable="true"
+        android:ems="10"
+        android:hint="@string/hint_phone_number"
+        android:inputType="phone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.537" />
 
     <EditText
         android:id="@+id/txtAddressUserAdmin"
         android:layout_width="275dp"
         android:layout_height="49dp"
         android:ems="10"
-        android:hint="@string/hint_phone_number"
+        android:hint="@string/hint_default_address"
         android:inputType="textPostalAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.641" />
-
-    <EditText
-        android:id="@+id/txtPhoneUserAdmin"
-        android:layout_width="277dp"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:hint="@string/hint_phone_number"
-        android:inputType="phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.557" />
-
-    <EditText
-        android:id="@+id/txtEmailUserAdmin"
-        android:layout_width="280dp"
-        android:layout_height="45dp"
-        android:editable="false"
-        android:ems="10"
-        android:hint="@string/hint_mail"
-        android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.487" />
+        app:layout_constraintVertical_bias="0.621" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -133,11 +133,11 @@
         <ImageButton
             android:id="@+id/btnHomeAdmin"
             android:layout_width="172dp"
-            android:layout_height="60dp"
+            android:layout_height="57dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/casa" />
+            app:srcCompat="@drawable/atrasamarillo" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -146,5 +146,17 @@
             android:orientation="horizontal"></LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtPasswordRecovery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recover password"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.684" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

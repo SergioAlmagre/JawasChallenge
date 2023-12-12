@@ -38,6 +38,7 @@ import kotlinx.coroutines.withContext
 
 class Login_Controller : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
+    val auth = FirebaseAuth.getInstance()
 
     //Para la autenticación, de cualquier tipo.
     private lateinit var firebaseauth: FirebaseAuth
@@ -71,6 +72,22 @@ class Login_Controller : AppCompatActivity() {
         //------------------ Sign In Google -------------------
         binding.btnSignInGoogle.setOnClickListener {
             signInGoogle()
+        }
+
+        binding.txtPasswordRecovery2.setOnClickListener {
+            if(binding.userMailInput.text!!.isNotEmpty()){
+                auth.sendPasswordResetEmail(binding.userMailInput.text.toString())
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(this, R.string.Key_sendEmailToRecovery, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }else{
+                val innerBuilder = AlertDialog.Builder(this)
+                innerBuilder.setTitle(R.string.emptyEmailField)
+                innerBuilder.setMessage(R.string.firstEnterEmail)
+                innerBuilder.show()
+            }
         }
 
 

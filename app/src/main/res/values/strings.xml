@@ -10,6 +10,9 @@
     <!-- TextInputLayout hints -->
     <string name="key_hint_userMailInput">Email</string>
     <string name="key_hint_userPasswordInput">Password</string>
+    <string name="Key_sendEmailToRecovery">An email has been sent to reset your password</string>
+    <string name="emptyEmailField">Empty Email field</string>
+    <string name="firstEnterEmail">First enter your email in the Email field</string>
 
     // ADD_BATCH
     <!-- Button text -->
@@ -89,6 +92,13 @@
     <!-- String for button text -->
     <string name="button_enter">Enter</string>
 
+    <string name="WelcomeTittle">Welcome to Re-Crea</string>
+    <string name="Letsgo">Let\'s go!!</string>
+    <string name="InitialMesagge">Your main screen will then open where you can add your batches of components that you want to donate using the button ( + ) that you will find at the bottom\n\nOn the right you can see your profile, where you can see and modify your data and If you click on one of your lots you will be able to see all the information relevant to it.\n\nRemember that you can cancel by holding down as long as the lot has not been delivered\n\n\tThank you for supporting this cause!!</string>
+    <string name="creatinganewprofile">Creating a new profile...</string>
+
+
+
     // ITEMS TYPE
     <string name="delete_type">Delete type</string>
 
@@ -108,7 +118,7 @@
     <string name="key_btnComeBackLogin">Come back</string>
     <string name="key_btnGuideContact">Guide/Contact</string>
     <string name="key_lblWelcome">Welcome to ReCrea!</string>
-    <string name="key_lblSumarize">In ReCrea, we are committed to the idea that something that is no longer useful for some can become a treasure for others. Our mission is to give a second life to those old or broken electronic devices that often end up in a forgotten corner. We want you to see the potential in what you no longer use and, together, we will transform those devices into jewels of all kinds.\n\n  The magic of ReCrea lies in the collaboration of generous people and companies who wish to donate their old electronic devices for a charitable cause. In partnership with the Virgen De Gracia center in Puertollano and other non-profit organizations, we channel our efforts to raise funds and bring help to those who need it most.\n\n  Here, we are all agents of change. Whether you have an old phone, a computer that no longer turns on, or any other device that you think is no longer useful, ReCrea offers you a platform where you can donate and make a difference.\n\n  Every donation counts. Every small gesture of generosity becomes an opportunity to improve lives and communities. So join us, discover the potential in what you no longer use, and help make the world a better place.\n\n  Thank you for being part of ReCrea. Together, we can turn old technology into smiles and hope. Welcome to a community of positive change!</string>
+    <string name="key_lblSumarize">In ReCrea, we are committed to the idea that something that is no longer useful for some can become a treasure for others. Our mission is to give a second life to those old or broken electronic devices that often end up in a forgotten corner. We want you to see the potential in what you no longer use and, together, we will transform those devices into jewels of all kinds.\n\nThe magic of ReCrea lies in the collaboration of generous people and companies who wish to donate their old electronic devices for a charitable cause. In partnership with the Virgen De Gracia center in Puertollano and other non-profit organizations, we channel our efforts to raise funds and bring help to those who need it most.\n\n  Here, we are all agents of change. Whether you have an old phone, a computer that no longer turns on, or any other device that you think is no longer useful, ReCrea offers you a platform where you can donate and make a difference.\n\n  Every donation counts. Every small gesture of generosity becomes an opportunity to improve lives and communities. So join us, discover the potential in what you no longer use, and help make the world a better place.\n\n  Thank you for being part of ReCrea. Together, we can turn old technology into smiles and hope. Welcome to a community of positive change!</string>
 
     // ALERT DIALOG
     <string name="hintText">Dark forces</string>
@@ -133,5 +143,7 @@
 
     // INVENTORY
     <string name="key_btnDeleteItem">Delete item</string>
+
+
 
 </resources>
