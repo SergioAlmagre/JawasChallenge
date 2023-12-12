@@ -10,6 +10,7 @@ object InterWindows {
     var iwUser = User()
     var iwUsersAL = ArrayList<User>()
 
+
     var iwBatch = Batch()
     var iwJewel = Jewel()
     var iwItem = Item()
@@ -25,7 +26,9 @@ object InterWindows {
 
     var iwItemInventory = ObjectQuantity()
 
+    var iwAdminUser = User()
 
+    var iwFirst = true
 
 
 

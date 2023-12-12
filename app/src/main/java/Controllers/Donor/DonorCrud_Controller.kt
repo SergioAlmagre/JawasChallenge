@@ -2,7 +2,9 @@ package Controllers.Donor
 
 import Adapters.RecyAdapterDonor
 import Auxiliaries.InterWindows
+import Constants.Routes
 import Controllers.Shared.UserDetails_Controller
+import Model.Hardware.Batch
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,7 +28,10 @@ class DonorCrud_Controller : AppCompatActivity() {
         binding = ActivityCrudBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnHomeAdmin.visibility = android.view.View.GONE
+        if(InterWindows.iwUser.role != Routes.adminRole){
+            binding.btnHomeAdmin.visibility = android.view.View.GONE
+        }
+
         binding.btnRandomJewel.visibility = android.view.View.GONE
         binding.btnInventory.visibility = android.view.View.GONE
 
@@ -51,7 +56,7 @@ class DonorCrud_Controller : AppCompatActivity() {
 
 
         binding.btnHomeAdmin.setOnClickListener{
-//            finish()
+            finish()
         }
 
 
@@ -61,6 +66,7 @@ class DonorCrud_Controller : AppCompatActivity() {
         }
 
         binding.btnAddObject.setOnClickListener {
+            InterWindows.iwBatch = Batch()
             var inte: Intent = Intent(this, AddBatch_Controller::class.java)
             startActivity(inte)
         }

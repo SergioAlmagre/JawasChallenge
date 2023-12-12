@@ -127,13 +127,13 @@ class RecyAdapterDonor(var batch : MutableList<Batch>, var  context: Context) : 
                                     }
                                 }
                                 trabajo.join()
+                                miAdaptadorRecycler.notifyDataSetChanged()
                             }
                         }else{
                             val innerBuilder = AlertDialog.Builder(context)
                             innerBuilder.setTitle("El lote ya ha sido recibido")
                             innerBuilder.setMessage("Solo puedes borrar los lotes que aún no hayan sido recibidos")
                             innerBuilder.show()
-                            miAdaptadorRecycler.notifyDataSetChanged()
                         }
                     }))
                     setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->

@@ -20,7 +20,14 @@ object Routes {
     var picturePositionAttribute = 2
 
     //ROLES
-    var defaultRole = "2" // Donor
+    var testRol = "0" // Test
+    var adminRole = "1" // Administrator
+    var donorRole = "2" // Donor
+    var classifierRole = "3" // Classifier
+    var jewelerRole = "4" // Jeweler
+
+
+
 
     //DATA
     var adminitratorEmail = "sergioalmagre@gmail.com"

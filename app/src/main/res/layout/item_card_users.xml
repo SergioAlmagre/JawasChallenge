@@ -35,7 +35,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            tools:srcCompat="@drawable/defaultuserpicture" />
+            tools:srcCompat="@drawable/usuario2" />
 
         <FrameLayout
             android:id="@+id/colorLayoutReceived"

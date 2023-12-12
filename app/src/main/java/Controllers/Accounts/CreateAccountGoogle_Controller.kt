@@ -73,7 +73,7 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
             var phone = binding.userPhoneInput.text.toString()
             var address = binding.userAddressInput.text.toString().uppercase().trim()
 
-            var newUser = User(name,user.email,address,phone,user.picture,Routes.defaultRole)
+            var newUser = User(name,user.email,address,phone,user.picture,Routes.donorRole)
 
             val positiveButtonClick = { dialog: DialogInterface, which: Int ->
                 updateUserDataCreateAccount(newUser)
@@ -281,7 +281,7 @@ class CreateAccountGoogle_Controller : AppCompatActivity() {
                             name = mail.substringBefore("@").uppercase().trim()
                         }
 
-                        var newUser = User(name,mail,address,phone,picture,Routes.defaultRole)
+                        var newUser = User(name,mail,address,phone,picture,Routes.donorRole)
 
 
                         FireStore.addUser(newUser)

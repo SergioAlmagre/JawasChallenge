@@ -80,7 +80,7 @@ class CreateAccountEmail_Controller : AppCompatActivity() {
                         name = mail.substringBefore("@").uppercase().trim()
                     }
 
-                    InterWindows.iwUser = User(name, mail, address, phone, InterWindows.iwUser.picture, Routes.defaultRole)
+                    InterWindows.iwUser = User(name, mail, address, phone, InterWindows.iwUser.picture, Routes.donorRole)
                     if(InterWindows.iwUser.picture != Routes.defaultUserPictureName){
                         uploadPictureOK()
                     }

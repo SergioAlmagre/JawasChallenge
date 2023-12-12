@@ -2,6 +2,7 @@ package Controllers.Administrator
 
 import Adapters.RecyAdapterAdminUsers
 import Auxiliaries.InterWindows
+import Constants.Routes
 import Controllers.Accounts.CreateAccountEmail_Controller
 import Controllers.Shared.UserDetails_Controller
 import android.content.Intent
@@ -28,12 +29,17 @@ class UserCrud_Controller : AppCompatActivity() {
         binding = ActivityCrudBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnHomeAdmin.visibility = android.view.View.GONE
+//        binding.btnHomeAdmin.visibility = android.view.View.GONE
         binding.btnRandomJewel.visibility = android.view.View.GONE
         binding.btnInventory.visibility = android.view.View.GONE
 
+        if(InterWindows.iwFirst){
+            InterWindows.iwAdminUser = InterWindows.iwUser
+            InterWindows.iwFirst = false
+        }
 
-        if(InterWindows.iwUser.role == "1"){
+
+        if(InterWindows.iwUser.role == Routes.adminRole){
             binding.btnAddObject.setImageResource(R.drawable.menu)
         }
 
@@ -54,11 +60,15 @@ class UserCrud_Controller : AppCompatActivity() {
 
 
         binding.btnHomeAdmin.setOnClickListener {
-//            finish()
+            InterWindows.iwUser = InterWindows.iwAdminUser
+            finish()
         }
 
 
         binding.btnUserAdmin.setOnClickListener {
+            if(!InterWindows.iwAdminUser.email.isNullOrEmpty()){
+                InterWindows.iwUser = InterWindows.iwAdminUser
+            }
             var inte = Intent(this, UserDetails_Controller::class.java)
             startActivity(inte)
         }

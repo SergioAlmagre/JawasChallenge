@@ -55,16 +55,23 @@ class ItemsType_Controller : AppCompatActivity() {
 
             builder.setPositiveButton("OK") { dialogInterface, i ->
                 val newItemTypeName = editText.text.toString()
-                Toast.makeText(applicationContext, "$newItemTypeName introducido con éxito", Toast.LENGTH_SHORT).show()
-
-                lifecycleScope.launch {
-                    try {
-                        FireStore.addNewTypeToFirebase(newItemTypeName)
-                        loadCombo()
-                    } catch (e: Exception) {
-                        // Manejar excepciones si es necesario
-                        Log.e("AddNewType", "Error: $e")
+                if(newItemTypeName == ""){
+                    Toast.makeText(applicationContext, "No se puede introducir un tipo de item vacío", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }else if(Store.ItemsTypes.allTypesList.contains(newItemTypeName)){
+                    Toast.makeText(applicationContext, "Ya existe un tipo de item con ese nombre", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }else{
+                    lifecycleScope.launch {
+                        try {
+                            FireStore.addNewTypeToFirebase(newItemTypeName)
+                            loadCombo()
+                        } catch (e: Exception) {
+                            // Manejar excepciones si es necesario
+                            Log.e("AddNewType", "Error: $e")
+                        }
                     }
+                    Toast.makeText(applicationContext, "Tipo de item añadido", Toast.LENGTH_SHORT).show()
                 }
             }
             builder.show()

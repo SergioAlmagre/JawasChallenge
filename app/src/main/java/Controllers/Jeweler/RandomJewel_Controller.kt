@@ -10,14 +10,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.example.jawaschallenge.R
 import com.example.jawaschallenge.databinding.ActivityRandomJewelBinding
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.storage
@@ -52,7 +48,42 @@ class RandomJewel_Controller : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
 
 
-        binding.btnPlayRandom.setOnClickListener {
+        binding.btnCreateJewel.setOnClickListener {
+            if(selectedJewel.name.isEmpty()){
+                Toast.makeText(this,"No hay joyas posibles que fabricar", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }else{
+                with(builder)
+                {
+                    setTitle("Vamos allá!")
+                    setMessage("¿Quieres crear esta joya? \n Los items se descontarán de tu inventario")
+                    setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
+                        runBlocking {
+                            val trabajo : Job = launch(context = Dispatchers.Default) {
+                                var selectedJewel = FireStore.getJewelByName(selectedJewel.name)
+                                FireStore.deleteItemsForJewel(selectedJewel!!)
+                            }
+                            trabajo.join()
+                            InterWindows.iwJewel = selectedJewel
+                            var inte: Intent = Intent(context, AddJewel_Controller::class.java)
+                            context.startActivity(inte)
+                        }
+                    }))
+                    setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
+
+                    }))
+                    show()
+                }
+            }
+
+        }
+
+        binding.btnHomeAdmin.setOnClickListener {
+            finish()
+        }
+
+
+        binding.btnRandomJewel.setOnClickListener {
             clearResults()
             Toast.makeText(this,"Buscando joya...", Toast.LENGTH_SHORT).show()
             runBlocking {
@@ -72,35 +103,6 @@ class RandomJewel_Controller : AppCompatActivity() {
                 }
 
                 binding.lblNameJewelRandom.text = selectedJewel.name
-            }
-        }
-
-        binding.btnHomeAdmin.setOnClickListener {
-            finish()
-        }
-
-
-        binding.btnCreateJewel.setOnClickListener {
-            with(builder)
-            {
-                setTitle("Vamos allá!")
-                setMessage("¿Quieres crear esta joya? \n Los items se descontarán de tu inventario")
-                setPositiveButton("Yes", android.content.DialogInterface.OnClickListener(function = { dialog: DialogInterface, which: Int ->
-                    runBlocking {
-                        val trabajo : Job = launch(context = Dispatchers.Default) {
-                            var selectedJewel = FireStore.getJewelByName(selectedJewel.name)
-                            FireStore.deleteItemsForJewel(selectedJewel!!)
-                        }
-                        trabajo.join()
-                        InterWindows.iwJewel = selectedJewel
-                        var inte: Intent = Intent(context, AddJewel_Controller::class.java)
-                        context.startActivity(inte)
-                    }
-                }))
-                setNegativeButton("No", ({ dialog: DialogInterface, which: Int ->
-
-                }))
-                show()
             }
         }
 

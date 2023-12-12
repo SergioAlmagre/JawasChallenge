@@ -99,7 +99,7 @@ class AddBatch_Controller : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
                 setTitle("Confirmación")
                 setMessage("¿Quieres solicitar la recogida?")
                 setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
-                    if (newBatch.longitude == null && InterWindows.iwUser.address.isNullOrBlank()) {
+                    if (newBatch.longitude == null && !binding.chkDefaultAddress.isChecked) {
                         val innerBuilder = AlertDialog.Builder(this@AddBatch_Controller)
                         innerBuilder.setTitle("Primero debes seleccionar una ubicación")
                         innerBuilder.setMessage("También puedes usar la dirección de tu perfil o llevarlo personalmente al taller")

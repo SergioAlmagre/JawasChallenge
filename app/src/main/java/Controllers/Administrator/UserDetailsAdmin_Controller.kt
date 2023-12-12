@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.jawaschallenge.R
 import com.example.jawaschallenge.databinding.ActivityUserDetailsAdminBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +41,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
     private lateinit var firebaseauth: FirebaseAuth
     private val cameraRequest = 1888
     private lateinit var bitmap: Bitmap
+    var contex = this
 
     val storage = Firebase.storage
     val storageRef = storage.reference
@@ -108,7 +110,7 @@ class UserDetailsAdmin_Controller : AppCompatActivity() {
                     FireStore.updateAllDataUser(user)
                 }
                 job.join()
-
+                Toast.makeText(contex, R.string.changes_saved, Toast.LENGTH_SHORT).show()
             }
         }
 

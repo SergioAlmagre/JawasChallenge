@@ -21,7 +21,7 @@
         <ImageButton
             android:id="@+id/btnHomeAdmin"
             android:layout_width="266dp"
-            android:layout_height="58dp"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
@@ -89,7 +89,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.98"
-        app:srcCompat="@drawable/ia" />
+        app:srcCompat="@drawable/magica" />
 
     <ImageButton
         android:id="@+id/btnInventory"
@@ -103,6 +103,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.98"
-        app:srcCompat="@drawable/inventory" />
+        app:srcCompat="@drawable/inventario" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

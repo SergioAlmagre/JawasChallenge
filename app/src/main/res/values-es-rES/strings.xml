@@ -57,7 +57,7 @@
     <string name="InitialMesagge">A continuación se abrirá tu pantalla principal en la que podrás añadir tus lotes de componenes que quieras donar mediante el botón ( + ) que encontrarás en la parte inferior\\n\\nEn la derecha podrás ver tu perfil, donde podrás ver y modificar tus datos y si pinchas en uno de tus lotes podrás ver toda la información relevante a este.\\n\\nRecuerda que puedes cancelar un lote manteniendo pulsada la imagen, siempre y cuando el lote no haya sido entregado\\n\\n\\tGracias por apoyar esta causa!</string>
     <string name="Letsgo">Vamos!!</string>
     <string name="delete_type">Borrar tipo</string>
-    <string name="key_btnCreateJewel">Crear joya</string>
+    <string name="key_btnCreateJewel">Joya aleatoria</string>
     <string name="key_hint_txtPrompRandom">Introduce tu mensaje</string>
     <string name="save_changes">Guardar cambios</string>
     <string name="key_lblItemAdded">Items añadidos</string>
@@ -87,4 +87,5 @@
     <string name="WelcomeTittle">Bienvenido a Re-Crea</string>
     <string name="creatinganewprofile">Creando un nuevo perfil...</string>
     <string name="firstEnterEmail">Primero introduzca un Email</string>
+    <string name="changes_saved">Cambios guardados</string>
 </resources>

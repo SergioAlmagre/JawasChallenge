@@ -103,11 +103,12 @@
     <string name="delete_type">Delete type</string>
 
     // RAMDOM JEWEL
-    <string name="key_btnCreateJewel">Create jewel</string>
+    <string name="key_btnCreateJewel">Random jewel</string>
     <string name="key_hint_txtPrompRandom">Enter your prompt</string>
 
     // USER DETAILS
     <string name="save_changes">Save changes</string>
+    <string name="changes_saved">Changes saved</string>
 
     // VIEW ITEMS BATCH
     <string name="key_lblItemAdded">Added items</string>
