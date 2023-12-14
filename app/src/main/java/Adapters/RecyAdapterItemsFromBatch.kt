@@ -27,8 +27,12 @@ import kotlinx.coroutines.runBlocking
 
 class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  context: Context) : RecyclerView.Adapter<RecyAdapterItemsFromBatch.ViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onItemClick(item: Item)
+    }
 
-    var onItemClickListener: ViewHolder.OnItemClickListener? = null
+    var onItemClickListener: RecyAdapterItemsFromBatch.OnItemClickListener? = null
+
 
 
     /**
@@ -38,6 +42,7 @@ class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  contex
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = itemsInside.get(position)
         holder.bind(item, context, position, this)
+
 
     }
 
@@ -63,6 +68,8 @@ class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  contex
         return itemsInside.size
     }
 
+
+
     //--------------------------------- Clase interna ViewHolder -----------------------------------
     /**
      * La clase ViewHolder. No es necesaria hacerla dentro del adapter, pero como van tan ligadas
@@ -87,6 +94,8 @@ class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  contex
             miAdaptadorRecycler: RecyAdapterItemsFromBatch
         ) {
             val builder = AlertDialog.Builder(context)
+
+
 
 
             Log.d("RecyAdapterItemsTxt", "itemType.text: ${ite.attributes[Routes.typeNamePositionAttribute].content}")
@@ -138,14 +147,16 @@ class RecyAdapterItemsFromBatch(var itemsInside : MutableList<Item>, var  contex
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
                 InterWindows.iwItem = InterWindows.iwItemsInside[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
-
-//                onItemClickListener?.onItemClick(it, adapterPosition)
-
-                }
+                miAdaptadorRecycler.onItemClickListener?.onItemClick(ite)
             }
+
+
+
+        }
 
         interface OnItemClickListener {
             fun onItemClick(view: View, position: Int)
+
         }
 
 

@@ -3,11 +3,18 @@ package Controllers.Jeweler
 import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
+import Controllers.Shared.UserDetails_Controller
 import Model.Jewels.Jewel
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -106,6 +113,11 @@ class RandomJewel_Controller : AppCompatActivity() {
             }
         }
 
+        binding.btnUserAdmin.setOnClickListener {
+            var inte: Intent = Intent(this, UserDetails_Controller::class.java)
+            startActivity(inte)
+        }
+
 
 
 
@@ -164,19 +176,49 @@ class RandomJewel_Controller : AppCompatActivity() {
         Log.d("RandomJewel", "All Jewels: ${allJewels}")
     }
 
+//    fun fileDownload(identificador: String?) {
+//        var spaceRef = storageRef.child(Routes.jewelsPicturesPath + identificador)
+//        val localfile = File.createTempFile(identificador!!, "jpg")
+//        Log.d("fileDownload", "localfile: ${localfile.absolutePath}")
+//        Log.d("fileDownload", "localfile: ${localfile.name}")
+//        spaceRef.getFile(localfile).addOnSuccessListener {
+//            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+//            binding.imageViewRandom.setImageBitmap(bitmap)
+//        }.addOnFailureListener {
+//            Log.d("fileDownload", "Error al descargar la imagen")
+//        }
+//    }
+
     fun fileDownload(identificador: String?) {
         var spaceRef = storageRef.child(Routes.jewelsPicturesPath + identificador)
-        val localfile = File.createTempFile(identificador!!, "jpg")
-        Log.d("fileDownload", "localfile: ${localfile.absolutePath}")
-        Log.d("fileDownload", "localfile: ${localfile.name}")
+        val localfile = File.createTempFile(identificador!!, "jpeg")
         spaceRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-            binding.imageViewRandom.setImageBitmap(bitmap)
+
+            // Crear una máscara con esquinas redondeadas
+            val roundedBitmap = getRoundedCornerBitmap(bitmap, 45f)
+
+            // Mostrar la imagen redondeada en la ImageView
+            binding.imageViewRandom.setImageBitmap(roundedBitmap)
         }.addOnFailureListener {
-            Log.d("fileDownload", "Error al descargar la imagen")
+            // Manejo de errores
         }
     }
 
+    private fun getRoundedCornerBitmap(bitmap: Bitmap, radius: Float): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val paint = Paint()
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = RectF(rect)
+
+        paint.isAntiAlias = true
+        canvas.drawRoundRect(rectF, radius, radius, paint)
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+
+        return output
+    }
 
 
 }//End of RandomJewel_Controller

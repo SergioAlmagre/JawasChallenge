@@ -7,6 +7,7 @@ import Controllers.Shared.UserDetails_Controller
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jawaschallenge.databinding.ActivityCrudBinding
@@ -30,7 +31,7 @@ class ClassifierCrud_Controller : AppCompatActivity() {
 
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
-
+                InterWindows.iwPendingBatches.clear()
                 Connections.FireStore.getAllPendingBatchesFromUsers()
             }
             trabajo.join()
@@ -39,6 +40,7 @@ class ClassifierCrud_Controller : AppCompatActivity() {
             miRecyclerView.layoutManager = LinearLayoutManager(context)
 
             var miAdapter = RecyAdapterClassifier(InterWindows.iwPendingBatches, context)
+            Log.d("recyclerBatch",InterWindows.iwPendingBatches.toString())
             miRecyclerView.adapter = miAdapter
         }
 
@@ -79,6 +81,7 @@ class ClassifierCrud_Controller : AppCompatActivity() {
         miRecyclerView.layoutManager = LinearLayoutManager(context)
 
         var miAdapter = RecyAdapterClassifier(InterWindows.iwPendingBatches, context)
+        Log.d("recyclerBatch",InterWindows.iwPendingBatches.toString())
         miRecyclerView.adapter = miAdapter
     }
 

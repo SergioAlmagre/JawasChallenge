@@ -27,7 +27,7 @@ class Item {
         return "IdItem=$idItem, attributes=$attributes \n)"
     }
 
-    private fun generateUniqueId(): String {
+    fun generateUniqueId(): String {
         return UUID.randomUUID().toString()
     }
 

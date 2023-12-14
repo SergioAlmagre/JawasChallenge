@@ -5,6 +5,7 @@ import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
 import Controllers.Shared.UserDetails_Controller
+import Model.Hardware.Item
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
-class ViewItemsBatch_Controller : AppCompatActivity() {
+class ViewItemsBatch_Controller : AppCompatActivity(), RecyAdapterItemsFromBatch.OnItemClickListener {
     lateinit var binding: ActivityViewItemsBatchBinding
     lateinit var miRecyclerView : RecyclerView
     private lateinit var firebaseauth: FirebaseAuth
@@ -62,10 +63,11 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
 
             var miAdapter = RecyAdapterItemsFromBatch(InterWindows.iwItemsInside, context)
             miRecyclerView.adapter = miAdapter
+            Log.d("image",binding.pictureItem.toString())
 
         }
 
-
+        Log.d("image",binding.pictureItem.toString())
         binding.btnHomeAdmin.setOnClickListener {
             finish()
         }
@@ -93,8 +95,9 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
                         runBlocking {
                             val trabajo: Job = launch(context = Dispatchers.Default) {
                                 var emailOwner = FireStore.getUserEmailByBatchId(InterWindows.iwBatch.idBatch)
-
+                                Log.d("AddItemsClassifierOnCreate","emailOwner: ${emailOwner}")
                                 FireStore.endBatch(emailOwner!!,InterWindows.iwBatch.idBatch)
+                                Log.d("AddItemsClassifierOnCreate","iwItemsInside: ${InterWindows.iwBatch.idBatch}")
                             }
                             trabajo.join()
                             finish()
@@ -108,29 +111,26 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
 
         }
 
-        //Como puedo detectar que se ha pulsado? // para poner la foto del item en el imageview
-//        binding.rVItemsInsideBatch.setOnClickListener  {
-//            Toast.makeText(this,"Click",Toast.LENGTH_SHORT).show()
-//        }
 
 
     }// End onCreate
 
-//    RecyAdapterItemsTxt.onItemClickListener = object : RecyAdapterItemsTxt.OnItemClickListener {
-//        override fun onItemClick(position: Int) {
-//            // Manejar el clic en el elemento aquí
-//            Toast.makeText(context, "Clic en el elemento $position", Toast.LENGTH_SHORT).show()
-//        }
-//    }
+    override fun onItemClick(item: Item) {
+        if (item.attributes[Routes.picturePositionAttribute].content != null) {
+            fileDownload(item.attributes[Routes.picturePositionAttribute].content)
+        } else {
+            fileDownload(Routes.defaultItemPictureName)
+        }
+    }
 
     override fun onResume() {
         super.onResume()
+        Log.d("image",binding.pictureItem.toString())
         if(InterWindows.iwItem.attributes[positionPicture].content != null){
             fileDownload(InterWindows.iwItem.attributes[positionPicture].content)
         }else{
             fileDownload(Routes.defaultItemPictureName)
         }
-
         runBlocking {
             val trabajo : Job = launch(context = Dispatchers.Default) {
                 InterWindows.iwItemsInside.clear()
@@ -142,7 +142,9 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
             miRecyclerView.layoutManager = LinearLayoutManager(context)
 
             var miAdapter = RecyAdapterItemsFromBatch(InterWindows.iwItemsInside, context)
+
             miRecyclerView.adapter = miAdapter
+            miAdapter.onItemClickListener = this@ViewItemsBatch_Controller
         }
     }
 
@@ -158,5 +160,7 @@ class ViewItemsBatch_Controller : AppCompatActivity() {
 
         }
     }
+
+
 
 }// End class

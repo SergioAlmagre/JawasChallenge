@@ -15,6 +15,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -79,7 +80,7 @@ class AddItemBatch_Controller : AppCompatActivity() {
         )
 
         binding.btnEndItem.setOnClickListener {
-
+            Toast.makeText(context, "Añadiendo item, espere...", Toast.LENGTH_LONG).show()
             var typeItem = binding.txtTypeItem.text.toString()
             if (Store.ItemsTypes.allTypesList.contains(typeItem)) {
                 var amountItem = binding.lblNumberAmount.text.toString().toInt()
@@ -88,20 +89,24 @@ class AddItemBatch_Controller : AppCompatActivity() {
                 for (i in 0..amountItem - 1) {
                     runBlocking {
                         val trabajo: Job = launch(context = Dispatchers.Default) {
+
                             newItem.attributes[Routes.typeNamePositionAttribute].content = typeItem
                             newItem.attributes[Routes.descriptionPositionAttribute].content = descriptionItem
                             newItem.attributes[Routes.picturePositionAttribute].content = InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content
-                            FireStore.addItemToBatch(
-                                InterWindows.iwUser.email,
-                                InterWindows.iwBatch.idBatch,
-                                newItem
+                            FireStore.addItemToBatch(InterWindows.iwBatch.idBatch, newItem
                             )
+
                         }
                         trabajo.join()
-                        uploadPictureOK()
+                        if(newItem.attributes[Routes.picturePositionAttribute].content != Routes.defaultItemPictureName){
+                            uploadPictureOK()
+                        }
+
                         InterWindows.iwItem = newItem
+                        newItem.idItem = newItem.generateUniqueId() //Here change the id if is more than 1 items
                     }
                 }
+
                 loadAutocomplete()
                 finish()
             }else{
@@ -284,11 +289,12 @@ class AddItemBatch_Controller : AppCompatActivity() {
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data2 = baos.toByteArray()
-
         val imagesRef = storageRef.child(Routes.itemsPicturesPath)
-        var pictureName = newItem.idItem
 
-        InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content = newItem.idItem
+//        var pictureName = newItem.idItem
+        var pictureName = newItem.attributes[Routes.picturePositionAttribute].content!!
+
+//        InterWindows.iwItem.attributes[Routes.picturePositionAttribute].content = newItem.idItem
 
         val uploadTask = imagesRef.child(pictureName).putBytes(data2)
         uploadTask.addOnSuccessListener {

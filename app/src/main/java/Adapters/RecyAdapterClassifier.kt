@@ -30,6 +30,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
+import android.util.Log
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
@@ -135,6 +136,9 @@ class RecyAdapterClassifier(var batch : MutableList<Batch>, var  context: Contex
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
                 InterWindows.iwBatch = InterWindows.iwPendingBatches[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
+                Log.d("RecyAdapterClassifier", "InterWindows.iwBatch: " + InterWindows.iwBatch.toString())
+                Log.d("RecyAdapterClassifier", "InterWindows.iwPendingBatches: " + InterWindows.iwPendingBatches.toString())
+                Log.d("RecyAdapterClassifier", "Pos: " + pos)
 
                 if (InterWindows.iwBatch != null){
 

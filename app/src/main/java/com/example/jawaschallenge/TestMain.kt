@@ -64,26 +64,26 @@ class TestMain: AppCompatActivity() {
         }
 
         binding.btnInsertarItemInBatch.setOnClickListener {//Recuerda que no podrás insertar items a no se que esté recibido en el virgen
-            lifecycleScope.launch {
-                try {
-                    val result = withContext(Dispatchers.Default) {
-                        Connections.FireStore.addItemToBatch(
-                            "DANIEL.MILLER@EXAMPLE.COM",
-                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c",
-                            Factory.createItem()
-                        )
-                    }
-
-                    withContext(Dispatchers.Main) {
-                        // Actualizar vistas de la interfaz de usuario aquí
-                        binding.textView.text = InterWindows.iwPendingBatches.toString()
-                        Log.d("ItemsInBatch", result.toString())
-
-                    }
-                } catch (e: Exception) {
-                    Log.e("ItemsInBatch", "Error: $e")
-                }
-            }
+//            lifecycleScope.launch {
+//                try {
+//                    val result = withContext(Dispatchers.Default) {
+//                        Connections.FireStore.addItemToBatch(
+//                            "DANIEL.MILLER@EXAMPLE.COM",
+//                            "ed2d4ae1-9513-41d1-8056-dcb26187bf4c",
+//                            Factory.createItem()
+//                        )
+//                    }
+//
+//                    withContext(Dispatchers.Main) {
+//                        // Actualizar vistas de la interfaz de usuario aquí
+//                        binding.textView.text = InterWindows.iwPendingBatches.toString()
+//                        Log.d("ItemsInBatch", result.toString())
+//
+//                    }
+//                } catch (e: Exception) {
+//                    Log.e("ItemsInBatch", "Error: $e")
+//                }
+//            }
         }
 
         binding.btnAllBatches.setOnClickListener {
@@ -220,7 +220,7 @@ class TestMain: AppCompatActivity() {
                 try {
                     var info: BatchInfo? = null
                     val result = withContext(Dispatchers.Default) {
-                        info = Connections.FireStore.getBatchInfoById(
+                        info = Connections.FireStore.getBatchInfoByIdAndEmail(
                             "DANIEL.MILLER@EXAMPLE.COM",
                             "ed2d4ae1-9513-41d1-8056-dcb26187bf4c"
                         )

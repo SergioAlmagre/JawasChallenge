@@ -20,6 +20,7 @@ import com.example.jawaschallenge.R
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import Model.Users.*
+import android.util.Log
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -125,13 +126,10 @@ class RecyAdapterItemsFromJewel(var itemsInside : MutableList<ObjectQuantity>, v
 
             //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
-                InterWindows.iwItem = InterWindows.iwItemsInside[pos] // valor dado por indice de pos en itemView desde ArrayList en Interventana
-
-//                onItemClickListener?.onItemClick(it, adapterPosition)
-
-                }
 
             }
+
+        }
 
         interface OnItemClickListener {
             fun onItemClick(view: View, position: Int)

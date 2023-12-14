@@ -44,13 +44,20 @@ class BatchDetails_Controller : AppCompatActivity() {
         var selectedBatch:BatchInfo? = null
         runBlocking {
                 val trabajo: Job = launch(context = Dispatchers.Default) {
+
+
                     selectedBatch = FireStore.getBatchInfoById(
-                        InterWindows.iwUser.email,
                         InterWindows.iwBatch.idBatch
+
                     )
+
+
+
                 }
 
                 trabajo.join()
+            Log.d("BatchDetails", selectedBatch.toString())
+            Log.d("BatchDetails", InterWindows.iwBatch.toString())
             if(selectedBatch != null) {
                 selectedBatch!!.address = InterWindows.iwBatch.address.toString()
                 if (selectedBatch != null) {
@@ -97,7 +104,7 @@ class BatchDetails_Controller : AppCompatActivity() {
                                 InterWindows.iwBatch.received = true
                                 runBlocking {
                                     val trabajo : Job = launch(context = Dispatchers.Default) {
-                                        FireStore.addOrUpdateBatchToDonor(InterWindows.iwUser.email,InterWindows.iwBatch)
+                                        FireStore.updateBatchToReceived(InterWindows.iwBatch)
                                     }
                                     trabajo.join()
                                 }

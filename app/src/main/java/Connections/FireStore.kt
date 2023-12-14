@@ -83,6 +83,12 @@ object FireStore {
     }
 
 
+
+
+
+
+
+
     fun addJewelToCatalog(jewel: Jewel): Int {
         var cant = 0
         var je = hashMapOf(
@@ -116,9 +122,13 @@ object FireStore {
     }
 
 
-    suspend fun addItemToBatch(userEmail: String, batchId: String, item: Item) {
+    suspend fun addItemToBatch(batchId: String, item: Item) { //---------------------------------------
+
+        // Obtén el email del usuario mediante el idBatch
+        val userEmail = getUserEmailByBatchId(batchId)
+
         // Referencia al documento del cliente
-        val clientDocument = db.collection("users").document(userEmail)
+        val clientDocument = db.collection("users").document(userEmail!!)
 
         try {
             // Obtener el cliente
@@ -242,6 +252,7 @@ object FireStore {
 
                     // Agregar los lotes no clasificados a la lista
                     allBatches.addAll(unclassifiedBatches)
+                    Log.d("getAllPendingBatchesFromUsers", allBatches.toString())
                 }
             }
 
@@ -355,13 +366,6 @@ object FireStore {
 
 
 
-
-
-
-
-
-
-
     suspend fun getBatchesForUser(userId: String): MutableList<Batch> {
         val batchesList = mutableListOf<Batch>()
 
@@ -417,7 +421,7 @@ object FireStore {
     }
 
 
-    suspend fun getBatchInfoById(userEmail: String, batchId: String): BatchInfo? {
+    suspend fun getBatchInfoByIdAndEmail(userEmail: String, batchId: String): BatchInfo? {
         try {
             // Referencia al documento del usuario
             val userDocument = db.collection("users").document(userEmail)
@@ -448,6 +452,47 @@ object FireStore {
 
         return null // Retorna null si no se encuentra el lote con el idBatch específico
     }
+
+
+    suspend fun getBatchInfoById(batchId: String): BatchInfo? {
+        try {
+            // Obtén el email del usuario mediante el idBatch
+            val userEmail = getUserEmailByBatchId(batchId)
+
+            // Verifica si se obtuvo el email del usuario
+            if (userEmail != null) {
+                // Obtén una referencia al documento del usuario
+                val userDocument = db.collection("users").document(userEmail)
+
+                // Obtén el usuario
+                val user = userDocument.get().await().toObject(User::class.java)
+
+                // Verifica si el objeto Usuario es válido y si tiene lotes
+                if (user != null && user.batches.isNotEmpty()) {
+                    // Buscar el lote con el idBatch específico
+                    val batch = user.batches.find { it.idBatch == batchId }
+
+                    // Si se encuentra el lote, crea un objeto BatchInfo con la información
+                    if (batch != null) {
+                        return BatchInfo(
+                            batchID = batch.idBatch,
+                            userName = user.name,
+                            email = user.email,
+                            address = user.address ?: "",
+                            creationDate = batch.creationDate,
+                            isReceived = batch.received
+                        )
+                    }
+                }
+            }
+        } catch (exception: Exception) {
+            println("Error al obtener datos: $exception")
+        }
+
+        return null // Retorna null si no se encuentra el lote con el idBatch específico
+    }
+
+
 
 
     suspend fun getAllJewels() {
@@ -730,6 +775,53 @@ object FireStore {
                 Log.e("updateAllDataUser", "Error updating user: $e")
             }
     }
+
+
+    suspend fun updateBatchToReceived(batch: Batch): Int {
+        var cant = 0
+
+        try {
+
+            val userEmail = getUserEmailByBatchId(batch.idBatch)
+
+            // Obtener la referencia al documento del donante
+            val donorDocument = db.collection("users").document(userEmail!!)
+
+            // Obtener el documento del donante
+            val donor = donorDocument.get().await().toObject(User::class.java)
+
+            // Verificar si el objeto Donor es válido
+            if (donor != null) {
+                // Buscar el índice del lote con el mismo idBatch en la lista de lotes
+                val existingBatchIndex = donor.batches.indexOfFirst { it.idBatch == batch.idBatch }
+
+                if (existingBatchIndex != -1) {
+                    // Actualizar el estado del lote a recibido
+                    donor.batches[existingBatchIndex].received = true
+
+                    // Actualizar el documento del donante con la lista de lotes modificada
+                    donorDocument.set(donor)
+                        .addOnSuccessListener {
+                            cant = 1
+                            Log.d("updateBatchToReceived", "Estado del lote actualizado con éxito")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("updateBatchToReceived", "Error al actualizar estado del lote: $e")
+                        }
+                }
+            }
+        } catch (exception: Exception) {
+            Log.e("updateBatchToReceived", "Error al obtener datos: $exception")
+        }
+
+        return cant
+    }
+
+
+
+
+
+
 
 
     suspend fun updatePhotoByEmail(email: String, newPhotoUrl: String) {

@@ -5,6 +5,7 @@ import Auxiliaries.InterWindows
 import Connections.FireStore
 import Constants.Routes
 import Controllers.Administrator.UserDetailsAdmin_Controller
+import Controllers.Shared.UserDetails_Controller
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -114,7 +115,7 @@ class AddJewel_Controller : AppCompatActivity() {
         }
 
         binding.btnUserAdmin.setOnClickListener {
-            val intent = Intent(this, UserDetailsAdmin_Controller::class.java)
+            val intent = Intent(this, UserDetails_Controller::class.java)
             startActivity(intent)
         }
 
